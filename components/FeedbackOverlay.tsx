@@ -58,7 +58,7 @@ export function FeedbackOverlay({ isCorrect, word, correctAnswer, onNext }: Prop
                     </div>
                 )}
                 <button
-                    onClick={onNext}
+                    onClick={(e) => { e.stopPropagation(); onNext() }}
                     style={{
                         marginTop: '4px',
                         background: isCorrect ? '#10b981' : '#ef4444',

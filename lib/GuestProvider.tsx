@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 interface GuestContextValue {
     guestId: string | null
     isLoading: boolean
-    profile: { xp: number; current_streak: number; is_guest: boolean } | null
+    profile: { current_streak: number; is_guest: boolean } | null
     refreshProfile: () => Promise<void>
 }
 
@@ -34,13 +34,9 @@ export function GuestProvider({ children }: { children: React.ReactNode }) {
         const { data: { user } } = await supabase.auth.getUser()
         const userId = user?.id ?? id
 
-        const { data } = await supabase
-            .from('profiles')
-            .select('xp, current_streak, is_guest')
-            .eq('id', userId)
-            .single()
-
-        if (data) setProfile(data)
+        const res = await fetch(`/api/profile?userId=${userId}`)
+        const { profile } = await res.json()
+        if (profile) setProfile(profile)
     }, [])
 
     useEffect(() => {

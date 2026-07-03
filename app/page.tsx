@@ -37,7 +37,6 @@ export default function HomePage() {
         )
     }
 
-    const xp = profile?.xp ?? 0
     const streak = profile?.current_streak ?? 0
     const totalCards = (data?.reviewCount ?? 0) + (data?.newWordCount ?? 0)
 
@@ -61,7 +60,7 @@ export default function HomePage() {
                         Understand anime in Japanese 🎌
                     </div>
                 </div>
-                <StreakBadge xp={xp} streak={streak} />
+                <StreakBadge streak={streak} />
             </div>
 
             <div style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px' }}>
@@ -118,11 +117,13 @@ export default function HomePage() {
                     <StatCard icon="📖" label="Due Reviews" value={data?.reviewCount ?? 0} color="#f59e0b" />
                     <StatCard icon="✨" label="New Words" value={data?.newWordCount ?? 0} color="#7c3aed" />
                     <StatCard icon="🔥" label="Day Streak" value={streak} color="#ef4444" />
-                    <StatCard icon="⚡" label="Total XP" value={xp} color="#10b981" />
                 </div>
 
                 {/* Links */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <Link href="/history" style={linkStyle}>
+                        📊 Learning history
+                    </Link>
                     <Link href="/onboarding" style={linkStyle}>
                         ⚙️ Learning settings
                     </Link>

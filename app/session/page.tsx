@@ -6,9 +6,6 @@ import { WordCard } from '@/components/WordCard'
 import { ChoiceGrid } from '@/components/ChoiceGrid'
 import { FeedbackOverlay } from '@/components/FeedbackOverlay'
 import { useGuest } from '@/lib/GuestProvider'
-import { createClient } from '@/lib/supabase/client'
-
-const SRS_INTERVALS = [1, 3, 7, 14] // days for level 1-4
 
 interface SessionItem {
     content_id: number
@@ -32,6 +29,7 @@ export default function SessionPage() {
     const [results, setResults] = useState<{ correct: number; total: number }>({ correct: 0, total: 0 })
     const [done, setDone] = useState(false)
     const [loading, setLoading] = useState(true)
+    const [sessionStart] = useState<number>(() => Date.now())
     // Shuffled choices — computed only when the current item changes, NOT on re-render
     const [shuffledChoices, setShuffledChoices] = useState<string[]>([])
 
@@ -65,58 +63,17 @@ export default function SessionPage() {
         setFeedback({ isCorrect })
         if (!guestId || !currentItem) return
 
-        const supabase = createClient()
-        const now = new Date()
-
-        if (isCorrect) {
-            // Advance SRS level (max 4)
-            const newLevel = Math.min((currentItem.srsLevel || 0) + 1, 4)
-            const daysToAdd = SRS_INTERVALS[newLevel - 1]
-            const nextReview = new Date(now)
-            nextReview.setDate(nextReview.getDate() + daysToAdd)
-
-            await supabase.from('user_srs_progress').upsert({
-                user_id: guestId,
-                content_id: currentItem.content_id,
-                level: newLevel,
-                next_review_at: nextReview.toISOString(),
-                last_reviewed_at: now.toISOString(),
-                review_count: 1,
-            }, { onConflict: 'user_id,content_id' })
-
-            // Mark as learned if first time correct
-            if (!currentItem.isReview) {
-                await supabase.from('user_learned_contents').upsert({
-                    user_id: guestId,
-                    content_id: currentItem.content_id,
-                }, { onConflict: 'user_id,content_id' })
-            }
-
-            // Add XP atomically using server-side function
-            const xpAmount = currentItem.isReview ? 5 : 10
-            try {
-                await supabase.rpc('increment_xp' as never, {
-                    p_user_id: guestId, p_amount: xpAmount,
-                } as never)
-            } catch {
-                // Fallback: read-modify-write
-                const { data: prof } = await supabase.from('profiles').select('xp').eq('id', guestId).single()
-                if (prof) await supabase.from('profiles').update({ xp: (prof.xp || 0) + xpAmount }).eq('id', guestId)
-            }
-        } else {
-            // Reset SRS level
-            const nextReview = new Date(now)
-            nextReview.setDate(nextReview.getDate() + 1)
-
-            await supabase.from('user_srs_progress').upsert({
-                user_id: guestId,
-                content_id: currentItem.content_id,
-                level: 1,
-                next_review_at: nextReview.toISOString(),
-                last_reviewed_at: now.toISOString(),
-                wrong_count: 1,
-            }, { onConflict: 'user_id,content_id' })
-        }
+        await fetch('/api/answer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: guestId,
+                contentId: currentItem.content_id,
+                isCorrect,
+                isReview: currentItem.isReview,
+                srsLevel: currentItem.srsLevel,
+            }),
+        })
 
         setResults(r => ({
             correct: r.correct + (isCorrect ? 1 : 0),
@@ -127,23 +84,24 @@ export default function SessionPage() {
     const handleNext = useCallback(async () => {
         setFeedback(null)
         if (index + 1 >= items.length) {
-            // Record streak
             if (guestId) {
-                const supabase = createClient()
-                const today = new Date().toISOString().split('T')[0]
-                await supabase.from('daily_streaks').upsert({
-                    user_id: guestId,
-                    date: today,
-                    questions_answered: results.total + 1,
-                    xp_earned: (results.correct + (feedback?.isCorrect ? 1 : 0)) * 10,
-                }, { onConflict: 'user_id,date' })
+                const durationSeconds = Math.round((Date.now() - sessionStart) / 1000)
+                await fetch('/api/streak', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: guestId,
+                        questionsAnswered: results.total + 1,
+                        durationSeconds,
+                    }),
+                })
                 await refreshProfile()
             }
             setDone(true)
         } else {
             setIndex(i => i + 1)
         }
-    }, [index, items.length, guestId, results, feedback, refreshProfile])
+    }, [index, items.length, guestId, results, feedback, refreshProfile, sessionStart])
 
     if (loading) {
         return (
@@ -178,11 +136,11 @@ export default function SessionPage() {
                             <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Correct</div>
                         </div>
                         <div style={{
-                            background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)',
+                            background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
                             borderRadius: '14px', padding: '16px',
                         }}>
-                            <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#a78bfa' }}>{results.correct * 10}</div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>XP Earned</div>
+                            <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#ef4444' }}>{results.total - results.correct}</div>
+                            <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Incorrect</div>
                         </div>
                     </div>
                     <button
@@ -257,6 +215,28 @@ export default function SessionPage() {
                 correctAnswer={currentItem.english}
                 onAnswer={handleAnswer}
             />
+
+            {/* Don't know button */}
+            {!feedback && (
+                <button
+                    onClick={() => handleAnswer(false)}
+                    style={{
+                        marginTop: '16px',
+                        width: '100%',
+                        padding: '14px',
+                        background: 'transparent',
+                        border: '1.5px solid rgba(255,255,255,0.1)',
+                        borderRadius: '14px',
+                        color: '#64748b',
+                        fontFamily: 'inherit',
+                        fontSize: '0.9rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                    }}
+                >
+                    I don't know
+                </button>
+            )}
 
             {/* Feedback overlay */}
             {feedback && (
