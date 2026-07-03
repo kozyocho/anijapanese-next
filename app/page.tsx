@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { useGuest } from '@/lib/GuestProvider'
 import { StreakBadge } from '@/components/StreakBadge'
 
@@ -60,7 +61,25 @@ export default function HomePage() {
                         Understand anime in Japanese 🎌
                     </div>
                 </div>
-                <StreakBadge streak={streak} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <StreakBadge streak={streak} />
+                    <SignedIn>
+                        <UserButton afterSignOutUrl="/" />
+                    </SignedIn>
+                    <SignedOut>
+                        <SignInButton mode="modal">
+                            <button style={{
+                                padding: '6px 14px',
+                                background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+                                border: 'none', borderRadius: '99px',
+                                color: 'white', fontFamily: 'inherit',
+                                fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer',
+                            }}>
+                                Sign in
+                            </button>
+                        </SignInButton>
+                    </SignedOut>
+                </div>
             </div>
 
             <div style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px' }}>
@@ -127,9 +146,11 @@ export default function HomePage() {
                     <Link href="/onboarding" style={linkStyle}>
                         ⚙️ Learning settings
                     </Link>
-                    <Link href="/login" style={linkStyle}>
-                        🔑 Sign in to save progress
-                    </Link>
+                    <SignedOut>
+                        <Link href="/login" style={linkStyle}>
+                            🔑 Sign in to save progress
+                        </Link>
+                    </SignedOut>
                 </div>
             </div>
         </div>

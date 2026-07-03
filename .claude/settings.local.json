@@ -3,7 +3,13 @@
     "allow": [
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(command -v clerk)",
+      "Bash(clerk --version)",
+      "Bash(npm install:*)",
+      "Bash(clerk auth:*)",
+      "Bash(clerk init:*)",
+      "Bash(clerk doctor:*)"
     ]
   }
 }
