@@ -330,9 +330,10 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                     Built by an anime fan who got tired of pausing to read subtitles.<br />
                     <span style={{ color: '#475569' }}>No textbooks. No grammar charts. Just words you'll actually hear.</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
                     <Link href="/privacy" style={{ fontSize: '0.75rem', color: '#475569', textDecoration: 'none' }}>Privacy Policy</Link>
                     <Link href="/terms" style={{ fontSize: '0.75rem', color: '#475569', textDecoration: 'none' }}>Terms of Service</Link>
+                    <Link href="/tokushoho" style={{ fontSize: '0.75rem', color: '#475569', textDecoration: 'none' }}>特定商取引法</Link>
                     <a href="mailto:osumomomo8110@gmail.com" style={{ fontSize: '0.75rem', color: '#475569', textDecoration: 'none' }}>Contact</a>
                 </div>
             </footer>
