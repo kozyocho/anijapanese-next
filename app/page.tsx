@@ -206,7 +206,7 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                     color: '#94a3b8', fontSize: '1rem', lineHeight: 1.65,
                     margin: '0 0 36px', maxWidth: '360px', marginLeft: 'auto', marginRight: 'auto',
                 }}>
-                    Master the words you actually hear in Naruto, One Piece, and Attack on Titan. Spaced repetition. 10 minutes a day.
+                    Master the words you actually hear in your favorite anime. Spaced repetition. 10 minutes a day.
                 </p>
 
                 {/* ONE call to action */}
