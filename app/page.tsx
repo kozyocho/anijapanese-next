@@ -333,7 +333,7 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
                     <Link href="/privacy" style={{ fontSize: '0.75rem', color: '#475569', textDecoration: 'none' }}>Privacy Policy</Link>
                     <Link href="/terms" style={{ fontSize: '0.75rem', color: '#475569', textDecoration: 'none' }}>Terms of Service</Link>
-                    <Link href="/tokushoho" style={{ fontSize: '0.75rem', color: '#475569', textDecoration: 'none' }}>特定商取引法</Link>
+                    <Link href="/tokushoho" style={{ fontSize: '0.75rem', color: '#475569', textDecoration: 'none' }}>Specified Commercial Transactions</Link>
                     <a href="mailto:osumomomo8110@gmail.com" style={{ fontSize: '0.75rem', color: '#475569', textDecoration: 'none' }}>Contact</a>
                 </div>
             </footer>
