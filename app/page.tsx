@@ -10,9 +10,9 @@ import { useSale } from '@/lib/useSale'
 // ── Demo words shown on landing page (no account needed) ──────────────────
 
 const DEMO_WORDS = [
-    { jp: '仲間', reading: 'nakama', en: 'comrade', options: ['rival', 'enemy', 'comrade', 'mentor'], anime: 'One Piece · Naruto' },
-    { jp: '覚悟', reading: 'kakugo', en: 'resolve', options: ['fear', 'resolve', 'regret', 'anger'], anime: 'Demon Slayer · AoT' },
-    { jp: '最強', reading: 'saikyō', en: 'strongest', options: ['fastest', 'kindest', 'strongest', 'wisest'], anime: 'Dragon Ball · MHA' },
+    { jp: '仲間', reading: 'nakama', en: 'comrade', options: ['rival', 'enemy', 'comrade', 'mentor'] },
+    { jp: '覚悟', reading: 'kakugo', en: 'resolve', options: ['fear', 'resolve', 'regret', 'anger'] },
+    { jp: '最強', reading: 'saikyō', en: 'strongest', options: ['fastest', 'kindest', 'strongest', 'wisest'] },
 ]
 
 // ── Shared styles ──────────────────────────────────────────────────────────
@@ -84,11 +84,8 @@ function DemoQuiz({ onFinish, priceLabel, onBuy, buying }: {
 
     return (
         <>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <span style={{ fontSize: '0.72rem', color: '#475569', fontWeight: 600 }}>
-                    {index + 1} of {DEMO_WORDS.length}
-                </span>
-                <span style={{ fontSize: '0.72rem', color: '#475569' }}>{word.anime}</span>
+            <div style={{ marginBottom: '20px', fontSize: '0.72rem', color: '#475569', fontWeight: 600 }}>
+                {index + 1} of {DEMO_WORDS.length}
             </div>
             <div style={{ textAlign: 'center', padding: '8px 0 24px' }}>
                 <div style={{ fontSize: '2.6rem', fontWeight: 900, marginBottom: '6px' }}>{word.jp}</div>
@@ -243,7 +240,7 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                                 See how it works — try 3 words
                             </div>
                             <div style={{ fontSize: '2.8rem', fontWeight: 900, marginBottom: '4px' }}>仲間</div>
-                            <div style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '24px' }}>nakama · Naruto / One Piece</div>
+                            <div style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '24px' }}>nakama · comrade</div>
                             <button onClick={() => setShowDemo(true)} style={{
                                 padding: '12px 28px',
                                 background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.3)',
