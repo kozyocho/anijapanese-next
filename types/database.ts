@@ -30,6 +30,10 @@ export interface Database {
                     last_active_at: string | null
                     created_at: string
                     updated_at: string
+                    is_guest: boolean
+                    is_premium: boolean
+                    stripe_customer_id: string | null
+                    subscription_status: string | null
                 }
                 Insert: {
                     id: string
@@ -44,6 +48,10 @@ export interface Database {
                     current_streak?: number
                     longest_streak?: number
                     last_active_at?: string | null
+                    is_guest?: boolean
+                    is_premium?: boolean
+                    stripe_customer_id?: string | null
+                    subscription_status?: string | null
                 }
                 Update: Partial<Database['public']['Tables']['profiles']['Insert']>
             }
