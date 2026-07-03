@@ -261,6 +261,140 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                 </div>
             </section>
 
+            {/* App screenshots — show before explain */}
+            <section style={{ maxWidth: '480px', margin: '0 auto', padding: '0 0 48px' }}>
+                <h2 style={{ fontSize: '1.2rem', fontWeight: 900, textAlign: 'center', margin: '0 0 20px', letterSpacing: '-0.02em', padding: '0 20px' }}>
+                    How it works
+                </h2>
+
+                {/* Horizontally scrollable screens */}
+                <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', padding: '4px 20px 12px', scrollSnapType: 'x mandatory' }}>
+
+                    {/* Screen 1: Word card */}
+                    <div style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>① A word appears</div>
+                        <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
+                            {/* Mini header */}
+                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
+                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>🔥 3</span>
+                            </div>
+                            {/* Word card */}
+                            <div style={{ padding: '24px 14px 20px', textAlign: 'center' }}>
+                                <div style={{ fontSize: '0.6rem', color: '#7c3aed', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Battle</div>
+                                <div style={{ fontSize: '2.4rem', fontWeight: 900, marginBottom: '4px' }}>仲間</div>
+                                <div style={{ fontSize: '0.7rem', color: '#64748b', marginBottom: '20px' }}>nakama</div>
+                                {/* Blurred choices (pre-reveal) */}
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                                    {['', '', '', ''].map((_, i) => (
+                                        <div key={i} style={{ height: '32px', background: '#1a1b35', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)', filter: 'blur(3px)' }} />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Screen 2: Quiz choices */}
+                    <div style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>② Pick the meaning</div>
+                        <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
+                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
+                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>🔥 3</span>
+                            </div>
+                            <div style={{ padding: '24px 14px 20px', textAlign: 'center' }}>
+                                <div style={{ fontSize: '0.6rem', color: '#7c3aed', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Battle</div>
+                                <div style={{ fontSize: '2.4rem', fontWeight: 900, marginBottom: '4px' }}>仲間</div>
+                                <div style={{ fontSize: '0.7rem', color: '#64748b', marginBottom: '20px' }}>nakama</div>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                                    {['rival', 'enemy', 'comrade', 'mentor'].map((opt, i) => (
+                                        <div key={i} style={{
+                                            padding: '8px 4px', fontSize: '0.68rem', fontWeight: 600,
+                                            background: '#1a1b35', borderRadius: '8px',
+                                            border: '1.5px solid rgba(255,255,255,0.08)',
+                                            color: '#f1f5f9', textAlign: 'center',
+                                        }}>{opt}</div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Screen 3: Correct feedback */}
+                    <div style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>③ Instant feedback</div>
+                        <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
+                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
+                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>🔥 3</span>
+                            </div>
+                            <div style={{ padding: '24px 14px 12px', textAlign: 'center' }}>
+                                <div style={{ fontSize: '0.6rem', color: '#7c3aed', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Battle</div>
+                                <div style={{ fontSize: '2.4rem', fontWeight: 900, marginBottom: '4px' }}>仲間</div>
+                                <div style={{ fontSize: '0.7rem', color: '#64748b', marginBottom: '16px' }}>nakama</div>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '10px' }}>
+                                    {[
+                                        { label: 'rival', correct: false, selected: false },
+                                        { label: 'enemy', correct: false, selected: false },
+                                        { label: 'comrade', correct: true, selected: true },
+                                        { label: 'mentor', correct: false, selected: false },
+                                    ].map((opt, i) => (
+                                        <div key={i} style={{
+                                            padding: '8px 4px', fontSize: '0.68rem', fontWeight: 600,
+                                            background: opt.correct ? 'rgba(34,197,94,0.15)' : '#1a1b35',
+                                            borderRadius: '8px',
+                                            border: `1.5px solid ${opt.correct ? 'rgba(34,197,94,0.5)' : 'rgba(255,255,255,0.06)'}`,
+                                            color: opt.correct ? '#4ade80' : '#475569', textAlign: 'center',
+                                        }}>{opt.label}</div>
+                                    ))}
+                                </div>
+                            </div>
+                            {/* Feedback banner */}
+                            <div style={{ background: '#0a2e22', padding: '10px 14px', borderTop: '1px solid rgba(34,197,94,0.2)' }}>
+                                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#4ade80', marginBottom: '2px' }}>✓ Correct! +10 XP</div>
+                                <div style={{ fontSize: '0.62rem', color: '#94a3b8' }}>comrade / ally / nakama</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Screen 4: Dashboard */}
+                    <div style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>④ Track your streak</div>
+                        <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
+                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
+                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>🔥 7</span>
+                            </div>
+                            <div style={{ padding: '12px 14px' }}>
+                                <div style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)', borderRadius: '12px', padding: '12px', textAlign: 'center', marginBottom: '8px' }}>
+                                    <div style={{ fontSize: '1.2rem', marginBottom: '4px' }}>⚡</div>
+                                    <div style={{ fontSize: '0.72rem', fontWeight: 800, marginBottom: '2px' }}>8 cards ready</div>
+                                    <div style={{ fontSize: '0.6rem', color: '#94a3b8', marginBottom: '10px' }}>3 reviews · 5 new words</div>
+                                    <div style={{ background: '#7c3aed', borderRadius: '8px', padding: '6px', fontSize: '0.65rem', fontWeight: 800, color: 'white' }}>Start Session →</div>
+                                </div>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                                    {[
+                                        { icon: '📖', label: 'Reviews', val: '3', color: '#f59e0b' },
+                                        { icon: '✨', label: 'New', val: '5', color: '#7c3aed' },
+                                        { icon: '🔥', label: 'Streak', val: '7', color: '#ef4444' },
+                                        { icon: '⭐', label: 'XP', val: '240', color: '#fbbf24' },
+                                    ].map((s, i) => (
+                                        <div key={i} style={{ background: '#13142a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '8px', padding: '8px' }}>
+                                            <div style={{ fontSize: '0.7rem' }}>{s.icon}</div>
+                                            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: s.color }}>{s.val}</div>
+                                            <div style={{ fontSize: '0.55rem', color: '#64748b' }}>{s.label}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Scroll hint */}
+                <p style={{ textAlign: 'center', fontSize: '0.72rem', color: '#334155', margin: '0' }}>← swipe to see more →</p>
+            </section>
+
             {/* Numbers — no adjectives */}
             <section style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px 48px' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', textAlign: 'center' }}>
