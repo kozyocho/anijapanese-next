@@ -29,25 +29,15 @@ export function FeedbackOverlay({ isCorrect, word, correctAnswer, onNext }: Prop
     return (
         <div
             style={{
-                position: 'fixed', inset: 0, zIndex: 100,
-                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end',
-                background: isCorrect
-                    ? 'linear-gradient(to top, rgba(16,185,129,0.15), transparent)'
-                    : 'linear-gradient(to top, rgba(239,68,68,0.12), transparent)',
-                padding: '0 20px 40px',
+                position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100,
+                display: 'flex', flexDirection: 'column', alignItems: 'center',
+                background: isCorrect ? '#0a2e22' : '#2e0a0a',
+                borderTop: `2px solid ${isCorrect ? '#10b981' : '#ef4444'}`,
+                padding: '20px 20px 40px',
             }}
             onClick={onNext}
         >
-            <div
-                style={{
-                    width: '100%', maxWidth: '480px',
-                    background: isCorrect ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.1)',
-                    border: `1.5px solid ${isCorrect ? '#10b981' : '#ef4444'}`,
-                    borderRadius: '20px',
-                    padding: '24px 20px',
-                    textAlign: 'center',
-                }}
-            >
+            <div style={{ width: '100%', maxWidth: '480px', textAlign: 'center' }}>
                 <div style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '8px', color: isCorrect ? '#10b981' : '#ef4444' }}>
                     {msg}
                 </div>

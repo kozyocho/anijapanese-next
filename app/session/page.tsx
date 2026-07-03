@@ -59,6 +59,12 @@ export default function SessionPage() {
         setShuffledChoices(pool)
     }, [currentItem?.content_id]) // eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(() => {
+        if (feedback) {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+        }
+    }, [feedback])
+
     const handleAnswer = useCallback(async (isCorrect: boolean) => {
         setFeedback({ isCorrect })
         if (!guestId || !currentItem) return
@@ -165,7 +171,7 @@ export default function SessionPage() {
 
 
     return (
-        <div style={{ minHeight: '100dvh', padding: '20px', maxWidth: '480px', margin: '0 auto' }}>
+        <div style={{ minHeight: '100dvh', padding: '20px', maxWidth: '480px', margin: '0 auto', paddingBottom: feedback ? '260px' : '20px' }}>
             {/* Progress bar */}
             <div style={{ marginBottom: '20px' }}>
                 <div style={{
