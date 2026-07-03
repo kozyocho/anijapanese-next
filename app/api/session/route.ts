@@ -36,12 +36,36 @@ const adminClient = createClient<Database>(
     process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
+const FREE_DAILY_NEW_LIMIT = 5
+
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const userId = searchParams.get('userId')
-    const newCount = Math.min(parseInt(searchParams.get('new') ?? '5'), 10)
 
     if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 })
+
+    // Check premium status
+    const { data: profileRow } = await adminClient
+        .from('profiles')
+        .select('is_premium')
+        .eq('id', userId)
+        .single()
+    const isPremium = profileRow?.is_premium ?? false
+
+    // Count new words learned today (for free-tier limit)
+    const todayStart = new Date()
+    todayStart.setHours(0, 0, 0, 0)
+    const { count: todayNewCount } = await adminClient
+        .from('user_learned_contents')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .gte('learned_at', todayStart.toISOString())
+
+    const dailyNewUsed = todayNewCount ?? 0
+    const dailyNewRemaining = isPremium ? 999 : Math.max(0, FREE_DAILY_NEW_LIMIT - dailyNewUsed)
+
+    const requestedNew = parseInt(searchParams.get('new') ?? '5')
+    const newCount = Math.min(requestedNew, isPremium ? 10 : dailyNewRemaining)
 
     const items: SessionItem[] = []
     const usedIds = new Set<number>()
@@ -133,5 +157,11 @@ export async function GET(req: NextRequest) {
     // Shuffle session order (reviews interleaved with new words)
     const shuffled = items.sort(() => Math.random() - 0.5)
 
-    return NextResponse.json({ items: shuffled, distractors })
+    return NextResponse.json({
+        items: shuffled,
+        distractors,
+        isPremium,
+        dailyNewUsed,
+        dailyNewLimit: isPremium ? null : FREE_DAILY_NEW_LIMIT,
+    })
 }

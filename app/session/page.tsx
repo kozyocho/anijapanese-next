@@ -33,6 +33,16 @@ export default function SessionPage() {
     // Shuffled choices — computed only when the current item changes, NOT on re-render
     const [shuffledChoices, setShuffledChoices] = useState<string[]>([])
 
+    // Paywall gate — non-premium users redirected to home
+    useEffect(() => {
+        if (!guestId) return
+        fetch(`/api/profile?userId=${guestId}`)
+            .then(r => r.json())
+            .then(({ profile }) => {
+                if (!profile?.is_premium) router.replace('/')
+            })
+    }, [guestId, router])
+
     useEffect(() => {
         if (!guestId) return
         fetch(`/api/session?userId=${guestId}&new=10`)

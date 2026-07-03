@@ -13,9 +13,23 @@ export async function GET(req: NextRequest) {
 
     const { data } = await adminClient
         .from('profiles')
-        .select('current_streak, is_guest')
+        .select('current_streak, is_guest, is_premium')
         .eq('id', userId)
         .single()
 
     return NextResponse.json({ profile: data })
+}
+
+export async function PATCH(req: NextRequest) {
+    const body = await req.json()
+    const { userId, ...updates } = body
+    if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 })
+
+    const { error } = await adminClient
+        .from('profiles')
+        .update(updates)
+        .eq('id', userId)
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ ok: true })
 }

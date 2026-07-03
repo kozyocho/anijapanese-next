@@ -9,7 +9,23 @@
       "Bash(npm install:*)",
       "Bash(clerk auth:*)",
       "Bash(clerk init:*)",
-      "Bash(clerk doctor:*)"
+      "Bash(clerk doctor:*)",
+      "Bash(command -v supabase)",
+      "Bash(supabase --version)",
+      "Bash(brew install:*)",
+      "Bash(supabase login:*)",
+      "Bash(curl:*)",
+      "Bash(command -v ngrok)",
+      "Bash(ngrok --version)",
+      "Bash(npx tsc:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs -I{} ps -p {} -o pid,command)",
+      "Bash(kill 14039 19283 19507 21933)",
+      "Bash(npm list:*)",
+      "Bash(/Users/shoheiyamasaki/projects/anijapanese-next/.env.local:*)",
+      "Bash(open:*)",
+      "Bash(npx skills:*)",
+      "Bash(git -C /Users/shoheiyamasaki/projects/anijapanese-next remote -v)"
     ]
   }
 }
