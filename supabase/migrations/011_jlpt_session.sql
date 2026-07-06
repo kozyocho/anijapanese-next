@@ -1,15 +1,9 @@
 -- Migration 011: Standardize jlpt_level to JLPT scale (5=N5 easiest → 1=N1 hardest)
--- Old constraint: BETWEEN 0 AND 4
--- New constraint: BETWEEN 1 AND 5
 
--- Step 1: Drop old check constraint
+-- Step 1: Drop old check constraint (BETWEEN 0 AND 4)
 ALTER TABLE profiles DROP CONSTRAINT IF EXISTS profiles_jlpt_level_check;
 
--- Step 2: Add new check constraint for JLPT scale
-ALTER TABLE profiles ADD CONSTRAINT profiles_jlpt_level_check
-    CHECK (jlpt_level BETWEEN 1 AND 5);
-
--- Step 3: Migrate existing data
+-- Step 2: Migrate existing data BEFORE adding new constraint
 -- Old values: 0=beginner → N5(5), 1=intermediate → N3(3)
 UPDATE profiles
 SET jlpt_level = CASE
@@ -21,3 +15,7 @@ END;
 UPDATE profiles
 SET jlpt_label = 'N' || jlpt_level::text
 WHERE jlpt_level BETWEEN 1 AND 5;
+
+-- Step 3: Add new check constraint after data is clean
+ALTER TABLE profiles ADD CONSTRAINT profiles_jlpt_level_check
+    CHECK (jlpt_level BETWEEN 1 AND 5);
