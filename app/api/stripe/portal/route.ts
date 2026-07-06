@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
+import { auth } from '@clerk/nextjs/server'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 const adminClient = createClient(
@@ -9,10 +10,10 @@ const adminClient = createClient(
 )
 
 export async function POST(req: NextRequest) {
-    const { userId } = await req.json()
-    if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 })
+    const { userId } = await auth()
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const origin = req.headers.get('origin') ?? process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+    const origin = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
     const { data: profile } = await adminClient
         .from('profiles')

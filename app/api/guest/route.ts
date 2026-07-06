@@ -8,10 +8,12 @@ const adminClient = createClient<Database>(
     process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
 export async function POST(req: NextRequest) {
     try {
         const { guestId } = await req.json()
-        if (!guestId || typeof guestId !== 'string') {
+        if (!guestId || typeof guestId !== 'string' || !UUID_RE.test(guestId)) {
             return NextResponse.json({ error: 'Invalid guestId' }, { status: 400 })
         }
 

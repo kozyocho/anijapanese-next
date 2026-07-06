@@ -6,7 +6,7 @@ import { createContext, useContext, useEffect, useState, useCallback } from 'rea
 interface GuestContextValue {
     guestId: string | null
     isLoading: boolean
-    profile: { current_streak: number; is_guest: boolean; is_premium: boolean } | null
+    profile: { current_streak: number; is_guest: boolean; is_premium: boolean; plan_type: string } | null
     refreshProfile: () => Promise<void>
 }
 

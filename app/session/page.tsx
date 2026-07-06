@@ -43,26 +43,26 @@ export default function SessionPage() {
     const [shuffledChoices, setShuffledChoices] = useState<string[]>([])
     const [selectedChoice, setSelectedChoice] = useState<string | null>(null)
 
-    // Paywall gate — non-premium users redirected to home
+    // Paywall gate then session load — sequential to prevent non-premium users seeing session content
     useEffect(() => {
         if (!guestId) return
-        fetch(`/api/profile?userId=${guestId}`)
-            .then(r => r.json())
-            .then(({ profile }) => {
-                if (!profile?.is_premium) router.replace('/')
-            })
-    }, [guestId, router])
+        let cancelled = false
+        async function init() {
+            const profileRes = await fetch(`/api/profile?userId=${guestId}`)
+            const { profile } = await profileRes.json()
+            if (cancelled) return
+            if (!profile?.is_premium) { router.replace('/'); return }
 
-    useEffect(() => {
-        if (!guestId) return
-        fetch(`/api/session?userId=${guestId}&new=10`)
-            .then(r => r.json())
-            .then(({ items, distractors }) => {
-                if (!items?.length) { router.push('/'); return }
-                setItems(items)
-                setDistractors(distractors ?? {})
-                setLoading(false)
-            })
+            const sessionRes = await fetch(`/api/session?userId=${guestId}&new=10`)
+            const { items, distractors } = await sessionRes.json()
+            if (cancelled) return
+            if (!items?.length) { router.push('/'); return }
+            setItems(items)
+            setDistractors(distractors ?? {})
+            setLoading(false)
+        }
+        init()
+        return () => { cancelled = true }
     }, [guestId, router])
 
     const currentItem = items[index]

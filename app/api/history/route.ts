@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { auth } from '@clerk/nextjs/server'
 
 const adminClient = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -8,7 +9,8 @@ const adminClient = createClient(
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
-    const userId = searchParams.get('userId')
+    const { userId: clerkUserId } = await auth()
+    const userId = clerkUserId ?? searchParams.get('userId')
     if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 })
 
     const ninetyDaysAgo = new Date()

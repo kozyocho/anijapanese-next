@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
+import { auth } from '@clerk/nextjs/server'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 const adminClient = createClient(
@@ -8,11 +9,46 @@ const adminClient = createClient(
     process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-export async function POST(req: NextRequest) {
-    const { userId, email, useWelcomeOffer } = await req.json()
-    if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 })
+type PlanType = 'monthly' | 'annual' | 'lifetime'
 
-    const origin = req.headers.get('origin') ?? process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+const PLAN_CONFIG: Record<PlanType, {
+    priceIdEnv: string
+    mode: Stripe.Checkout.SessionCreateParams['mode']
+}> = {
+    monthly: { priceIdEnv: 'STRIPE_MONTHLY_PRICE_ID', mode: 'subscription' },
+    annual:  { priceIdEnv: 'STRIPE_ANNUAL_PRICE_ID',  mode: 'subscription' },
+    lifetime: { priceIdEnv: 'STRIPE_LIFETIME_PRICE_ID', mode: 'payment' },
+}
+
+export async function POST(req: NextRequest) {
+    const body = await req.json()
+    const { userId: clerkUserId } = await auth()
+    if (!clerkUserId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const userId = clerkUserId
+
+    const { email, planType, useWelcomeOffer } = body as {
+        email?: string
+        planType: PlanType
+        useWelcomeOffer?: boolean
+    }
+
+    if (!planType || !(planType in PLAN_CONFIG)) {
+        return NextResponse.json({ error: 'Invalid planType' }, { status: 400 })
+    }
+
+    const { priceIdEnv, mode } = PLAN_CONFIG[planType]
+
+    // For lifetime: use sale price if welcome offer is active
+    const lifetimeSalePriceId = process.env.STRIPE_LIFETIME_SALE_PRICE_ID
+    const priceId = (planType === 'lifetime' && useWelcomeOffer && lifetimeSalePriceId)
+        ? lifetimeSalePriceId
+        : process.env[priceIdEnv]
+
+    if (!priceId) {
+        return NextResponse.json({ error: `Price not configured for plan: ${planType}` }, { status: 500 })
+    }
+
+    const origin = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
     // Get or create Stripe customer
     const { data: profile } = await adminClient
@@ -31,22 +67,18 @@ export async function POST(req: NextRequest) {
         await adminClient.from('profiles').update({ stripe_customer_id: customerId }).eq('id', userId)
     }
 
-    // Use welcome offer price/coupon if within 24h sale window
-    const salePriceId = process.env.STRIPE_SALE_PRICE_ID
-    const welcomeCouponId = process.env.STRIPE_WELCOME_COUPON_ID
-    const priceId = (useWelcomeOffer && salePriceId) ? salePriceId : process.env.STRIPE_PRICE_ID!
-
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
         customer: customerId,
-        mode: 'payment',
+        mode,
         line_items: [{ price: priceId, quantity: 1 }],
         success_url: `${origin}/?upgraded=1`,
         cancel_url: `${origin}/`,
-        metadata: { userId },
+        metadata: { userId, planType },
     }
 
-    if (useWelcomeOffer && welcomeCouponId && !salePriceId) {
-        sessionParams.discounts = [{ coupon: welcomeCouponId }]
+    // For subscription plans, allow proration and trial if needed
+    if (mode === 'subscription') {
+        sessionParams.subscription_data = { metadata: { userId, planType } }
     }
 
     const session = await stripe.checkout.sessions.create(sessionParams)

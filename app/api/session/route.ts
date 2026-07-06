@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/database'
+import { auth } from '@clerk/nextjs/server'
 
 const SRS_INTERVALS_DAYS = [1, 3, 7, 14] // level 1→4
 
@@ -40,7 +41,8 @@ const FREE_DAILY_NEW_LIMIT = 5
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
-    const userId = searchParams.get('userId')
+    const { userId: clerkUserId } = await auth()
+    const userId = clerkUserId ?? searchParams.get('userId')
 
     if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 })
 

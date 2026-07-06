@@ -124,10 +124,41 @@ function DemoQuiz({ onFinish, priceLabel, onBuy, buying }: {
 
 // ── Landing Page ──────────────────────────────────────────────────────────
 
+type PlanType = 'monthly' | 'annual' | 'lifetime'
+
+const PLANS = [
+    {
+        id: 'monthly' as PlanType,
+        label: 'Monthly',
+        price: '$4.99',
+        per: '/month',
+        badge: null,
+        features: ['Unlimited new words', 'All 500+ words', 'SRS system', 'Streak tracking'],
+    },
+    {
+        id: 'annual' as PlanType,
+        label: 'Annual',
+        price: '$29.99',
+        per: '/year',
+        badge: 'Most Popular',
+        monthlyEquiv: '$2.50/mo',
+        features: ['Everything in Monthly', '50% cheaper than monthly', 'All future word packs'],
+    },
+    {
+        id: 'lifetime' as PlanType,
+        label: 'Lifetime',
+        price: '$59.99',
+        salePriceRaw: '$39.99',
+        per: ' one-time',
+        badge: null,
+        features: ['Everything in Annual', 'Pay once, own forever', 'No subscription ever'],
+    },
+]
+
 function LandingPage({ guestId }: { guestId: string | null }) {
     const sale = useSale()
     const [showDemo, setShowDemo] = useState(false)
-    const [buying, setBuying] = useState(false)
+    const [buying, setBuying] = useState<PlanType | null>(null)
     const [showPromo, setShowPromo] = useState(false)
     const [promoCode, setPromoCode] = useState('')
     const [promoStatus, setPromoStatus] = useState<'idle' | 'loading' | 'error'>('idle')
@@ -149,27 +180,25 @@ function LandingPage({ guestId }: { guestId: string | null }) {
             setPromoError(data.error ?? 'Something went wrong')
             return
         }
-        // Success — reload as premium
         router.replace('/?upgraded=1')
     }
 
-    const salePrice = '$9.99'
-    const regularPrice = '$19.99'
-    const priceLabel = sale.isActive ? salePrice : regularPrice
-
-    async function buy() {
+    async function buy(planType: PlanType) {
         if (!guestId) return
-        setBuying(true)
+        setBuying(planType)
         try {
             const res = await fetch('/api/stripe/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: guestId, useWelcomeOffer: sale.isActive }),
+                body: JSON.stringify({
+                    planType,
+                    useWelcomeOffer: sale.isActive && planType === 'lifetime',
+                }),
             })
             const { url } = await res.json()
             if (url) window.location.href = url
         } finally {
-            setBuying(false)
+            setBuying(null)
         }
     }
 
@@ -221,7 +250,7 @@ function LandingPage({ guestId }: { guestId: string | null }) {
             {/* Hero — sells in one screen */}
             <section style={{ maxWidth: '480px', margin: '0 auto', padding: '52px 20px 40px', textAlign: 'center' }}>
                 <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#7c3aed', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '18px' }}>
-                    500+ anime words · 10 min/day · One-time payment
+                    500+ anime words · 10 min/day · From $2.50/month
                 </div>
                 <h1 style={{
                     fontSize: 'clamp(2rem, 8vw, 2.8rem)', fontWeight: 900,
@@ -236,77 +265,24 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                     Master the words you actually hear in your favorite anime. Spaced repetition. 10 minutes a day.
                 </p>
 
-                {/* ONE call to action */}
+                {/* Primary CTA — Annual (most popular) */}
                 <SignedIn>
-                    <button onClick={buy} disabled={buying} style={BTN}>
-                        {buying ? 'Redirecting...' : `Get lifetime access — ${priceLabel}`}
+                    <button onClick={() => buy('annual')} disabled={buying !== null} style={BTN}>
+                        {buying === 'annual' ? 'Redirecting...' : 'Get Annual — $29.99/yr'}
                     </button>
                 </SignedIn>
                 <SignedOut>
                     <SignInButton mode="modal">
-                        <button style={BTN}>Get lifetime access — {priceLabel}</button>
+                        <button style={BTN}>Get Annual — $29.99/yr</button>
                     </SignInButton>
                 </SignedOut>
 
                 <p style={{ marginTop: '10px', fontSize: '0.78rem', color: '#475569' }}>
-                    {sale.isActive
-                        ? <><span style={{ textDecoration: 'line-through' }}>{regularPrice}</span> · One-time · No subscription</>
-                        : 'One-time payment · No subscription · All future updates'}
+                    $2.50/mo · Cancel anytime ·{' '}
+                    <a href="#pricing" style={{ color: '#7c3aed', textDecoration: 'none', fontWeight: 600 }}>
+                        See all plans ↓
+                    </a>
                 </p>
-
-                {/* Promo code */}
-                <div style={{ marginTop: '20px' }}>
-                    {!showPromo ? (
-                        <button onClick={() => setShowPromo(true)} style={{
-                            background: 'rgba(124,58,237,0.1)',
-                            border: '1px solid rgba(124,58,237,0.3)',
-                            borderRadius: '10px',
-                            color: '#a78bfa',
-                            fontSize: '0.85rem',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            fontFamily: 'inherit',
-                            padding: '10px 20px',
-                            width: '100%',
-                        }}>
-                            Have a promo code? →
-                        </button>
-                    ) : (
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                            <input
-                                value={promoCode}
-                                onChange={e => setPromoCode(e.target.value)}
-                                onKeyDown={e => e.key === 'Enter' && redeemPromo()}
-                                placeholder="Enter promo code"
-                                style={{
-                                    flex: 1, padding: '10px 14px',
-                                    background: '#1a1b35', border: '1px solid rgba(255,255,255,0.12)',
-                                    borderRadius: '10px', color: '#f1f5f9',
-                                    fontFamily: 'inherit', fontSize: '0.88rem',
-                                    outline: 'none', textTransform: 'uppercase',
-                                }}
-                            />
-                            <button
-                                onClick={redeemPromo}
-                                disabled={promoStatus === 'loading' || !promoCode.trim()}
-                                style={{
-                                    padding: '10px 18px', background: '#7c3aed',
-                                    border: 'none', borderRadius: '10px',
-                                    color: 'white', fontFamily: 'inherit',
-                                    fontSize: '0.88rem', fontWeight: 700,
-                                    cursor: promoStatus === 'loading' ? 'default' : 'pointer',
-                                    opacity: !promoCode.trim() ? 0.5 : 1,
-                                }}
-                            >
-                                {promoStatus === 'loading' ? '…' : 'Apply'}
-                            </button>
-                        </div>
-                    )}
-                    {promoStatus === 'error' && (
-                        <p style={{ marginTop: '8px', fontSize: '0.78rem', color: '#f87171' }}>{promoError}</p>
-                    )}
-                </div>
-            </section>
 
             {/* Demo — show the product before explaining it */}
             <section style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px 48px' }}>
@@ -332,10 +308,10 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                         </div>
                     ) : (
                         <DemoQuiz
-                            priceLabel={priceLabel}
+                            priceLabel="$29.99/yr"
                             onFinish={() => {}}
-                            onBuy={buy}
-                            buying={buying}
+                            onBuy={() => buy('annual')}
+                            buying={buying === 'annual'}
                         />
                     )}
                 </div>
@@ -481,7 +457,7 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                     {[
                         { n: '500+', label: 'anime words' },
                         { n: '10 min', label: 'per day' },
-                        { n: '$19.99', label: 'one-time only' },
+                        { n: '$2.50', label: 'per month (annual)' },
                     ].map((s, i) => (
                         <div key={i} style={{ background: '#13142a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', padding: '18px 12px' }}>
                             <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#7c3aed', marginBottom: '4px' }}>{s.n}</div>
@@ -491,50 +467,164 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                 </div>
             </section>
 
-            {/* Pricing — impossible to miss */}
+            {/* Pricing */}
             <section id="pricing" style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px 64px' }}>
-                <h2 style={{ fontSize: '1.4rem', fontWeight: 900, textAlign: 'center', margin: '0 0 20px', letterSpacing: '-0.02em' }}>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 900, textAlign: 'center', margin: '0 0 8px', letterSpacing: '-0.02em' }}>
                     Simple pricing
                 </h2>
+                <p style={{ textAlign: 'center', color: '#64748b', fontSize: '0.85rem', margin: '0 0 24px' }}>
+                    Free to try · Upgrade anytime
+                </p>
+
+                {/* Free tier */}
                 <div style={{
-                    background: '#13142a', border: '1.5px solid rgba(124,58,237,0.35)',
-                    borderRadius: '20px', padding: '28px 24px', textAlign: 'center',
+                    background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.07)',
+                    borderRadius: '16px', padding: '18px 20px', marginBottom: '12px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 }}>
-                    {sale.isActive ? (
-                        <div style={{ marginBottom: '4px' }}>
-                            <span style={{ fontSize: '1.1rem', color: '#64748b', textDecoration: 'line-through', marginRight: '10px' }}>{regularPrice}</span>
-                            <span style={{ fontSize: '2.8rem', fontWeight: 900 }}>{salePrice}</span>
-                        </div>
-                    ) : (
-                        <div style={{ fontSize: '2.8rem', fontWeight: 900, marginBottom: '4px' }}>{regularPrice}</div>
-                    )}
-                    <div style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '24px' }}>
-                        One-time · Lifetime access · No subscription ever
+                    <div>
+                        <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '2px' }}>Free</div>
+                        <div style={{ fontSize: '0.78rem', color: '#475569' }}>5 words/day · No SRS</div>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px', textAlign: 'left' }}>
-                        {[
-                            'Unlimited new words every day',
-                            'All 500+ anime vocabulary words',
-                            'Spaced repetition (SRS) system',
-                            'Streak tracking & progress stats',
-                            'All future word packs included',
-                        ].map((f, i) => (
-                            <div key={i} style={{ display: 'flex', gap: '10px', fontSize: '0.9rem', color: '#94a3b8' }}>
-                                <span style={{ color: '#7c3aed', fontWeight: 800, flexShrink: 0 }}>✓</span>
-                                {f}
+                    <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#64748b' }}>$0</div>
+                </div>
+
+                {/* Paid plans */}
+                {PLANS.map(plan => {
+                    const isAnnual = plan.id === 'annual'
+                    const isLifetime = plan.id === 'lifetime'
+                    const displayPrice = isLifetime && sale.isActive ? plan.salePriceRaw! : plan.price
+                    const isBuying = buying === plan.id
+
+                    return (
+                        <div key={plan.id} style={{
+                            background: isAnnual ? 'linear-gradient(135deg,rgba(124,58,237,0.15),rgba(109,40,217,0.08))' : '#13142a',
+                            border: isAnnual ? '1.5px solid rgba(124,58,237,0.5)' : '1px solid rgba(255,255,255,0.07)',
+                            borderRadius: '18px', padding: '22px 20px', marginBottom: '12px',
+                        }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
+                                <div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
+                                        <span style={{ fontWeight: 800, fontSize: '1rem' }}>{plan.label}</span>
+                                        {plan.badge && (
+                                            <span style={{
+                                                fontSize: '0.65rem', fontWeight: 800,
+                                                background: '#7c3aed', color: 'white',
+                                                padding: '2px 8px', borderRadius: '99px',
+                                                textTransform: 'uppercase', letterSpacing: '0.04em',
+                                            }}>{plan.badge}</span>
+                                        )}
+                                        {isLifetime && sale.isActive && (
+                                            <span style={{
+                                                fontSize: '0.65rem', fontWeight: 800,
+                                                background: '#db2777', color: 'white',
+                                                padding: '2px 8px', borderRadius: '99px',
+                                            }}>Sale</span>
+                                        )}
+                                    </div>
+                                    {'monthlyEquiv' in plan && (
+                                        <div style={{ fontSize: '0.75rem', color: '#7c3aed', fontWeight: 600 }}>{plan.monthlyEquiv}</div>
+                                    )}
+                                </div>
+                                <div style={{ textAlign: 'right' }}>
+                                    {isLifetime && sale.isActive && (
+                                        <div style={{ fontSize: '0.78rem', color: '#64748b', textDecoration: 'line-through' }}>{plan.price}</div>
+                                    )}
+                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
+                                        <span style={{ fontSize: '1.6rem', fontWeight: 900 }}>{displayPrice}</span>
+                                        <span style={{ fontSize: '0.75rem', color: '#64748b' }}>{plan.per}</span>
+                                    </div>
+                                </div>
                             </div>
-                        ))}
-                    </div>
-                    <SignedIn>
-                        <button onClick={buy} disabled={buying} style={BTN}>
-                            {buying ? 'Redirecting...' : `Get lifetime access — ${priceLabel}`}
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '7px', marginBottom: '16px' }}>
+                                {plan.features.map((f, i) => (
+                                    <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '0.83rem', color: '#94a3b8' }}>
+                                        <span style={{ color: '#7c3aed', fontWeight: 800, flexShrink: 0 }}>✓</span>
+                                        {f}
+                                    </div>
+                                ))}
+                            </div>
+
+                            <SignedIn>
+                                <button
+                                    onClick={() => buy(plan.id)}
+                                    disabled={buying !== null}
+                                    style={{
+                                        ...BTN,
+                                        background: isAnnual ? '#7c3aed' : 'rgba(124,58,237,0.15)',
+                                        boxShadow: isAnnual ? '0 4px 20px rgba(124,58,237,0.35)' : 'none',
+                                        color: isAnnual ? 'white' : '#a78bfa',
+                                        border: isAnnual ? 'none' : '1px solid rgba(124,58,237,0.3)',
+                                        opacity: buying !== null && !isBuying ? 0.6 : 1,
+                                        fontSize: '0.9rem', padding: '14px',
+                                    }}
+                                >
+                                    {isBuying ? 'Redirecting...' : `Get ${plan.label}`}
+                                </button>
+                            </SignedIn>
+                            <SignedOut>
+                                <SignInButton mode="modal">
+                                    <button style={{
+                                        ...BTN,
+                                        background: isAnnual ? '#7c3aed' : 'rgba(124,58,237,0.15)',
+                                        boxShadow: isAnnual ? '0 4px 20px rgba(124,58,237,0.35)' : 'none',
+                                        color: isAnnual ? 'white' : '#a78bfa',
+                                        border: isAnnual ? 'none' : '1px solid rgba(124,58,237,0.3)',
+                                        fontSize: '0.9rem', padding: '14px',
+                                    }}>
+                                        Get {plan.label}
+                                    </button>
+                                </SignInButton>
+                            </SignedOut>
+                        </div>
+                    )
+                })}
+
+                {/* Promo code */}
+                <div style={{ marginTop: '16px' }}>
+                    {!showPromo ? (
+                        <button onClick={() => setShowPromo(true)} style={{
+                            background: 'transparent', border: 'none',
+                            color: '#475569', fontSize: '0.82rem', fontWeight: 600,
+                            cursor: 'pointer', fontFamily: 'inherit', width: '100%', textAlign: 'center',
+                        }}>
+                            Have a promo code?
                         </button>
-                    </SignedIn>
-                    <SignedOut>
-                        <SignInButton mode="modal">
-                            <button style={BTN}>Get lifetime access — {priceLabel}</button>
-                        </SignInButton>
-                    </SignedOut>
+                    ) : (
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                            <input
+                                value={promoCode}
+                                onChange={e => setPromoCode(e.target.value)}
+                                onKeyDown={e => e.key === 'Enter' && redeemPromo()}
+                                placeholder="Enter promo code"
+                                style={{
+                                    flex: 1, padding: '10px 14px',
+                                    background: '#1a1b35', border: '1px solid rgba(255,255,255,0.12)',
+                                    borderRadius: '10px', color: '#f1f5f9',
+                                    fontFamily: 'inherit', fontSize: '0.88rem',
+                                    outline: 'none', textTransform: 'uppercase',
+                                }}
+                            />
+                            <button
+                                onClick={redeemPromo}
+                                disabled={promoStatus === 'loading' || !promoCode.trim()}
+                                style={{
+                                    padding: '10px 18px', background: '#7c3aed',
+                                    border: 'none', borderRadius: '10px',
+                                    color: 'white', fontFamily: 'inherit',
+                                    fontSize: '0.88rem', fontWeight: 700,
+                                    cursor: promoStatus === 'loading' ? 'default' : 'pointer',
+                                    opacity: !promoCode.trim() ? 0.5 : 1,
+                                }}
+                            >
+                                {promoStatus === 'loading' ? '…' : 'Apply'}
+                            </button>
+                        </div>
+                    )}
+                    {promoStatus === 'error' && (
+                        <p style={{ marginTop: '8px', fontSize: '0.78rem', color: '#f87171', textAlign: 'center' }}>{promoError}</p>
+                    )}
                 </div>
             </section>
 
