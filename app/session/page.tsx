@@ -18,6 +18,15 @@ interface SessionItem {
     srsLevel: number
 }
 
+function speakJapanese(text: string) {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return
+    window.speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = 'ja-JP'
+    utterance.rate = 0.85
+    window.speechSynthesis.speak(utterance)
+}
+
 export default function SessionPage() {
     const { guestId, refreshProfile } = useGuest()
     const router = useRouter()
@@ -67,6 +76,8 @@ export default function SessionPage() {
             [pool[i], pool[j]] = [pool[j], pool[i]]
         }
         setShuffledChoices(pool)
+        // Auto-play Japanese audio
+        speakJapanese(currentItem.japanese)
     }, [currentItem?.content_id]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
@@ -210,13 +221,36 @@ export default function SessionPage() {
             </div>
 
             {/* Word card */}
-            <div style={{ marginBottom: '24px' }}>
+            <div style={{ marginBottom: '16px' }}>
                 <WordCard
                     word={currentItem.japanese}
                     reading={currentItem.reading}
                     category={currentItem.category}
                     isReview={currentItem.isReview}
                 />
+            </div>
+
+            {/* Audio replay button */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                <button
+                    onClick={() => speakJapanese(currentItem.japanese)}
+                    style={{
+                        background: 'rgba(255,255,255,0.05)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        borderRadius: '99px',
+                        color: '#94a3b8',
+                        fontSize: '0.82rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        fontFamily: 'inherit',
+                        padding: '7px 18px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                    }}
+                >
+                    🔊 Play again
+                </button>
             </div>
 
             {/* Question */}
