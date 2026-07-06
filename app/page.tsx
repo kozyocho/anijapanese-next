@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { useGuest } from '@/lib/GuestProvider'
 import { StreakBadge } from '@/components/StreakBadge'
@@ -479,11 +480,19 @@ function LandingPage({ guestId }: { guestId: string | null }) {
 
 interface SessionData { reviewCount: number; newWordCount: number }
 
-function Dashboard({ guestId, profile }: {
+function Dashboard({ guestId, profile, showUpgradeSuccess }: {
     guestId: string
     profile: { current_streak: number } | null
+    showUpgradeSuccess?: boolean
 }) {
     const [data, setData] = useState<SessionData | null>(null)
+    const [toastVisible, setToastVisible] = useState(showUpgradeSuccess ?? false)
+
+    useEffect(() => {
+        if (!showUpgradeSuccess) return
+        const id = setTimeout(() => setToastVisible(false), 5000)
+        return () => clearTimeout(id)
+    }, [showUpgradeSuccess])
 
     useEffect(() => {
         fetch(`/api/session?userId=${guestId}&new=10`)
@@ -502,6 +511,28 @@ function Dashboard({ guestId, profile }: {
 
     return (
         <div style={{ minHeight: '100dvh', paddingBottom: '32px' }}>
+            {/* Upgrade success toast */}
+            {toastVisible && (
+                <div style={{
+                    position: 'fixed', top: '20px', left: '50%', transform: 'translateX(-50%)',
+                    zIndex: 1000, background: 'linear-gradient(135deg,#7c3aed,#059669)',
+                    borderRadius: '16px', padding: '16px 24px',
+                    display: 'flex', alignItems: 'center', gap: '12px',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                    animation: 'fadeIn 0.3s ease',
+                    maxWidth: '90vw',
+                }}>
+                    <span style={{ fontSize: '1.5rem' }}>🎉</span>
+                    <div>
+                        <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'white' }}>Premium unlocked!</div>
+                        <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.75)', marginTop: '2px' }}>Unlimited words, all features. Let's go!</div>
+                    </div>
+                    <button onClick={() => setToastVisible(false)} style={{
+                        background: 'none', border: 'none', color: 'rgba(255,255,255,0.6)',
+                        fontSize: '1.1rem', cursor: 'pointer', padding: '0 0 0 8px',
+                    }}>✕</button>
+                </div>
+            )}
             <div style={{
                 padding: '24px 20px 16px', maxWidth: '480px', margin: '0 auto',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -586,6 +617,8 @@ const LINK_STYLE: React.CSSProperties = {
 
 export default function HomePage() {
     const { guestId, isLoading, profile } = useGuest()
+    const searchParams = useSearchParams()
+    const upgraded = searchParams.get('upgraded') === '1'
 
     if (isLoading) {
         return (
@@ -598,7 +631,7 @@ export default function HomePage() {
     const isPremium = (profile as { is_premium?: boolean } | null)?.is_premium ?? false
 
     if (isPremium && guestId) {
-        return <Dashboard guestId={guestId} profile={profile} />
+        return <Dashboard guestId={guestId} profile={profile} showUpgradeSuccess={upgraded} />
     }
 
     return <LandingPage guestId={guestId} />
