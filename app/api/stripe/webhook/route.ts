@@ -27,11 +27,16 @@ export async function POST(req: NextRequest) {
     switch (event.type) {
         case 'checkout.session.completed': {
             const session = event.data.object as Stripe.Checkout.Session
+            const userId = session.metadata?.userId
             const customerId = getCustomerId(session)
-            if (customerId) {
+            if (userId) {
                 await adminClient.from('profiles')
-                    .update({ is_premium: true, subscription_status: 'active' })
-                    .eq('stripe_customer_id', customerId)
+                    .update({
+                        is_premium: true,
+                        subscription_status: 'active',
+                        ...(customerId ? { stripe_customer_id: customerId } : {}),
+                    })
+                    .eq('id', userId)
             }
             break
         }
