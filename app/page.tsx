@@ -7,6 +7,7 @@ import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { useGuest } from '@/lib/GuestProvider'
 import { StreakBadge } from '@/components/StreakBadge'
 import { useSale } from '@/lib/useSale'
+import { useRouter } from 'next/navigation'
 
 // ── Demo words shown on landing page (no account needed) ──────────────────
 
@@ -618,19 +619,52 @@ const LINK_STYLE: React.CSSProperties = {
 export default function HomePage() {
     const { guestId, isLoading, profile } = useGuest()
     const searchParams = useSearchParams()
+    const router = useRouter()
     const upgraded = searchParams.get('upgraded') === '1'
+    const [polling, setPolling] = useState(upgraded)
+    const [confirmedPremium, setConfirmedPremium] = useState(false)
 
-    if (isLoading) {
+    // When redirected from Stripe (?upgraded=1), poll until is_premium is true
+    useEffect(() => {
+        if (!upgraded || !guestId) return
+        let attempts = 0
+        const check = async () => {
+            const res = await fetch(`/api/profile?userId=${guestId}`)
+            const data = await res.json()
+            if (data.profile?.is_premium) {
+                setConfirmedPremium(true)
+                setPolling(false)
+                return
+            }
+            attempts++
+            if (attempts < 15) {
+                setTimeout(check, 2000)
+            } else {
+                setPolling(false) // give up after 30s
+            }
+        }
+        check()
+    }, [upgraded, guestId])
+
+    if (isLoading || polling) {
         return (
-            <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ color: '#64748b' }}>Loading...</div>
+            <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', color: '#f1f5f9' }}>
+                {upgraded ? (
+                    <>
+                        <div style={{ fontSize: '3rem' }}>🎉</div>
+                        <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>Payment successful!</div>
+                        <div style={{ color: '#64748b', fontSize: '0.9rem' }}>Activating your account…</div>
+                    </>
+                ) : (
+                    <div style={{ color: '#64748b' }}>Loading…</div>
+                )}
             </div>
         )
     }
 
-    const isPremium = (profile as { is_premium?: boolean } | null)?.is_premium ?? false
+    const isPremium = (profile as { is_premium?: boolean } | null)?.is_premium ?? confirmedPremium
 
-    if (isPremium && guestId) {
+    if ((isPremium || confirmedPremium) && guestId) {
         return <Dashboard guestId={guestId} profile={profile} showUpgradeSuccess={upgraded} />
     }
 
