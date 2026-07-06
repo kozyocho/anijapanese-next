@@ -257,11 +257,18 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                 <div style={{ marginTop: '20px' }}>
                     {!showPromo ? (
                         <button onClick={() => setShowPromo(true)} style={{
-                            background: 'none', border: 'none', color: '#475569',
-                            fontSize: '0.78rem', cursor: 'pointer', textDecoration: 'underline',
+                            background: 'rgba(124,58,237,0.1)',
+                            border: '1px solid rgba(124,58,237,0.3)',
+                            borderRadius: '10px',
+                            color: '#a78bfa',
+                            fontSize: '0.85rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
                             fontFamily: 'inherit',
+                            padding: '10px 20px',
+                            width: '100%',
                         }}>
-                            Have a promo code?
+                            Have a promo code? →
                         </button>
                     ) : (
                         <div style={{ display: 'flex', gap: '8px' }}>
