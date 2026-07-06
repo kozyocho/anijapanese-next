@@ -1,22 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-
 interface Props {
-    choices: string[]           // 4 options (shuffled, includes correct)
+    choices: string[]
     correctAnswer: string
-    onAnswer: (isCorrect: boolean) => void
+    selected: string | null
+    onSelect: (choice: string) => void
 }
 
-export function ChoiceGrid({ choices, correctAnswer, onAnswer }: Props) {
-    const [selected, setSelected] = useState<string | null>(null)
-
-    function handleSelect(choice: string) {
-        if (selected) return   // already answered
-        setSelected(choice)
-        onAnswer(choice === correctAnswer)
-    }
-
+export function ChoiceGrid({ choices, correctAnswer, selected, onSelect }: Props) {
     function getBg(choice: string) {
         if (!selected) return 'rgba(26,27,53,0.8)'
         if (choice === correctAnswer) return 'rgba(16,185,129,0.2)'
@@ -35,21 +26,17 @@ export function ChoiceGrid({ choices, correctAnswer, onAnswer }: Props) {
         if (!selected) return '#f1f5f9'
         if (choice === correctAnswer) return '#10b981'
         if (choice === selected && choice !== correctAnswer) return '#ef4444'
-        return '#64748b'
+        return '#475569'
     }
 
     return (
-        <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '12px',
-        }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             {choices.map((choice, i) => (
                 <button
                     key={i}
-                    onClick={() => handleSelect(choice)}
+                    onClick={() => !selected && onSelect(choice)}
                     style={{
-                        padding: '18px 12px',
+                        padding: '18px 12px 18px 10px',
                         background: getBg(choice),
                         border: getBorder(choice),
                         borderRadius: '14px',
@@ -59,11 +46,28 @@ export function ChoiceGrid({ choices, correctAnswer, onAnswer }: Props) {
                         fontWeight: 600,
                         cursor: selected ? 'default' : 'pointer',
                         transition: 'all 0.15s ease',
-                        textAlign: 'center',
+                        textAlign: 'left',
                         lineHeight: 1.3,
                         minHeight: '64px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
                     }}
                 >
+                    <span style={{
+                        fontSize: '0.65rem', fontWeight: 800,
+                        color: selected ? 'transparent' : '#334155',
+                        background: selected ? 'transparent' : 'rgba(255,255,255,0.05)',
+                        border: selected ? 'none' : '1px solid rgba(255,255,255,0.08)',
+                        borderRadius: '5px',
+                        padding: '2px 6px',
+                        flexShrink: 0,
+                        minWidth: '20px',
+                        textAlign: 'center',
+                        transition: 'all 0.15s',
+                    }}>
+                        {i + 1}
+                    </span>
                     {choice}
                 </button>
             ))}

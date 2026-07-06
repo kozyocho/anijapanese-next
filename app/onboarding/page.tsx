@@ -140,7 +140,7 @@ export default function OnboardingPage() {
                             boxShadow: '0 4px 24px rgba(124,58,237,0.4)',
                         }}
                     >
-                        Start for free
+                        Start setup
                     </button>
                     <p style={{ marginTop: '12px', fontSize: '0.78rem', color: '#475569' }}>
                         No account required &nbsp;·&nbsp; 2 min setup

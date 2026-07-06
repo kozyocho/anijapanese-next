@@ -40,8 +40,8 @@ export default function SessionPage() {
     const [done, setDone] = useState(false)
     const [loading, setLoading] = useState(true)
     const [sessionStart] = useState<number>(() => Date.now())
-    // Shuffled choices — computed only when the current item changes, NOT on re-render
     const [shuffledChoices, setShuffledChoices] = useState<string[]>([])
+    const [selectedChoice, setSelectedChoice] = useState<string | null>(null)
 
     // Paywall gate — non-premium users redirected to home
     useEffect(() => {
@@ -77,7 +77,7 @@ export default function SessionPage() {
             [pool[i], pool[j]] = [pool[j], pool[i]]
         }
         setShuffledChoices(pool)
-        // Auto-play Japanese audio
+        setSelectedChoice(null)
         speakJapanese(currentItem.japanese)
     }, [currentItem?.content_id]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -86,6 +86,28 @@ export default function SessionPage() {
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
         }
     }, [feedback])
+
+    // Keyboard shortcuts: 1-4 to pick, Space/Enter to continue
+    useEffect(() => {
+        function onKey(e: KeyboardEvent) {
+            if (e.key === ' ' || e.key === 'Enter') {
+                if (feedback) { e.preventDefault(); handleNext() }
+                return
+            }
+            const num = parseInt(e.key)
+            if (num >= 1 && num <= shuffledChoices.length && !feedback && !selectedChoice) {
+                handleSelect(shuffledChoices[num - 1])
+            }
+        }
+        window.addEventListener('keydown', onKey)
+        return () => window.removeEventListener('keydown', onKey)
+    }, [feedback, shuffledChoices, selectedChoice, handleNext]) // eslint-disable-line react-hooks/exhaustive-deps
+
+    function handleSelect(choice: string) {
+        if (selectedChoice || !currentItem) return
+        setSelectedChoice(choice)
+        handleAnswer(choice === currentItem.english)
+    }
 
     const handleAnswer = useCallback(async (isCorrect: boolean) => {
         setFeedback({ isCorrect })
@@ -217,8 +239,9 @@ export default function SessionPage() {
                 </div>
             </div>
 
-            {/* Word card */}
-            <div style={{ marginBottom: '16px' }}>
+            {/* Word card — key forces remount + fade on each new word */}
+            <div key={currentItem.content_id} style={{ marginBottom: '16px', animation: 'fadeIn 0.25s ease both' }}>
+                <style>{`@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }`}</style>
                 <WordCard
                     word={currentItem.japanese}
                     reading={currentItem.reading}
@@ -257,10 +280,10 @@ export default function SessionPage() {
 
             {/* Choices */}
             <ChoiceGrid
-                key={currentItem.content_id}
                 choices={shuffledChoices}
                 correctAnswer={currentItem.english}
-                onAnswer={handleAnswer}
+                selected={selectedChoice}
+                onSelect={handleSelect}
             />
 
             {/* Don't know button */}
@@ -290,6 +313,7 @@ export default function SessionPage() {
                 <FeedbackOverlay
                     isCorrect={feedback.isCorrect}
                     word={currentItem.japanese}
+                    reading={currentItem.reading}
                     correctAnswer={currentItem.english}
                     onNext={handleNext}
                 />
