@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background -->
+  <rect width="32" height="32" rx="7" fill="url(#bg)"/>
+  <!-- Gold accent dot (top-right) -->
+  <circle cx="25" cy="7" r="3" fill="#fbbf24" opacity="0.9"/>
+  <!-- 語 = word / language -->
+  <text
+    x="15"
+    y="23"
+    text-anchor="middle"
+    font-family="serif"
+    font-size="18"
+    font-weight="bold"
+    fill="white"
+    letter-spacing="-0.5"
+  >語</text>
+</svg>
