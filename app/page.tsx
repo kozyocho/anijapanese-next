@@ -637,10 +637,10 @@ export default function HomePage() {
                 return
             }
             attempts++
-            if (attempts < 15) {
-                setTimeout(check, 2000)
+            if (attempts < 20) {
+                setTimeout(check, 1000)
             } else {
-                setPolling(false) // give up after 30s
+                setPolling(false) // give up after 20s
             }
         }
         check()
