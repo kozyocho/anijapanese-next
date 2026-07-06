@@ -17,11 +17,11 @@ const PLACEMENT_QUESTIONS = [
     { jp: '奈落', reading: 'naraku', en: 'abyss', level: 2, opts: ['paradise', 'abyss', 'mountain', 'heavens'] },
 ]
 
-function scoreToJlptLevel(correct: number): { level: number; label: string } {
-    if (correct <= 1) return { level: 5, label: 'N5' }
-    if (correct <= 3) return { level: 4, label: 'N4' }
-    if (correct <= 5) return { level: 3, label: 'N3' }
-    return { level: 2, label: 'N2' }
+function scoreToJlptLevel(correct: number): { level: number; label: string; display: string; sub: string } {
+    if (correct <= 1) return { level: 5, label: 'N5', display: 'Beginner', sub: "We'll start with the essentials and build from there." }
+    if (correct <= 3) return { level: 4, label: 'N4', display: 'Elementary', sub: "You know some words — we'll expand your vocab fast." }
+    if (correct <= 5) return { level: 3, label: 'N3', display: 'Intermediate', sub: "Solid base! Time to level up with harder vocab." }
+    return { level: 2, label: 'N2', display: 'Advanced', sub: "Impressive! You'll be tackling the tough stuff." }
 }
 
 const GOAL_OPTIONS = [
@@ -156,7 +156,7 @@ export default function OnboardingPage() {
                         background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.35)',
                         borderRadius: '99px', color: '#a78bfa', fontWeight: 800, fontSize: '1rem',
                     }}>
-                        Starting level: JLPT {result.label}
+                        {result.display} level
                     </div>
                     <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: '0 0 28px', lineHeight: 1.7 }}>
                         We'll show you words matched to your level and gradually introduce harder ones as you progress.
@@ -186,7 +186,7 @@ export default function OnboardingPage() {
                     <ProgressBar progress={progress} step={stepIndex[screen]} total={totalSteps} />
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
                         <div style={{ fontSize: '3rem', marginBottom: '16px' }}>📊</div>
-                        <h2 style={{ fontSize: '1.6rem', fontWeight: 900, margin: '0 0 8px' }}>Level detected!</h2>
+                        <h2 style={{ fontSize: '1.6rem', fontWeight: 900, margin: '0 0 8px' }}>Your level is set!</h2>
                         <p style={{ color: '#94a3b8', margin: '0 0 20px' }}>
                             {correctCount} / {PLACEMENT_QUESTIONS.length} correct
                         </p>
@@ -195,13 +195,10 @@ export default function OnboardingPage() {
                             borderRadius: '16px', padding: '20px', marginBottom: '28px',
                         }}>
                             <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#a78bfa', marginBottom: '4px' }}>
-                                JLPT {detectedLevel.label}
+                                {detectedLevel.display}
                             </div>
                             <div style={{ fontSize: '0.85rem', color: '#64748b' }}>
-                                {detectedLevel.level === 5 ? 'Beginner — building your foundation' :
-                                 detectedLevel.level === 4 ? 'Elementary — expanding your vocab' :
-                                 detectedLevel.level === 3 ? 'Intermediate — getting serious' :
-                                 'Advanced — you know your anime!'}
+                                {detectedLevel.sub}
                             </div>
                         </div>
                         <button onClick={() => setScreen('time')} style={{
