@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useGuest } from '@/lib/GuestProvider'
+import { LoadingScreen } from '@/components/LoadingScreen'
 
 interface DayData {
     date: string
@@ -63,11 +64,7 @@ export default function HistoryPage() {
     }, [guestId])
 
     if (!data) {
-        return (
-            <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ color: '#64748b' }}>Loading...</div>
-            </div>
-        )
+        return <LoadingScreen />
     }
 
     const { days, totals } = data

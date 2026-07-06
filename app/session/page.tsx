@@ -6,6 +6,7 @@ import { WordCard } from '@/components/WordCard'
 import { ChoiceGrid } from '@/components/ChoiceGrid'
 import { FeedbackOverlay } from '@/components/FeedbackOverlay'
 import { useGuest } from '@/lib/GuestProvider'
+import { LoadingScreen } from '@/components/LoadingScreen'
 
 interface SessionItem {
     content_id: number
@@ -131,11 +132,7 @@ export default function SessionPage() {
     }, [index, items.length, guestId, results, feedback, refreshProfile, sessionStart])
 
     if (loading) {
-        return (
-            <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ textAlign: 'center', color: '#64748b' }}>Building your session...</div>
-            </div>
-        )
+        return <LoadingScreen message="Building your session..." />
     }
 
     if (done) {

@@ -8,6 +8,7 @@ import { useGuest } from '@/lib/GuestProvider'
 import { StreakBadge } from '@/components/StreakBadge'
 import { useSale } from '@/lib/useSale'
 import { useRouter } from 'next/navigation'
+import { LoadingScreen } from '@/components/LoadingScreen'
 
 // ── Demo words shown on landing page (no account needed) ──────────────────
 
@@ -724,19 +725,9 @@ export default function HomePage() {
     }, [upgraded, guestId])
 
     if (isLoading || polling) {
-        return (
-            <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', color: '#f1f5f9' }}>
-                {upgraded ? (
-                    <>
-                        <div style={{ fontSize: '3rem' }}>🎉</div>
-                        <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>Payment successful!</div>
-                        <div style={{ color: '#64748b', fontSize: '0.9rem' }}>Activating your account…</div>
-                    </>
-                ) : (
-                    <div style={{ color: '#64748b' }}>Loading…</div>
-                )}
-            </div>
-        )
+        return upgraded
+            ? <LoadingScreen emoji="🎉" message="Payment successful! Activating your account…" />
+            : <LoadingScreen />
     }
 
     const isPremium = (profile as { is_premium?: boolean } | null)?.is_premium ?? confirmedPremium
