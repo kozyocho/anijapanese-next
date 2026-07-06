@@ -127,6 +127,30 @@ function LandingPage({ guestId }: { guestId: string | null }) {
     const sale = useSale()
     const [showDemo, setShowDemo] = useState(false)
     const [buying, setBuying] = useState(false)
+    const [showPromo, setShowPromo] = useState(false)
+    const [promoCode, setPromoCode] = useState('')
+    const [promoStatus, setPromoStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+    const [promoError, setPromoError] = useState('')
+    const router = useRouter()
+
+    async function redeemPromo() {
+        if (!guestId || !promoCode.trim()) return
+        setPromoStatus('loading')
+        setPromoError('')
+        const res = await fetch('/api/redeem', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: guestId, code: promoCode }),
+        })
+        const data = await res.json()
+        if (!res.ok) {
+            setPromoStatus('error')
+            setPromoError(data.error ?? 'Something went wrong')
+            return
+        }
+        // Success — reload as premium
+        router.replace('/?upgraded=1')
+    }
 
     const salePrice = '$9.99'
     const regularPrice = '$19.99'
@@ -228,6 +252,52 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                         ? <><span style={{ textDecoration: 'line-through' }}>{regularPrice}</span> · One-time · No subscription</>
                         : 'One-time payment · No subscription · All future updates'}
                 </p>
+
+                {/* Promo code */}
+                <div style={{ marginTop: '20px' }}>
+                    {!showPromo ? (
+                        <button onClick={() => setShowPromo(true)} style={{
+                            background: 'none', border: 'none', color: '#475569',
+                            fontSize: '0.78rem', cursor: 'pointer', textDecoration: 'underline',
+                            fontFamily: 'inherit',
+                        }}>
+                            Have a promo code?
+                        </button>
+                    ) : (
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                            <input
+                                value={promoCode}
+                                onChange={e => setPromoCode(e.target.value)}
+                                onKeyDown={e => e.key === 'Enter' && redeemPromo()}
+                                placeholder="Enter promo code"
+                                style={{
+                                    flex: 1, padding: '10px 14px',
+                                    background: '#1a1b35', border: '1px solid rgba(255,255,255,0.12)',
+                                    borderRadius: '10px', color: '#f1f5f9',
+                                    fontFamily: 'inherit', fontSize: '0.88rem',
+                                    outline: 'none', textTransform: 'uppercase',
+                                }}
+                            />
+                            <button
+                                onClick={redeemPromo}
+                                disabled={promoStatus === 'loading' || !promoCode.trim()}
+                                style={{
+                                    padding: '10px 18px', background: '#7c3aed',
+                                    border: 'none', borderRadius: '10px',
+                                    color: 'white', fontFamily: 'inherit',
+                                    fontSize: '0.88rem', fontWeight: 700,
+                                    cursor: promoStatus === 'loading' ? 'default' : 'pointer',
+                                    opacity: !promoCode.trim() ? 0.5 : 1,
+                                }}
+                            >
+                                {promoStatus === 'loading' ? '…' : 'Apply'}
+                            </button>
+                        </div>
+                    )}
+                    {promoStatus === 'error' && (
+                        <p style={{ marginTop: '8px', fontSize: '0.78rem', color: '#f87171' }}>{promoError}</p>
+                    )}
+                </div>
             </section>
 
             {/* Demo — show the product before explaining it */}
