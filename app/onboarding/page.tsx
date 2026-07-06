@@ -1,26 +1,34 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useGuest } from '@/lib/GuestProvider'
 
-const PREVIEW_WORDS = [
-    { jp: '仲間', reading: 'nakama', en: 'comrade / nakama' },
-    { jp: '覚悟', reading: 'kakugo', en: 'resolve / readiness' },
-    { jp: '最強', reading: 'saikyō', en: 'the strongest' },
+// ── Placement test questions (2 per JLPT level: N5→N2) ────────────────────
+// N5(5)=easiest → N2(2)=advanced
+const PLACEMENT_QUESTIONS = [
+    { jp: '友達', reading: 'tomodachi', en: 'friend', level: 5, opts: ['enemy', 'friend', 'family', 'teacher'] },
+    { jp: '強い', reading: 'tsuyoi', en: 'strong', level: 5, opts: ['weak', 'fast', 'strong', 'smart'] },
+    { jp: '影', reading: 'kage', en: 'shadow', level: 4, opts: ['light', 'shadow', 'fire', 'spirit'] },
+    { jp: '命', reading: 'inochi', en: 'life', level: 4, opts: ['death', 'life', 'soul', 'heart'] },
+    { jp: '覚悟', reading: 'kakugo', en: 'resolve', level: 3, opts: ['fear', 'regret', 'resolve', 'anger'] },
+    { jp: '最強', reading: 'saikyō', en: 'strongest', level: 3, opts: ['fastest', 'kindest', 'strongest', 'wisest'] },
+    { jp: '奥義', reading: 'ougi', en: 'secret technique', level: 2, opts: ['basic move', 'secret technique', 'defense', 'power up'] },
+    { jp: '奈落', reading: 'naraku', en: 'abyss', level: 2, opts: ['paradise', 'abyss', 'mountain', 'heavens'] },
 ]
+
+function scoreToJlptLevel(correct: number): { level: number; label: string } {
+    if (correct <= 1) return { level: 5, label: 'N5' }
+    if (correct <= 3) return { level: 4, label: 'N4' }
+    if (correct <= 5) return { level: 3, label: 'N3' }
+    return { level: 2, label: 'N2' }
+}
 
 const GOAL_OPTIONS = [
     { value: 'nosubs', emoji: '📺', label: 'Watch anime without subtitles', sub: 'The ultimate goal' },
     { value: 'vocab', emoji: '📚', label: 'Understand way more words', sub: 'Follow every episode' },
     { value: 'speak', emoji: '💬', label: 'Start speaking Japanese', sub: 'Sound like your fave character' },
     { value: 'explore', emoji: '🌸', label: 'Just exploring for now', sub: 'No pressure, dive in' },
-]
-
-const LEVEL_OPTIONS = [
-    { value: 'none', emoji: '🌱', label: 'Total beginner', sub: 'Never studied Japanese' },
-    { value: 'little', emoji: '👀', label: 'I know a little', sub: 'Some words from watching anime' },
-    { value: 'some', emoji: '⚡', label: 'Intermediate', sub: 'Know hiragana, some grammar' },
 ]
 
 const TIME_OPTIONS = [
@@ -30,62 +38,72 @@ const TIME_OPTIONS = [
     { value: '30', emoji: '🚀', label: '30+ min', sub: 'Full immersion' },
 ]
 
-const GOAL_PREVIEW: Record<string, { jp: string; en: string }[]> = {
-    nosubs: [{ jp: '無敵', en: 'invincible' }, { jp: '運命', en: 'destiny' }, { jp: '戦士', en: 'warrior' }],
-    vocab:  [{ jp: '言葉', en: 'words / language' }, { jp: '記憶', en: 'memory' }, { jp: '理解', en: 'understand' }],
-    speak:  [{ jp: 'ありがとう', en: 'thank you' }, { jp: '頑張る', en: "I'll do my best" }, { jp: 'すごい', en: 'amazing' }],
-    explore:[{ jp: '冒険', en: 'adventure' }, { jp: '仲間', en: 'nakama' }, { jp: '夢', en: 'dream' }],
-}
-
-type Screen = 'welcome' | 'goal' | 'level' | 'time' | 'done'
+type Screen = 'welcome' | 'goal' | 'placement' | 'time' | 'done'
 
 export default function OnboardingPage() {
     const { guestId } = useGuest()
     const router = useRouter()
     const [screen, setScreen] = useState<Screen>('welcome')
-    const [answers, setAnswers] = useState<{ goal?: string; level?: string; time?: string }>({})
+    const [goal, setGoal] = useState<string>('explore')
     const [saving, setSaving] = useState(false)
 
+    // Placement test state
+    const [qIndex, setQIndex] = useState(0)
+    const [selected, setSelected] = useState<string | null>(null)
+    const [correctCount, setCorrectCount] = useState(0)
+    const [placementDone, setPlacementDone] = useState(false)
+    const [detectedLevel, setDetectedLevel] = useState<{ level: number; label: string } | null>(null)
+
     const totalSteps = 3
-    const stepIndex: Record<Screen, number> = { welcome: 0, goal: 1, level: 2, time: 3, done: 3 }
+    const stepIndex: Record<Screen, number> = { welcome: 0, goal: 1, placement: 2, time: 3, done: 3 }
     const progress = (stepIndex[screen] / totalSteps) * 100
 
-    async function pickGoal(value: string) {
-        setAnswers(a => ({ ...a, goal: value }))
-        setScreen('level')
-    }
+    // Auto-advance after answer
+    useEffect(() => {
+        if (!selected) return
+        const timer = setTimeout(() => {
+            const next = qIndex + 1
+            setSelected(null)
+            if (next >= PLACEMENT_QUESTIONS.length) {
+                const result = scoreToJlptLevel(correctCount)
+                setDetectedLevel(result)
+                setPlacementDone(true)
+            } else {
+                setQIndex(next)
+            }
+        }, 700)
+        return () => clearTimeout(timer)
+    }, [selected, qIndex, correctCount])
 
-    async function pickLevel(value: string) {
-        setAnswers(a => ({ ...a, level: value }))
-        setScreen('time')
+    function pickAnswer(opt: string) {
+        if (selected) return
+        const isCorrect = opt === PLACEMENT_QUESTIONS[qIndex].en
+        if (isCorrect) setCorrectCount(c => c + 1)
+        setSelected(opt)
     }
 
     async function pickTime(value: string) {
-        const newAnswers = { ...answers, time: value }
-        setAnswers(newAnswers)
         setSaving(true)
-
+        const result = detectedLevel ?? { level: 5, label: 'N5' }
         if (guestId) {
-            const jlpt_level = newAnswers.level === 'some' ? 1 : 0
             await fetch('/api/profile', {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     userId: guestId,
-                    jlpt_level,
-                    jlpt_label: jlpt_level === 1 ? 'N5' : 'Pre-N5',
+                    jlpt_level: result.level,
+                    jlpt_label: result.label,
                     minutes_per_day: parseInt(value),
-                    goals: [newAnswers.goal ?? 'explore'],
+                    goals: [goal],
                     onboarding_completed_at: new Date().toISOString(),
                 }),
             })
         }
-
         setSaving(false)
         setScreen('done')
     }
 
-    // ── Welcome ──────────────────────────────────────────────────────────────
+    // ── Welcome ─────────────────────────────────────────────────────────────
     if (screen === 'welcome') {
         return (
             <div style={{ minHeight: '100dvh', padding: '0 20px 40px', maxWidth: '480px', margin: '0 auto' }}>
@@ -93,53 +111,25 @@ export default function OnboardingPage() {
                     <div style={{
                         fontSize: '1.4rem', fontWeight: 900, letterSpacing: '-0.02em',
                         background: 'linear-gradient(135deg,#a78bfa,#fbbf24)',
-                        WebkitBackgroundClip: 'text', backgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
+                        WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent',
                     }}>AniJapanese</div>
                 </div>
-
                 <div style={{ textAlign: 'center', padding: '32px 0 0' }}>
                     <div style={{ fontSize: '2.8rem', marginBottom: '14px' }}>🎌</div>
-                    <h1 style={{
-                        fontSize: 'clamp(1.6rem,6vw,2rem)', fontWeight: 900,
-                        lineHeight: 1.2, letterSpacing: '-0.03em',
-                        margin: '0 0 12px',
-                    }}>
+                    <h1 style={{ fontSize: 'clamp(1.6rem,6vw,2rem)', fontWeight: 900, lineHeight: 1.2, letterSpacing: '-0.03em', margin: '0 0 12px' }}>
                         Learn Japanese<br />the anime way
                     </h1>
                     <p style={{ color: '#94a3b8', fontSize: '1rem', margin: '0 0 32px', lineHeight: 1.6 }}>
                         Real words from real anime. Master vocab that actually comes up when you watch.
                     </p>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '32px' }}>
-                        {PREVIEW_WORDS.map((w, i) => (
-                            <div key={i} style={{
-                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                padding: '14px 18px',
-                                background: '#13142a',
-                                border: '1px solid rgba(255,255,255,0.07)',
-                                borderRadius: '14px',
-                            }}>
-                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-                                    <span style={{ fontSize: '1.4rem', fontWeight: 800 }}>{w.jp}</span>
-                                    <span style={{ fontSize: '0.8rem', color: '#64748b' }}>{w.reading}</span>
-                                </div>
-                                <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>{w.en}</span>
-                            </div>
-                        ))}
-                    </div>
-
-                    <button
-                        onClick={() => setScreen('goal')}
-                        style={{
-                            display: 'block', width: '100%', padding: '18px',
-                            background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
-                            border: 'none', borderRadius: '14px',
-                            color: 'white', fontFamily: 'inherit',
-                            fontSize: '1.05rem', fontWeight: 800, cursor: 'pointer',
-                            boxShadow: '0 4px 24px rgba(124,58,237,0.4)',
-                        }}
-                    >
+                    <button onClick={() => setScreen('goal')} style={{
+                        display: 'block', width: '100%', padding: '18px',
+                        background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+                        border: 'none', borderRadius: '14px',
+                        color: 'white', fontFamily: 'inherit',
+                        fontSize: '1.05rem', fontWeight: 800, cursor: 'pointer',
+                        boxShadow: '0 4px 24px rgba(124,58,237,0.4)',
+                    }}>
                         Start setup
                     </button>
                     <p style={{ marginTop: '12px', fontSize: '0.78rem', color: '#475569' }}>
@@ -152,11 +142,7 @@ export default function OnboardingPage() {
 
     // ── Done ─────────────────────────────────────────────────────────────────
     if (screen === 'done') {
-        const goal = answers.goal ?? 'explore'
-        const previewWords = GOAL_PREVIEW[goal] ?? GOAL_PREVIEW.explore
-        const mins = answers.time ?? '10'
-        const goalLabel = GOAL_OPTIONS.find(o => o.value === goal)?.label ?? 'Explore'
-
+        const result = detectedLevel ?? { level: 5, label: 'N5' }
         return (
             <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', padding: '0 20px 40px', maxWidth: '480px', margin: '0 auto' }}>
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
@@ -164,42 +150,25 @@ export default function OnboardingPage() {
                     <h2 style={{ fontSize: '1.8rem', fontWeight: 900, letterSpacing: '-0.02em', margin: '0 0 8px' }}>
                         Your plan is ready!
                     </h2>
-                    <p style={{ color: '#94a3b8', fontSize: '0.95rem', margin: '0 0 32px' }}>
-                        {mins} minutes a day &nbsp;·&nbsp; {goalLabel}
-                    </p>
-
                     <div style={{
-                        background: 'rgba(124,58,237,0.08)',
-                        border: '1px solid rgba(124,58,237,0.2)',
-                        borderRadius: '16px', padding: '20px',
-                        marginBottom: '28px', textAlign: 'left',
+                        display: 'inline-block', margin: '0 auto 24px',
+                        padding: '6px 20px',
+                        background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.35)',
+                        borderRadius: '99px', color: '#a78bfa', fontWeight: 800, fontSize: '1rem',
                     }}>
-                        <div style={{ fontSize: '0.72rem', color: '#a78bfa', fontWeight: 700, marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                            First words you will learn
-                        </div>
-                        {previewWords.map((w, i) => (
-                            <div key={i} style={{
-                                display: 'flex', justifyContent: 'space-between',
-                                padding: '9px 0',
-                                borderBottom: i < previewWords.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
-                            }}>
-                                <span style={{ fontWeight: 700, fontSize: '1.1rem' }}>{w.jp}</span>
-                                <span style={{ color: '#94a3b8', fontSize: '0.9rem', alignSelf: 'center' }}>{w.en}</span>
-                            </div>
-                        ))}
+                        Starting level: JLPT {result.label}
                     </div>
-
-                    <button
-                        onClick={() => router.push('/')}
-                        style={{
-                            display: 'block', width: '100%', padding: '18px',
-                            background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
-                            border: 'none', borderRadius: '14px',
-                            color: 'white', fontFamily: 'inherit',
-                            fontSize: '1.05rem', fontWeight: 800, cursor: 'pointer',
-                            boxShadow: '0 4px 24px rgba(124,58,237,0.4)',
-                        }}
-                    >
+                    <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: '0 0 28px', lineHeight: 1.7 }}>
+                        We'll show you words matched to your level and gradually introduce harder ones as you progress.
+                    </p>
+                    <button onClick={() => router.push('/')} style={{
+                        display: 'block', width: '100%', padding: '18px',
+                        background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+                        border: 'none', borderRadius: '14px',
+                        color: 'white', fontFamily: 'inherit',
+                        fontSize: '1.05rem', fontWeight: 800, cursor: 'pointer',
+                        boxShadow: '0 4px 24px rgba(124,58,237,0.4)',
+                    }}>
                         Start learning
                     </button>
                 </div>
@@ -207,73 +176,151 @@ export default function OnboardingPage() {
         )
     }
 
-    // ── Step screens ─────────────────────────────────────────────────────────
+    // ── Placement test ────────────────────────────────────────────────────────
+    if (screen === 'placement') {
+        const q = PLACEMENT_QUESTIONS[qIndex]
+
+        if (placementDone && detectedLevel) {
+            return (
+                <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', padding: '24px 20px 40px', maxWidth: '480px', margin: '0 auto' }}>
+                    <ProgressBar progress={progress} step={stepIndex[screen]} total={totalSteps} />
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
+                        <div style={{ fontSize: '3rem', marginBottom: '16px' }}>📊</div>
+                        <h2 style={{ fontSize: '1.6rem', fontWeight: 900, margin: '0 0 8px' }}>Level detected!</h2>
+                        <p style={{ color: '#94a3b8', margin: '0 0 20px' }}>
+                            {correctCount} / {PLACEMENT_QUESTIONS.length} correct
+                        </p>
+                        <div style={{
+                            background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.25)',
+                            borderRadius: '16px', padding: '20px', marginBottom: '28px',
+                        }}>
+                            <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#a78bfa', marginBottom: '4px' }}>
+                                JLPT {detectedLevel.label}
+                            </div>
+                            <div style={{ fontSize: '0.85rem', color: '#64748b' }}>
+                                {detectedLevel.level === 5 ? 'Beginner — building your foundation' :
+                                 detectedLevel.level === 4 ? 'Elementary — expanding your vocab' :
+                                 detectedLevel.level === 3 ? 'Intermediate — getting serious' :
+                                 'Advanced — you know your anime!'}
+                            </div>
+                        </div>
+                        <button onClick={() => setScreen('time')} style={{
+                            display: 'block', width: '100%', padding: '18px',
+                            background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+                            border: 'none', borderRadius: '14px',
+                            color: 'white', fontFamily: 'inherit',
+                            fontSize: '1.05rem', fontWeight: 800, cursor: 'pointer',
+                            boxShadow: '0 4px 24px rgba(124,58,237,0.4)',
+                        }}>
+                            Looks good →
+                        </button>
+                    </div>
+                </div>
+            )
+        }
+
+        return (
+            <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', padding: '24px 20px 40px', maxWidth: '480px', margin: '0 auto' }}>
+                <ProgressBar progress={progress} step={stepIndex[screen]} total={totalSteps} />
+
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <div style={{ fontSize: '0.78rem', color: '#475569', fontWeight: 700, marginBottom: '24px', textAlign: 'center' }}>
+                        Question {qIndex + 1} of {PLACEMENT_QUESTIONS.length}
+                    </div>
+
+                    {/* Word card */}
+                    <div style={{
+                        background: '#13142a', border: '1px solid rgba(255,255,255,0.08)',
+                        borderRadius: '20px', padding: '36px 24px',
+                        textAlign: 'center', marginBottom: '20px',
+                    }}>
+                        <div style={{ fontSize: '0.65rem', color: '#7c3aed', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px' }}>
+                            What does this mean?
+                        </div>
+                        <div style={{ fontSize: 'clamp(3rem,10vw,4.5rem)', fontWeight: 900, marginBottom: '8px' }}>{q.jp}</div>
+                        <div style={{ fontSize: '0.9rem', color: '#64748b' }}>{q.reading}</div>
+                    </div>
+
+                    {/* Choices */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                        {q.opts.map(opt => {
+                            const isCorrect = opt === q.en
+                            const isSelected = opt === selected
+                            const bg = selected
+                                ? isCorrect ? 'rgba(16,185,129,0.2)' : isSelected ? 'rgba(239,68,68,0.15)' : '#13142a'
+                                : '#13142a'
+                            const border = selected
+                                ? isCorrect ? '1.5px solid #10b981' : isSelected ? '1.5px solid #ef4444' : '1.5px solid rgba(255,255,255,0.06)'
+                                : '1.5px solid rgba(255,255,255,0.08)'
+                            const color = selected
+                                ? isCorrect ? '#10b981' : isSelected ? '#ef4444' : '#475569'
+                                : '#f1f5f9'
+                            return (
+                                <button key={opt} onClick={() => pickAnswer(opt)} style={{
+                                    padding: '16px 10px', background: bg,
+                                    border, borderRadius: '12px',
+                                    color, fontFamily: 'inherit', fontSize: '0.9rem',
+                                    fontWeight: 600, cursor: selected ? 'default' : 'pointer',
+                                    transition: 'all 0.15s', minHeight: '60px',
+                                }}>{opt}</button>
+                            )
+                        })}
+                    </div>
+
+                    {/* Mini progress dots */}
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginTop: '28px' }}>
+                        {PLACEMENT_QUESTIONS.map((_, i) => (
+                            <div key={i} style={{
+                                width: '6px', height: '6px', borderRadius: '99px',
+                                background: i < qIndex ? '#7c3aed' : i === qIndex ? '#a78bfa' : 'rgba(255,255,255,0.12)',
+                                transition: 'background 0.2s',
+                            }} />
+                        ))}
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    // ── Goal + Time steps ─────────────────────────────────────────────────────
     type StepOption = { value: string; emoji: string; label: string; sub: string }
-    const stepConfig: {
-        step: number; title: string; sub: string
-        options: StepOption[]; onPick: (v: string) => void
-    } = screen === 'goal'
-        ? { step: 1, title: "What's your main goal?", sub: "We'll tailor your vocab pack to match", options: GOAL_OPTIONS, onPick: pickGoal }
-        : screen === 'level'
-        ? { step: 2, title: 'How much Japanese do you know?', sub: "Don't worry — we'll meet you where you are", options: LEVEL_OPTIONS, onPick: pickLevel }
-        : { step: 3, title: 'How long can you study each day?', sub: 'Even 5 minutes daily builds a powerful habit', options: TIME_OPTIONS, onPick: pickTime }
+    const isGoal = screen === 'goal'
+    const options: StepOption[] = isGoal ? GOAL_OPTIONS : TIME_OPTIONS
+    const title = isGoal ? "What's your main goal?" : 'How long can you study each day?'
+    const sub = isGoal ? "We'll tailor your vocab pack to match" : 'Even 5 minutes daily builds a powerful habit'
+
+    function onPick(value: string) {
+        if (isGoal) {
+            setGoal(value)
+            setScreen('placement')
+        } else {
+            pickTime(value)
+        }
+    }
 
     return (
         <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', padding: '24px 20px 40px', maxWidth: '480px', margin: '0 auto' }}>
-            {/* Progress */}
-            <div style={{ marginBottom: '40px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: '#64748b', marginBottom: '8px', fontWeight: 600 }}>
-                    <span>Setup</span>
-                    <span>{stepConfig.step} of {totalSteps}</span>
-                </div>
-                <div style={{ height: '4px', background: 'rgba(255,255,255,0.06)', borderRadius: '99px' }}>
-                    <div style={{
-                        height: '100%', borderRadius: '99px',
-                        background: 'linear-gradient(90deg,#7c3aed,#f59e0b)',
-                        width: `${progress}%`, transition: 'width 0.4s ease',
-                    }} />
-                </div>
-            </div>
+            <ProgressBar progress={progress} step={stepIndex[screen]} total={totalSteps} />
 
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <h2 style={{
-                    fontSize: 'clamp(1.4rem,5vw,1.8rem)', fontWeight: 900,
-                    lineHeight: 1.2, letterSpacing: '-0.02em',
-                    margin: '0 0 8px',
-                }}>
-                    {stepConfig.title}
+                <h2 style={{ fontSize: 'clamp(1.4rem,5vw,1.8rem)', fontWeight: 900, lineHeight: 1.2, letterSpacing: '-0.02em', margin: '0 0 8px' }}>
+                    {title}
                 </h2>
-                <p style={{ color: '#94a3b8', fontSize: '0.95rem', margin: '0 0 28px' }}>
-                    {stepConfig.sub}
-                </p>
+                <p style={{ color: '#94a3b8', fontSize: '0.95rem', margin: '0 0 28px' }}>{sub}</p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {stepConfig.options.map(opt => (
-                        <button
-                            key={opt.value}
-                            onClick={() => stepConfig.onPick(opt.value)}
-                            disabled={saving}
-                            style={{
-                                display: 'flex', alignItems: 'center', gap: '14px',
-                                padding: '16px 18px',
-                                background: '#13142a',
-                                border: '1.5px solid rgba(255,255,255,0.07)',
-                                borderRadius: '14px',
-                                color: '#f1f5f9', fontFamily: 'inherit',
-                                fontSize: '0.95rem', fontWeight: 600,
-                                cursor: saving ? 'not-allowed' : 'pointer',
-                                textAlign: 'left',
-                                transition: 'border-color 0.15s, background 0.15s',
-                            }}
-                            onMouseEnter={e => {
-                                if (saving) return
-                                e.currentTarget.style.borderColor = 'rgba(124,58,237,0.5)'
-                                e.currentTarget.style.background = 'rgba(124,58,237,0.08)'
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'
-                                e.currentTarget.style.background = '#13142a'
-                            }}
+                    {options.map(opt => (
+                        <button key={opt.value} onClick={() => !saving && onPick(opt.value)} disabled={saving} style={{
+                            display: 'flex', alignItems: 'center', gap: '14px',
+                            padding: '16px 18px', background: '#13142a',
+                            border: '1.5px solid rgba(255,255,255,0.07)',
+                            borderRadius: '14px', color: '#f1f5f9', fontFamily: 'inherit',
+                            fontSize: '0.95rem', fontWeight: 600,
+                            cursor: saving ? 'not-allowed' : 'pointer',
+                            textAlign: 'left', transition: 'border-color 0.15s, background 0.15s',
+                        }}
+                            onMouseEnter={e => { if (!saving) { e.currentTarget.style.borderColor = 'rgba(124,58,237,0.5)'; e.currentTarget.style.background = 'rgba(124,58,237,0.08)' } }}
+                            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.background = '#13142a' }}
                         >
                             <span style={{ fontSize: '1.4rem', flexShrink: 0 }}>{opt.emoji}</span>
                             <div>
@@ -283,12 +330,24 @@ export default function OnboardingPage() {
                         </button>
                     ))}
                 </div>
+            </div>
+        </div>
+    )
+}
 
-                {saving && (
-                    <div style={{ textAlign: 'center', color: '#94a3b8', fontSize: '0.9rem', marginTop: '20px' }}>
-                        Setting up your plan...
-                    </div>
-                )}
+function ProgressBar({ progress, step, total }: { progress: number; step: number; total: number }) {
+    return (
+        <div style={{ marginBottom: '40px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: '#64748b', marginBottom: '8px', fontWeight: 600 }}>
+                <span>Setup</span>
+                <span>{step} of {total}</span>
+            </div>
+            <div style={{ height: '4px', background: 'rgba(255,255,255,0.06)', borderRadius: '99px' }}>
+                <div style={{
+                    height: '100%', borderRadius: '99px',
+                    background: 'linear-gradient(90deg,#7c3aed,#f59e0b)',
+                    width: `${progress}%`, transition: 'width 0.4s ease',
+                }} />
             </div>
         </div>
     )

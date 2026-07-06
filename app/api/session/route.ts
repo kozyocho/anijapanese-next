@@ -44,13 +44,22 @@ export async function GET(req: NextRequest) {
 
     if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 })
 
-    // Check premium status
+    // Fetch profile: premium status, JLPT level, study time
     const { data: profileRow } = await adminClient
         .from('profiles')
-        .select('is_premium')
+        .select('is_premium, jlpt_level, minutes_per_day')
         .eq('id', userId)
         .single()
+
     const isPremium = profileRow?.is_premium ?? false
+    // jlpt_level: 5=N5(easiest)→1=N1(hardest). Default N5 for new users.
+    const userJlptLevel = profileRow?.jlpt_level ?? 5
+    // Word count based on daily study time
+    const minutesPerDay = profileRow?.minutes_per_day ?? 10
+    const maxNewByTime = minutesPerDay <= 5 ? 5
+        : minutesPerDay <= 10 ? 10
+        : minutesPerDay <= 20 ? 15
+        : 20
 
     // Count new words learned today (for free-tier limit)
     const todayStart = new Date()
@@ -64,8 +73,8 @@ export async function GET(req: NextRequest) {
     const dailyNewUsed = todayNewCount ?? 0
     const dailyNewRemaining = isPremium ? 999 : Math.max(0, FREE_DAILY_NEW_LIMIT - dailyNewUsed)
 
-    const requestedNew = parseInt(searchParams.get('new') ?? '5')
-    const newCount = Math.min(requestedNew, isPremium ? 10 : dailyNewRemaining)
+    const requestedNew = parseInt(searchParams.get('new') ?? String(maxNewByTime))
+    const newCount = Math.min(requestedNew, isPremium ? maxNewByTime : Math.min(dailyNewRemaining, maxNewByTime))
 
     const items: SessionItem[] = []
     const usedIds = new Set<number>()
@@ -113,14 +122,15 @@ export async function GET(req: NextRequest) {
         // Combine exclude list
         const excludeIds = [...learnedIds, ...Array.from(usedIds)]
 
-        // Fetch new vocab ordered by frequency_score
-        let query = adminClient
+        // Fetch new vocab: filter by user's JLPT level, ordered by frequency
+        // jlpt_level >= userJlptLevel means: show words at user's level and easier
+        // (5=N5/easiest, 1=N1/hardest — higher number = easier)
+        const { data: allVocab } = await adminClient
             .from('content_vocabulary_details')
-            .select('content_id, japanese, reading, english, category, anime_tag, frequency_score')
+            .select('content_id, japanese, reading, english, category, anime_tag, frequency_score, jlpt_level')
+            .gte('jlpt_level', userJlptLevel)
             .order('frequency_score', { ascending: false })
-            .limit(slotsNeeded + excludeIds.length + 10) // overfetch then filter
-
-        const { data: allVocab } = await query
+            .limit(slotsNeeded + excludeIds.length + 10)
 
         let added = 0
         for (const v of allVocab ?? []) {

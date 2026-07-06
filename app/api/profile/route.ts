@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
 
     const { data } = await adminClient
         .from('profiles')
-        .select('current_streak, is_guest, is_premium')
+        .select('current_streak, is_guest, is_premium, jlpt_level, minutes_per_day')
         .eq('id', userId)
         .single()
 
