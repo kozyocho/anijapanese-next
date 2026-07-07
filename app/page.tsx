@@ -283,6 +283,7 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                         See all plans ↓
                     </a>
                 </p>
+            </section>
 
             {/* Demo — show the product before explaining it */}
             <section style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px 48px' }}>
