@@ -59,16 +59,18 @@ export function GuestProvider({ children }: { children: React.ReactNode }) {
                     ? crypto.randomUUID()
                     : `${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`
                 localStorage.setItem('anijp_guest_id', id)
+            }
 
-                try {
-                    await fetch('/api/guest', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ guestId: id }),
-                    })
-                } catch (e) {
-                    console.error('Guest init error:', e)
-                }
+            // Always ensure the profile row exists (idempotent insert-if-missing).
+            // Self-heals guests whose row was never created due to past failures.
+            try {
+                await fetch('/api/guest', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ guestId: id }),
+                })
+            } catch (e) {
+                console.error('Guest init error:', e)
             }
 
             setGuestId(id)

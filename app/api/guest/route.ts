@@ -17,10 +17,11 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Invalid guestId' }, { status: 400 })
         }
 
-        // Upsert guest profile (idempotent — safe to call twice)
+        // Insert guest profile if missing (idempotent — existing rows untouched).
+        // jlpt_level set explicitly: DB default was 0, violating CHECK (1-5) from migration 011.
         const { error } = await adminClient
             .from('profiles')
-            .upsert({ id: guestId, is_guest: true }, { onConflict: 'id' })
+            .upsert({ id: guestId, is_guest: true, jlpt_level: 5 }, { onConflict: 'id', ignoreDuplicates: true })
 
         if (error) {
             console.error('Guest profile create error:', error)
