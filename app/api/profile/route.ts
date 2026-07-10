@@ -7,7 +7,7 @@ const adminClient = createClient(
     process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-const ALLOWED_PATCH_FIELDS = ['jlpt_level', 'minutes_per_day'] as const
+const ALLOWED_PATCH_FIELDS = ['jlpt_level', 'jlpt_label', 'minutes_per_day', 'goals', 'onboarding_completed_at'] as const
 type AllowedField = typeof ALLOWED_PATCH_FIELDS[number]
 
 export async function GET(req: NextRequest) {

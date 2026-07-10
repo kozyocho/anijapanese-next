@@ -17,11 +17,25 @@ const PLACEMENT_QUESTIONS = [
     { jp: '奈落', reading: 'naraku', en: 'abyss', level: 2, opts: ['paradise', 'abyss', 'mountain', 'heavens'] },
 ]
 
-function scoreToJlptLevel(correct: number): { level: number; label: string; display: string; sub: string } {
-    if (correct <= 1) return { level: 5, label: 'N5', display: 'Beginner', sub: "We'll start with the essentials and build from there." }
-    if (correct <= 3) return { level: 4, label: 'N4', display: 'Elementary', sub: "You know some words — we'll expand your vocab fast." }
-    if (correct <= 5) return { level: 3, label: 'N3', display: 'Intermediate', sub: "Solid base! Time to level up with harder vocab." }
-    return { level: 2, label: 'N2', display: 'Advanced', sub: "Impressive! You'll be tackling the tough stuff." }
+interface LevelResult {
+    level: number
+    label: string
+    display: string
+    sub: string
+}
+
+const LEVEL_RESULTS: LevelResult[] = [
+    { level: 5, label: 'N5', display: 'Beginner', sub: "We'll start with the essentials and build from there." },
+    { level: 4, label: 'N4', display: 'Elementary', sub: "You know some words — we'll expand your vocab fast." },
+    { level: 3, label: 'N3', display: 'Intermediate', sub: 'Solid base! Time to level up with harder vocab.' },
+    { level: 2, label: 'N2', display: 'Advanced', sub: "Impressive! You'll be tackling the tough stuff." },
+]
+
+function scoreToJlptLevel(correct: number): LevelResult {
+    if (correct <= 1) return LEVEL_RESULTS[0]
+    if (correct <= 3) return LEVEL_RESULTS[1]
+    if (correct <= 5) return LEVEL_RESULTS[2]
+    return LEVEL_RESULTS[3]
 }
 
 const GOAL_OPTIONS = [
@@ -38,13 +52,14 @@ const TIME_OPTIONS = [
     { value: '30', emoji: '🚀', label: '30+ min', sub: 'Full immersion' },
 ]
 
-type Screen = 'welcome' | 'goal' | 'placement' | 'time' | 'done'
+type Screen = 'welcome' | 'goal' | 'placement' | 'level-pick' | 'time' | 'done'
 
 export default function OnboardingPage() {
     const { guestId } = useGuest()
     const router = useRouter()
     const [screen, setScreen] = useState<Screen>('welcome')
     const [goal, setGoal] = useState<string>('explore')
+    const [minutes, setMinutes] = useState<string>('10')
     const [saving, setSaving] = useState(false)
 
     // Placement test state
@@ -52,10 +67,17 @@ export default function OnboardingPage() {
     const [selected, setSelected] = useState<string | null>(null)
     const [correctCount, setCorrectCount] = useState(0)
     const [placementDone, setPlacementDone] = useState(false)
-    const [detectedLevel, setDetectedLevel] = useState<{ level: number; label: string } | null>(null)
+    const [detectedLevel, setDetectedLevel] = useState<LevelResult | null>(null)
+
+    function resetPlacement() {
+        setQIndex(0)
+        setSelected(null)
+        setCorrectCount(0)
+        setPlacementDone(false)
+    }
 
     const totalSteps = 3
-    const stepIndex: Record<Screen, number> = { welcome: 0, goal: 1, placement: 2, time: 3, done: 3 }
+    const stepIndex: Record<Screen, number> = { welcome: 0, goal: 1, placement: 2, 'level-pick': 2, time: 3, done: 3 }
     const progress = (stepIndex[screen] / totalSteps) * 100
 
     // Auto-advance after answer
@@ -84,7 +106,8 @@ export default function OnboardingPage() {
 
     async function pickTime(value: string) {
         setSaving(true)
-        const result = detectedLevel ?? { level: 5, label: 'N5' }
+        setMinutes(value)
+        const result = detectedLevel ?? LEVEL_RESULTS[0]
         if (guestId) {
             await fetch('/api/profile', {
                 method: 'PATCH',
@@ -142,24 +165,37 @@ export default function OnboardingPage() {
 
     // ── Done ─────────────────────────────────────────────────────────────────
     if (screen === 'done') {
-        const result = detectedLevel ?? { level: 5, label: 'N5' }
+        const result = detectedLevel ?? LEVEL_RESULTS[0]
+        const goalLabel = GOAL_OPTIONS.find(g => g.value === goal)
         return (
             <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', padding: '0 20px 40px', maxWidth: '480px', margin: '0 auto' }}>
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
                     <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🎉</div>
-                    <h2 style={{ fontSize: '1.8rem', fontWeight: 900, letterSpacing: '-0.02em', margin: '0 0 8px' }}>
+                    <h2 style={{ fontSize: '1.8rem', fontWeight: 900, letterSpacing: '-0.02em', margin: '0 0 20px' }}>
                         Your plan is ready!
                     </h2>
                     <div style={{
-                        display: 'inline-block', margin: '0 auto 24px',
-                        padding: '6px 20px',
-                        background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.35)',
-                        borderRadius: '99px', color: '#a78bfa', fontWeight: 800, fontSize: '1rem',
+                        background: '#13142a', border: '1px solid rgba(255,255,255,0.08)',
+                        borderRadius: '16px', padding: '18px', marginBottom: '24px', textAlign: 'left',
                     }}>
-                        {result.display} level
+                        {[
+                            { icon: '📊', label: 'Level', value: `${result.display} (${result.label})` },
+                            { icon: '⏱️', label: 'Daily goal', value: `${minutes} min / day` },
+                            ...(goalLabel ? [{ icon: goalLabel.emoji, label: 'Goal', value: goalLabel.label }] : []),
+                        ].map((row, i, arr) => (
+                            <div key={row.label} style={{
+                                display: 'flex', alignItems: 'center', gap: '12px',
+                                padding: '10px 0',
+                                borderBottom: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                            }}>
+                                <span style={{ fontSize: '1.2rem' }}>{row.icon}</span>
+                                <span style={{ fontSize: '0.8rem', color: '#64748b', width: '80px', flexShrink: 0 }}>{row.label}</span>
+                                <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#f1f5f9' }}>{row.value}</span>
+                            </div>
+                        ))}
                     </div>
                     <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: '0 0 28px', lineHeight: 1.7 }}>
-                        We'll show you words matched to your level and gradually introduce harder ones as you progress.
+                        We'll match words and scene quizzes to your level, and introduce harder ones as you progress. You can change this anytime in settings.
                     </p>
                     <button onClick={() => router.push('/')} style={{
                         display: 'block', width: '100%', padding: '18px',
@@ -176,6 +212,49 @@ export default function OnboardingPage() {
         )
     }
 
+    // ── Manual level pick (skip test) ─────────────────────────────────────────
+    if (screen === 'level-pick') {
+        return (
+            <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', padding: '24px 20px 40px', maxWidth: '480px', margin: '0 auto' }}>
+                <ProgressBar progress={progress} step={stepIndex[screen]} total={totalSteps} onBack={() => { resetPlacement(); setScreen('placement') }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <h2 style={{ fontSize: 'clamp(1.4rem,5vw,1.8rem)', fontWeight: 900, lineHeight: 1.2, letterSpacing: '-0.02em', margin: '0 0 8px' }}>
+                        Pick your level
+                    </h2>
+                    <p style={{ color: '#94a3b8', fontSize: '0.95rem', margin: '0 0 28px' }}>
+                        You can change this anytime in settings
+                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        {LEVEL_RESULTS.map(lv => (
+                            <button key={lv.level} onClick={() => { setDetectedLevel(lv); setScreen('time') }} style={{
+                                display: 'flex', alignItems: 'center', gap: '14px',
+                                padding: '16px 18px', background: '#13142a',
+                                border: '1.5px solid rgba(255,255,255,0.07)',
+                                borderRadius: '14px', color: '#f1f5f9', fontFamily: 'inherit',
+                                fontSize: '0.95rem', fontWeight: 600, cursor: 'pointer',
+                                textAlign: 'left', transition: 'border-color 0.15s, background 0.15s',
+                            }}
+                                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(124,58,237,0.5)'; e.currentTarget.style.background = 'rgba(124,58,237,0.08)' }}
+                                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.background = '#13142a' }}
+                            >
+                                <span style={{
+                                    flexShrink: 0, width: '44px', textAlign: 'center',
+                                    padding: '4px 0', borderRadius: '8px',
+                                    background: 'rgba(124,58,237,0.15)', color: '#a78bfa',
+                                    fontWeight: 800, fontSize: '0.85rem',
+                                }}>{lv.label}</span>
+                                <div>
+                                    <div>{lv.display}</div>
+                                    <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 400, marginTop: '2px' }}>{lv.sub}</div>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     // ── Placement test ────────────────────────────────────────────────────────
     if (screen === 'placement') {
         const q = PLACEMENT_QUESTIONS[qIndex]
@@ -183,7 +262,7 @@ export default function OnboardingPage() {
         if (placementDone && detectedLevel) {
             return (
                 <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', padding: '24px 20px 40px', maxWidth: '480px', margin: '0 auto' }}>
-                    <ProgressBar progress={progress} step={stepIndex[screen]} total={totalSteps} />
+                    <ProgressBar progress={progress} step={stepIndex[screen]} total={totalSteps} onBack={() => { resetPlacement() }} />
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
                         <div style={{ fontSize: '3rem', marginBottom: '16px' }}>📊</div>
                         <h2 style={{ fontSize: '1.6rem', fontWeight: 900, margin: '0 0 8px' }}>Your level is set!</h2>
@@ -218,7 +297,7 @@ export default function OnboardingPage() {
 
         return (
             <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', padding: '24px 20px 40px', maxWidth: '480px', margin: '0 auto' }}>
-                <ProgressBar progress={progress} step={stepIndex[screen]} total={totalSteps} />
+                <ProgressBar progress={progress} step={stepIndex[screen]} total={totalSteps} onBack={() => { resetPlacement(); setScreen('goal') }} />
 
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <div style={{ fontSize: '0.78rem', color: '#475569', fontWeight: 700, marginBottom: '24px', textAlign: 'center' }}>
@@ -274,6 +353,16 @@ export default function OnboardingPage() {
                             }} />
                         ))}
                     </div>
+
+                    {/* Skip test */}
+                    <button onClick={() => setScreen('level-pick')} style={{
+                        marginTop: '20px', background: 'none', border: 'none',
+                        color: '#64748b', fontFamily: 'inherit', fontSize: '0.82rem',
+                        fontWeight: 600, cursor: 'pointer', textDecoration: 'underline',
+                        textUnderlineOffset: '3px',
+                    }}>
+                        I already know my level — skip the test
+                    </button>
                 </div>
             </div>
         )
@@ -297,7 +386,10 @@ export default function OnboardingPage() {
 
     return (
         <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', padding: '24px 20px 40px', maxWidth: '480px', margin: '0 auto' }}>
-            <ProgressBar progress={progress} step={stepIndex[screen]} total={totalSteps} />
+            <ProgressBar
+                progress={progress} step={stepIndex[screen]} total={totalSteps}
+                onBack={() => setScreen(isGoal ? 'welcome' : placementDone ? 'placement' : 'level-pick')}
+            />
 
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <h2 style={{ fontSize: 'clamp(1.4rem,5vw,1.8rem)', fontWeight: 900, lineHeight: 1.2, letterSpacing: '-0.02em', margin: '0 0 8px' }}>
@@ -332,11 +424,19 @@ export default function OnboardingPage() {
     )
 }
 
-function ProgressBar({ progress, step, total }: { progress: number; step: number; total: number }) {
+function ProgressBar({ progress, step, total, onBack }: { progress: number; step: number; total: number; onBack?: () => void }) {
     return (
         <div style={{ marginBottom: '40px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: '#64748b', marginBottom: '8px', fontWeight: 600 }}>
-                <span>Setup</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem', color: '#64748b', marginBottom: '8px', fontWeight: 600 }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    {onBack && (
+                        <button onClick={onBack} aria-label="Back" style={{
+                            background: 'none', border: 'none', color: '#64748b',
+                            cursor: 'pointer', fontSize: '1rem', padding: 0, fontFamily: 'inherit',
+                        }}>←</button>
+                    )}
+                    Setup
+                </span>
                 <span>{step} of {total}</span>
             </div>
             <div style={{ height: '4px', background: 'rgba(255,255,255,0.06)', borderRadius: '99px' }}>
