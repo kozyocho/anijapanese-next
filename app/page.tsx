@@ -69,7 +69,7 @@ function DemoQuiz({ onFinish, priceLabel, onBuy, buying }: {
                     {correct}/{DEMO_WORDS.length} correct
                 </div>
                 <div style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '24px' }}>
-                    500+ more words are waiting for you.
+                    500+ more words and scene dialogue quizzes are waiting for you.
                 </div>
                 <SignedIn>
                     <button onClick={onBuy} disabled={buying} style={BTN}>
@@ -133,7 +133,7 @@ const PLANS = [
         price: '$4.99',
         per: '/month',
         badge: null,
-        features: ['Unlimited new words', 'All 500+ words', 'SRS system', 'Streak tracking'],
+        features: ['Unlimited new words', 'All 500+ words', 'Scene dialogue quizzes', 'SRS system', 'Streak tracking'],
     },
     {
         id: 'annual' as PlanType,
@@ -283,10 +283,16 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                         See all plans ↓
                     </a>
                 </p>
+                <p style={{ marginTop: '6px', fontSize: '0.78rem', color: '#475569' }}>
+                    Not sure yet?{' '}
+                    <a href="#demo" style={{ color: '#94a3b8', textDecoration: 'underline', textUnderlineOffset: '3px', fontWeight: 600 }}>
+                        Try 3 words free — no sign-up
+                    </a>
+                </p>
             </section>
 
             {/* Demo — show the product before explaining it */}
-            <section style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px 48px' }}>
+            <section id="demo" style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px 48px' }}>
                 <div style={{
                     background: '#13142a', border: '1px solid rgba(255,255,255,0.07)',
                     borderRadius: '20px', padding: '24px',
@@ -414,9 +420,47 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                         </div>
                     </div>
 
-                    {/* Screen 4: Dashboard */}
+                    {/* Screen 4: Scene quiz */}
                     <div style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
-                        <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>④ Track your streak</div>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>④ Master real dialogue</div>
+                        <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
+                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
+                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>🔥 7</span>
+                            </div>
+                            <div style={{ padding: '14px' }}>
+                                <div style={{ fontSize: '0.55rem', color: '#a78bfa', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>🎬 Scene</div>
+                                <div style={{ fontSize: '0.62rem', color: '#94a3b8', lineHeight: 1.5, marginBottom: '10px' }}>
+                                    A rival finally shows up late. The hero smirks and says:
+                                </div>
+                                <div style={{ display: 'grid', gap: '5px' }}>
+                                    {[
+                                        { jp: 'やっと来たか', correct: true },
+                                        { jp: 'やっと来ましたね', correct: false },
+                                        { jp: 'もう来たのか', correct: false },
+                                        { jp: 'やっと行くか', correct: false },
+                                    ].map((opt, i) => (
+                                        <div key={i} style={{
+                                            padding: '7px 4px', fontSize: '0.68rem', fontWeight: 700,
+                                            background: opt.correct ? 'rgba(34,197,94,0.15)' : '#1a1b35',
+                                            borderRadius: '8px',
+                                            border: `1.5px solid ${opt.correct ? 'rgba(34,197,94,0.5)' : 'rgba(255,255,255,0.06)'}`,
+                                            color: opt.correct ? '#4ade80' : '#94a3b8', textAlign: 'center',
+                                        }}>{opt.jp}</div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div style={{ background: '#0a2e22', padding: '8px 14px', borderTop: '1px solid rgba(34,197,94,0.2)' }}>
+                                <div style={{ fontSize: '0.6rem', color: '#94a3b8', lineHeight: 1.5 }}>
+                                    Every wrong choice explained — register, grammar, nuance
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Screen 5: Dashboard */}
+                    <div style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>⑤ Track your streak</div>
                         <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
                             <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                                 <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
@@ -627,6 +671,50 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                         <p style={{ marginTop: '8px', fontSize: '0.78rem', color: '#f87171', textAlign: 'center' }}>{promoError}</p>
                     )}
                 </div>
+            </section>
+
+            {/* FAQ */}
+            <section style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px 56px' }}>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 900, textAlign: 'center', margin: '0 0 20px', letterSpacing: '-0.02em' }}>
+                    Common questions
+                </h2>
+                {[
+                    {
+                        q: 'Do I need to know hiragana?',
+                        a: 'No. Every word comes with romaji reading and audio, so you can start from zero. Kana knowledge helps but is never required.',
+                    },
+                    {
+                        q: "I'm a total beginner. Will this work for me?",
+                        a: 'Yes — a 2-minute placement test matches words to your level, starting from the essentials and gradually introducing harder vocab as you improve.',
+                    },
+                    {
+                        q: 'What are scene dialogue quizzes?',
+                        a: 'You see an anime-style scene and pick the line a character would actually say. Every wrong choice comes with a one-line explanation — formality, grammar, or nuance — so you learn why, not just what.',
+                    },
+                    {
+                        q: 'How does the SRS system work?',
+                        a: 'Words you get right come back at growing intervals (1, 3, 7, then 14 days). Words you miss come back sooner. You review exactly what you are about to forget.',
+                    },
+                    {
+                        q: 'Can I cancel anytime?',
+                        a: 'Yes. Monthly and Annual plans can be canceled anytime from your account and you keep access until the end of the paid period. Lifetime is a one-time payment — no subscription at all.',
+                    },
+                ].map(item => (
+                    <details key={item.q} style={{
+                        background: '#13142a', border: '1px solid rgba(255,255,255,0.07)',
+                        borderRadius: '14px', padding: '16px 18px', marginBottom: '10px',
+                    }}>
+                        <summary style={{
+                            fontSize: '0.92rem', fontWeight: 700, color: '#f1f5f9',
+                            cursor: 'pointer', listStyle: 'none',
+                        }}>
+                            {item.q}
+                        </summary>
+                        <p style={{ margin: '10px 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.65 }}>
+                            {item.a}
+                        </p>
+                    </details>
+                ))}
             </section>
 
             {/* Footer — something worth sharing */}
