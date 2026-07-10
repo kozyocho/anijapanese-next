@@ -81,6 +81,13 @@ function DemoQuiz({ onFinish, priceLabel, onBuy, buying }: {
                         <button style={BTN}>Unlock all 500+ words — {priceLabel}</button>
                     </SignInButton>
                 </SignedOut>
+                <Link href="/onboarding" style={{
+                    display: 'inline-block', marginTop: '14px',
+                    fontSize: '0.82rem', color: '#94a3b8', fontWeight: 600,
+                    textDecoration: 'underline', textUnderlineOffset: '3px',
+                }}>
+                    or continue with the free plan →
+                </Link>
             </div>
         )
     }
@@ -525,13 +532,23 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                 <div style={{
                     background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.07)',
                     borderRadius: '16px', padding: '18px 20px', marginBottom: '12px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px',
                 }}>
                     <div>
                         <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '2px' }}>Free</div>
-                        <div style={{ fontSize: '0.78rem', color: '#475569' }}>5 words/day · No SRS</div>
+                        <div style={{ fontSize: '0.78rem', color: '#475569' }}>5 new words/day · No credit card</div>
                     </div>
-                    <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#64748b' }}>$0</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#64748b' }}>$0</div>
+                        <Link href="/onboarding" style={{
+                            padding: '9px 16px', background: 'rgba(255,255,255,0.06)',
+                            border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px',
+                            color: '#e2e8f0', fontSize: '0.82rem', fontWeight: 700,
+                            textDecoration: 'none', whiteSpace: 'nowrap',
+                        }}>
+                            Start free
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Paid plans */}
@@ -738,9 +755,10 @@ function LandingPage({ guestId }: { guestId: string | null }) {
 
 interface SessionData { reviewCount: number; newWordCount: number }
 
-function Dashboard({ guestId, profile, showUpgradeSuccess }: {
+function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
     guestId: string
     profile: { current_streak: number } | null
+    isPremium: boolean
     showUpgradeSuccess?: boolean
 }) {
     const [data, setData] = useState<SessionData | null>(null)
@@ -822,6 +840,7 @@ function Dashboard({ guestId, profile, showUpgradeSuccess }: {
                             <div style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '6px' }}>{total} cards ready</div>
                             <div style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '20px' }}>
                                 {data?.reviewCount ?? 0} reviews · {data?.newWordCount ?? 0} new words
+                                {!isPremium && <span style={{ color: '#64748b' }}> · Free: 5 new/day</span>}
                             </div>
                             <Link href="/session" style={{
                                 display: 'block', padding: '16px',
@@ -855,7 +874,7 @@ function Dashboard({ guestId, profile, showUpgradeSuccess }: {
                     ))}
                 </div>
 
-                <Link href="/scene" style={{
+                <Link href={isPremium ? '/scene' : '/upgrade'} style={{
                     display: 'block', padding: '16px 18px', marginBottom: '16px',
                     background: 'linear-gradient(135deg, rgba(124,58,237,0.15), rgba(167,139,250,0.08))',
                     border: '1px solid rgba(124,58,237,0.3)',
@@ -863,10 +882,32 @@ function Dashboard({ guestId, profile, showUpgradeSuccess }: {
                     fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none',
                 }}>
                     🎬 Scene Quiz — What would they say?
+                    {!isPremium && (
+                        <span style={{
+                            marginLeft: '8px', fontSize: '0.65rem', fontWeight: 800,
+                            background: 'rgba(124,58,237,0.25)', color: '#a78bfa',
+                            padding: '2px 8px', borderRadius: '99px', verticalAlign: 'middle',
+                        }}>🔒 Premium</span>
+                    )}
                     <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 500, marginTop: '4px' }}>
                         Pick the natural line for each anime-style scene
                     </div>
                 </Link>
+
+                {!isPremium && (
+                    <Link href="/upgrade" style={{
+                        display: 'block', padding: '16px 18px', marginBottom: '16px',
+                        background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+                        borderRadius: '16px', color: 'white',
+                        fontWeight: 800, fontSize: '0.95rem', textDecoration: 'none',
+                        boxShadow: '0 4px 20px rgba(124,58,237,0.35)',
+                    }}>
+                        🚀 Go unlimited — from $2.50/mo
+                        <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.75)', fontWeight: 500, marginTop: '4px' }}>
+                            Unlimited new words + scene quizzes
+                        </div>
+                    </Link>
+                )}
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <Link href="/history" style={LINK_STYLE}>📊 Learning history</Link>
@@ -922,10 +963,12 @@ export default function HomePage() {
             : <LoadingScreen />
     }
 
-    const isPremium = (profile as { is_premium?: boolean } | null)?.is_premium ?? confirmedPremium
+    const isPremium = (profile?.is_premium ?? false) || confirmedPremium
+    const onboarded = !!profile?.onboarding_completed_at
 
-    if ((isPremium || confirmedPremium) && guestId) {
-        return <Dashboard guestId={guestId} profile={profile} showUpgradeSuccess={upgraded} />
+    // Premium users and free users who completed onboarding get the dashboard
+    if ((isPremium || onboarded) && guestId) {
+        return <Dashboard guestId={guestId} profile={profile} isPremium={isPremium} showUpgradeSuccess={upgraded} />
     }
 
     return <LandingPage guestId={guestId} />

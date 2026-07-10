@@ -147,7 +147,13 @@ export async function GET(req: NextRequest) {
     }
 
     if (items.length === 0) {
-        return NextResponse.json({ items: [], distractors: {} })
+        return NextResponse.json({
+            items: [],
+            distractors: {},
+            isPremium,
+            dailyNewUsed,
+            dailyNewLimit: isPremium ? null : FREE_DAILY_NEW_LIMIT,
+        })
     }
 
     // ── 3. Distractors: 3 wrong english answers per item ──────────

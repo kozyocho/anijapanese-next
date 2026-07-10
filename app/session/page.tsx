@@ -42,21 +42,24 @@ export default function SessionPage() {
     const [sessionStart] = useState<number>(() => Date.now())
     const [shuffledChoices, setShuffledChoices] = useState<string[]>([])
     const [selectedChoice, setSelectedChoice] = useState<string | null>(null)
+    const [isPremium, setIsPremium] = useState(true)
+    const [limitReached, setLimitReached] = useState(false)
 
-    // Paywall gate then session load — sequential to prevent non-premium users seeing session content
+    // Load session — free users get the API-enforced daily limit (5 new words/day)
     useEffect(() => {
         if (!guestId) return
         let cancelled = false
         async function init() {
-            const profileRes = await fetch(`/api/profile?userId=${guestId}`)
-            const { profile } = await profileRes.json()
-            if (cancelled) return
-            if (!profile?.is_premium) { router.replace('/'); return }
-
             const sessionRes = await fetch(`/api/session?userId=${guestId}&new=10`)
-            const { items, distractors } = await sessionRes.json()
+            const { items, distractors, isPremium: premium } = await sessionRes.json()
             if (cancelled) return
-            if (!items?.length) { router.push('/'); return }
+            setIsPremium(premium ?? false)
+            if (!items?.length) {
+                if (premium) { router.push('/'); return }
+                setLimitReached(true)
+                setLoading(false)
+                return
+            }
             setItems(items)
             setDistractors(distractors ?? {})
             setLoading(false)
@@ -157,6 +160,45 @@ export default function SessionPage() {
         return <LoadingScreen message="Building your session..." />
     }
 
+    if (limitReached) {
+        return (
+            <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+                <div style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
+                    <div style={{ fontSize: '4rem', marginBottom: '16px' }}>🌙</div>
+                    <div style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '8px' }}>
+                        Daily limit reached
+                    </div>
+                    <div style={{ color: '#94a3b8', marginBottom: '24px', lineHeight: 1.6 }}>
+                        You finished today&apos;s 5 free new words. Come back tomorrow — or go unlimited now.
+                    </div>
+                    <button
+                        onClick={() => router.push('/upgrade')}
+                        style={{
+                            width: '100%', padding: '16px', marginBottom: '10px',
+                            background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+                            border: 'none', borderRadius: '14px',
+                            color: 'white', fontFamily: 'inherit',
+                            fontSize: '1rem', fontWeight: 800, cursor: 'pointer',
+                        }}
+                    >
+                        Unlock unlimited words →
+                    </button>
+                    <button
+                        onClick={() => router.push('/')}
+                        style={{
+                            width: '100%', padding: '14px',
+                            background: 'transparent', border: '1.5px solid rgba(255,255,255,0.1)',
+                            borderRadius: '14px', color: '#64748b',
+                            fontFamily: 'inherit', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer',
+                        }}
+                    >
+                        Back to Home
+                    </button>
+                </div>
+            </div>
+        )
+    }
+
     if (done) {
         const acc = Math.round((results.correct / results.total) * 100)
         return (
@@ -201,6 +243,20 @@ export default function SessionPage() {
                     >
                         Back to Home
                     </button>
+                    {!isPremium && (
+                        <button
+                            onClick={() => router.push('/upgrade')}
+                            style={{
+                                width: '100%', padding: '14px', marginTop: '10px',
+                                background: 'rgba(124,58,237,0.12)',
+                                border: '1px solid rgba(124,58,237,0.3)',
+                                borderRadius: '14px', color: '#a78bfa',
+                                fontFamily: 'inherit', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer',
+                            }}
+                        >
+                            Free plan: 5 new words/day — go unlimited →
+                        </button>
+                    )}
                 </div>
             </div>
         )

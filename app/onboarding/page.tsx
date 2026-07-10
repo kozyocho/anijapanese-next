@@ -55,7 +55,7 @@ const TIME_OPTIONS = [
 type Screen = 'welcome' | 'goal' | 'placement' | 'level-pick' | 'time' | 'done'
 
 export default function OnboardingPage() {
-    const { guestId } = useGuest()
+    const { guestId, refreshProfile } = useGuest()
     const router = useRouter()
     const [screen, setScreen] = useState<Screen>('welcome')
     const [goal, setGoal] = useState<string>('explore')
@@ -121,6 +121,7 @@ export default function OnboardingPage() {
                     onboarding_completed_at: new Date().toISOString(),
                 }),
             })
+            await refreshProfile()
         }
         setSaving(false)
         setScreen('done')
