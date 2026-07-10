@@ -43,6 +43,7 @@ export default function UpgradePage() {
     const [loading, setLoading] = useState(false)
 
     const isPremium = profile?.is_premium ?? false
+    const planType = profile?.plan_type ?? null
     const sale = useSale()
 
     async function buy(planType: PlanType) {
@@ -116,25 +117,49 @@ export default function UpgradePage() {
             {isPremium ? (
                 <div>
                     <div style={{
-                        padding: '16px', textAlign: 'center',
+                        padding: '20px', textAlign: 'center',
                         background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)',
                         borderRadius: '14px', marginBottom: '12px',
-                        color: '#4ade80', fontWeight: 700,
                     }}>
-                        Premium active
+                        <div style={{ color: '#4ade80', fontWeight: 700, marginBottom: '4px' }}>
+                            {planType === 'lifetime' ? 'Lifetime plan active'
+                                : planType === 'annual' ? 'Annual plan active'
+                                : planType === 'monthly' ? 'Monthly plan active'
+                                : 'Premium active'}
+                        </div>
+                        <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                            {planType === 'lifetime'
+                                ? 'Paid once — yours forever. No subscription, nothing to cancel.'
+                                : 'All premium features unlocked.'}
+                        </div>
                     </div>
-                    <button
-                        onClick={handlePortal}
-                        disabled={loading}
-                        style={{
-                            display: 'block', width: '100%', padding: '14px',
-                            background: 'transparent', border: '1px solid rgba(255,255,255,0.1)',
-                            borderRadius: '14px', color: '#64748b',
-                            fontFamily: 'inherit', fontSize: '0.9rem', cursor: 'pointer',
-                        }}
-                    >
-                        {loading ? 'Opening...' : 'Manage subscription'}
-                    </button>
+                    {planType !== 'lifetime' && (
+                        <>
+                            <button
+                                onClick={handlePortal}
+                                disabled={loading}
+                                style={{
+                                    display: 'block', width: '100%', padding: '16px',
+                                    background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.3)',
+                                    borderRadius: '14px', color: '#a78bfa',
+                                    fontFamily: 'inherit', fontSize: '0.95rem', fontWeight: 800, cursor: 'pointer',
+                                }}
+                            >
+                                {loading ? 'Opening…' : 'Manage subscription →'}
+                            </button>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', margin: '14px 4px 0' }}>
+                                {['Switch between Monthly / Annual', 'Update payment method', 'Cancel anytime — access lasts until the end of the paid period'].map((t, i) => (
+                                    <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '0.8rem', color: '#94a3b8' }}>
+                                        <span style={{ color: '#7c3aed', fontWeight: 800, flexShrink: 0 }}>✓</span>
+                                        {t}
+                                    </div>
+                                ))}
+                            </div>
+                            <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#475569', margin: '16px 0 0' }}>
+                                Handled securely by Stripe
+                            </p>
+                        </>
+                    )}
                 </div>
             ) : (
                 <>

@@ -912,6 +912,14 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <Link href="/history" style={LINK_STYLE}>📊 Learning history</Link>
                     <Link href="/onboarding" style={LINK_STYLE}>⚙️ Learning settings</Link>
+                    {isPremium && (
+                        <Link href="/upgrade" style={LINK_STYLE}>
+                            💎 Manage plan
+                            <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', fontWeight: 500, marginTop: '2px' }}>
+                                Change plan, payment method, or cancel
+                            </span>
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>
