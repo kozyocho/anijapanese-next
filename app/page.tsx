@@ -944,11 +944,14 @@ export default function HomePage() {
     const [polling, setPolling] = useState(upgraded)
     const [confirmedPremium, setConfirmedPremium] = useState(false)
 
-    // When redirected from Stripe (?upgraded=1), poll until is_premium is true
+    // When redirected from Stripe (?upgraded=1), verify the session directly
+    // for instant activation; fall back to polling the webhook result.
     useEffect(() => {
         if (!upgraded || !guestId) return
+        const sessionId = searchParams.get('session_id')
+
         let attempts = 0
-        const check = async () => {
+        const pollWebhook = async () => {
             const res = await fetch(`/api/profile?userId=${guestId}`)
             const data = await res.json()
             if (data.profile?.is_premium) {
@@ -957,14 +960,33 @@ export default function HomePage() {
                 return
             }
             attempts++
-            if (attempts < 20) {
-                setTimeout(check, 1000)
+            if (attempts < 10) {
+                setTimeout(pollWebhook, 1000)
             } else {
-                setPolling(false) // give up after 20s
+                setPolling(false) // give up after 10s
             }
         }
-        check()
-    }, [upgraded, guestId])
+
+        const run = async () => {
+            if (sessionId) {
+                try {
+                    const res = await fetch('/api/stripe/verify', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sessionId }),
+                    })
+                    const data = await res.json()
+                    if (data.premium) {
+                        setConfirmedPremium(true)
+                        setPolling(false)
+                        return
+                    }
+                } catch { /* fall through to polling */ }
+            }
+            pollWebhook()
+        }
+        run()
+    }, [upgraded, guestId, searchParams])
 
     if (isLoading || polling) {
         return upgraded
