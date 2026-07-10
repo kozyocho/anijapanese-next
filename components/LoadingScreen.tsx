@@ -2,10 +2,9 @@
 
 interface Props {
     message?: string
-    emoji?: string
 }
 
-export function LoadingScreen({ message, emoji }: Props) {
+export function LoadingScreen({ message }: Props) {
     return (
         <>
             <style>{`
@@ -24,18 +23,14 @@ export function LoadingScreen({ message, emoji }: Props) {
                 gap: '16px', color: '#f1f5f9',
                 animation: 'anijp-fade-up 0.3s ease both',
             }}>
-                {emoji ? (
-                    <div style={{ fontSize: '3rem' }}>{emoji}</div>
-                ) : (
-                    <div style={{
-                        fontSize: '1.3rem', fontWeight: 900, letterSpacing: '-0.02em',
-                        background: 'linear-gradient(135deg,#a78bfa,#fbbf24)',
-                        WebkitBackgroundClip: 'text', backgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                    }}>
-                        AniJapanese
-                    </div>
-                )}
+                <div style={{
+                    fontSize: '1.3rem', fontWeight: 900, letterSpacing: '-0.02em',
+                    background: 'linear-gradient(135deg,#a78bfa,#fbbf24)',
+                    WebkitBackgroundClip: 'text', backgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                }}>
+                    AniJapanese
+                </div>
 
                 {/* Spinner */}
                 <div style={{

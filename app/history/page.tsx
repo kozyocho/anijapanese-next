@@ -112,10 +112,10 @@ export default function HistoryPage() {
 
                 {/* Stat cards */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px' }}>
-                    <StatCard icon="📚" label="Words Learned" value={String(totals.total_words_learned)} />
-                    <StatCard icon="⏱️" label="Study Time" value={formatTime(totals.total_duration_seconds)} />
-                    <StatCard icon="🔥" label="Current Streak" value={`${totals.current_streak} days`} />
-                    <StatCard icon="🏆" label="Best Streak" value={`${totals.longest_streak} days`} />
+                    <StatCard label="Words Learned" value={String(totals.total_words_learned)} />
+                    <StatCard label="Study Time" value={formatTime(totals.total_duration_seconds)} />
+                    <StatCard label="Current Streak" value={`${totals.current_streak} days`} />
+                    <StatCard label="Best Streak" value={`${totals.longest_streak} days`} />
                 </div>
 
                 {/* Calendar heatmap */}
@@ -221,10 +221,9 @@ export default function HistoryPage() {
     )
 }
 
-function StatCard({ icon, label, value }: { icon: string; label: string; value: string }) {
+function StatCard({ label, value }: { label: string; value: string }) {
     return (
         <div style={{ background: '#13142a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '18px 16px' }}>
-            <div style={{ fontSize: '1.3rem', marginBottom: '6px' }}>{icon}</div>
             <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#f1f5f9' }}>{value}</div>
             <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px' }}>{label}</div>
         </div>

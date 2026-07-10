@@ -9,7 +9,6 @@ export default function LoginPage() {
     return (
         <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
             <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-                <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>🎌</div>
                 <div style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '6px' }}>
                     Save your progress
                 </div>

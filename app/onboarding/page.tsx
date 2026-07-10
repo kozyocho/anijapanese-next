@@ -39,17 +39,17 @@ function scoreToJlptLevel(correct: number): LevelResult {
 }
 
 const GOAL_OPTIONS = [
-    { value: 'nosubs', emoji: '📺', label: 'Watch anime without subtitles', sub: 'The ultimate goal' },
-    { value: 'vocab', emoji: '📚', label: 'Understand way more words', sub: 'Follow every episode' },
-    { value: 'speak', emoji: '💬', label: 'Start speaking Japanese', sub: 'Sound like your fave character' },
-    { value: 'explore', emoji: '🌸', label: 'Just exploring for now', sub: 'No pressure, dive in' },
+    { value: 'nosubs', label: 'Watch anime without subtitles', sub: 'The ultimate goal' },
+    { value: 'vocab', label: 'Understand way more words', sub: 'Follow every episode' },
+    { value: 'speak', label: 'Start speaking Japanese', sub: 'Sound like your fave character' },
+    { value: 'explore', label: 'Just exploring for now', sub: 'No pressure, dive in' },
 ]
 
 const TIME_OPTIONS = [
-    { value: '5', emoji: '⚡', label: '5 min', sub: 'Just a quick warmup' },
-    { value: '10', emoji: '🔥', label: '10 min', sub: 'Solid daily habit' },
-    { value: '20', emoji: '💪', label: '20 min', sub: 'Serious learner mode' },
-    { value: '30', emoji: '🚀', label: '30+ min', sub: 'Full immersion' },
+    { value: '5', label: '5 min', sub: 'Just a quick warmup' },
+    { value: '10', label: '10 min', sub: 'Solid daily habit' },
+    { value: '20', label: '20 min', sub: 'Serious learner mode' },
+    { value: '30', label: '30+ min', sub: 'Full immersion' },
 ]
 
 type Screen = 'welcome' | 'goal' | 'placement' | 'level-pick' | 'time' | 'done'
@@ -139,7 +139,6 @@ export default function OnboardingPage() {
                     }}>AniJapanese</div>
                 </div>
                 <div style={{ textAlign: 'center', padding: '32px 0 0' }}>
-                    <div style={{ fontSize: '2.8rem', marginBottom: '14px' }}>🎌</div>
                     <h1 style={{ fontSize: 'clamp(1.6rem,6vw,2rem)', fontWeight: 900, lineHeight: 1.2, letterSpacing: '-0.03em', margin: '0 0 12px' }}>
                         Learn Japanese<br />the anime way
                     </h1>
@@ -171,7 +170,6 @@ export default function OnboardingPage() {
         return (
             <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', padding: '0 20px 40px', maxWidth: '480px', margin: '0 auto' }}>
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
-                    <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🎉</div>
                     <h2 style={{ fontSize: '1.8rem', fontWeight: 900, letterSpacing: '-0.02em', margin: '0 0 20px' }}>
                         Your plan is ready!
                     </h2>
@@ -180,16 +178,15 @@ export default function OnboardingPage() {
                         borderRadius: '16px', padding: '18px', marginBottom: '24px', textAlign: 'left',
                     }}>
                         {[
-                            { icon: '📊', label: 'Level', value: `${result.display} (${result.label})` },
-                            { icon: '⏱️', label: 'Daily goal', value: `${minutes} min / day` },
-                            ...(goalLabel ? [{ icon: goalLabel.emoji, label: 'Goal', value: goalLabel.label }] : []),
+                            { label: 'Level', value: `${result.display} (${result.label})` },
+                            { label: 'Daily goal', value: `${minutes} min / day` },
+                            ...(goalLabel ? [{ label: 'Goal', value: goalLabel.label }] : []),
                         ].map((row, i, arr) => (
                             <div key={row.label} style={{
                                 display: 'flex', alignItems: 'center', gap: '12px',
                                 padding: '10px 0',
                                 borderBottom: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
                             }}>
-                                <span style={{ fontSize: '1.2rem' }}>{row.icon}</span>
                                 <span style={{ fontSize: '0.8rem', color: '#64748b', width: '80px', flexShrink: 0 }}>{row.label}</span>
                                 <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#f1f5f9' }}>{row.value}</span>
                             </div>
@@ -265,7 +262,6 @@ export default function OnboardingPage() {
                 <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', padding: '24px 20px 40px', maxWidth: '480px', margin: '0 auto' }}>
                     <ProgressBar progress={progress} step={stepIndex[screen]} total={totalSteps} onBack={() => { resetPlacement() }} />
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '16px' }}>📊</div>
                         <h2 style={{ fontSize: '1.6rem', fontWeight: 900, margin: '0 0 8px' }}>Your level is set!</h2>
                         <p style={{ color: '#94a3b8', margin: '0 0 20px' }}>
                             {correctCount} / {PLACEMENT_QUESTIONS.length} correct
@@ -370,7 +366,7 @@ export default function OnboardingPage() {
     }
 
     // ── Goal + Time steps ─────────────────────────────────────────────────────
-    type StepOption = { value: string; emoji: string; label: string; sub: string }
+    type StepOption = { value: string; label: string; sub: string }
     const isGoal = screen === 'goal'
     const options: StepOption[] = isGoal ? GOAL_OPTIONS : TIME_OPTIONS
     const title = isGoal ? "What's your main goal?" : 'How long can you study each day?'
@@ -412,7 +408,6 @@ export default function OnboardingPage() {
                             onMouseEnter={e => { if (!saving) { e.currentTarget.style.borderColor = 'rgba(124,58,237,0.5)'; e.currentTarget.style.background = 'rgba(124,58,237,0.08)' } }}
                             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.background = '#13142a' }}
                         >
-                            <span style={{ fontSize: '1.4rem', flexShrink: 0 }}>{opt.emoji}</span>
                             <div>
                                 <div>{opt.label}</div>
                                 <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 400, marginTop: '2px' }}>{opt.sub}</div>

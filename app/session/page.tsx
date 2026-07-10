@@ -164,7 +164,6 @@ export default function SessionPage() {
         return (
             <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
                 <div style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-                    <div style={{ fontSize: '4rem', marginBottom: '16px' }}>🌙</div>
                     <div style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '8px' }}>
                         Daily limit reached
                     </div>
@@ -204,9 +203,6 @@ export default function SessionPage() {
         return (
             <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
                 <div style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-                    <div style={{ fontSize: '4rem', marginBottom: '16px' }}>
-                        {acc >= 80 ? '🏆' : acc >= 50 ? '📈' : '💪'}
-                    </div>
                     <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '8px' }}>
                         Session Complete!
                     </div>
@@ -325,7 +321,7 @@ export default function SessionPage() {
                         gap: '6px',
                     }}
                 >
-                    🔊 Play again
+                    Play audio again
                 </button>
             </div>
 

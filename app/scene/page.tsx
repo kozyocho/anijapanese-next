@@ -137,9 +137,6 @@ export default function ScenePage() {
         return (
             <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
                 <div style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-                    <div style={{ fontSize: '4rem', marginBottom: '16px' }}>
-                        {acc >= 80 ? '🎬' : acc >= 50 ? '📈' : '💪'}
-                    </div>
                     <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '8px' }}>
                         Scene Complete!
                     </div>
@@ -221,7 +218,7 @@ export default function ScenePage() {
                     marginBottom: '16px',
                 }}>
                     <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#a78bfa', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '8px' }}>
-                        🎬 Scene
+                        Scene
                     </div>
                     <div style={{ fontSize: '0.95rem', color: '#e2e8f0', lineHeight: 1.5 }}>
                         {currentItem.scene_en}

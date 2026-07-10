@@ -105,7 +105,6 @@ export default function UpgradePage() {
             )}
 
             <div style={{ textAlign: 'center', padding: '24px 0 24px' }}>
-                <div style={{ fontSize: '2.4rem', marginBottom: '12px' }}>🚀</div>
                 <h1 style={{ fontSize: '1.8rem', fontWeight: 900, letterSpacing: '-0.02em', margin: '0 0 8px' }}>
                     AniJapanese Premium
                 </h1>

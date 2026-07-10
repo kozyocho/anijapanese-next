@@ -14,7 +14,7 @@ export function StreakBadge({ streak }: Props) {
                 fontSize: '0.85rem', fontWeight: 700, color: '#fbbf24',
             }}
         >
-            🔥 {streak}
+            {streak} day streak
         </div>
     )
 }

@@ -347,7 +347,7 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                             {/* Mini header */}
                             <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                                 <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
-                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>🔥 3</span>
+                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>Streak 3</span>
                             </div>
                             {/* Word card */}
                             <div style={{ padding: '24px 14px 20px', textAlign: 'center' }}>
@@ -370,7 +370,7 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                         <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
                             <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                                 <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
-                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>🔥 3</span>
+                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>Streak 3</span>
                             </div>
                             <div style={{ padding: '24px 14px 20px', textAlign: 'center' }}>
                                 <div style={{ fontSize: '0.6rem', color: '#7c3aed', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Battle</div>
@@ -396,7 +396,7 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                         <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
                             <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                                 <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
-                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>🔥 3</span>
+                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>Streak 3</span>
                             </div>
                             <div style={{ padding: '24px 14px 12px', textAlign: 'center' }}>
                                 <div style={{ fontSize: '0.6rem', color: '#7c3aed', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Battle</div>
@@ -433,10 +433,10 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                         <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
                             <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                                 <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
-                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>🔥 7</span>
+                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>Streak 7</span>
                             </div>
                             <div style={{ padding: '14px' }}>
-                                <div style={{ fontSize: '0.55rem', color: '#a78bfa', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>🎬 Scene</div>
+                                <div style={{ fontSize: '0.55rem', color: '#a78bfa', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Scene</div>
                                 <div style={{ fontSize: '0.62rem', color: '#94a3b8', lineHeight: 1.5, marginBottom: '10px' }}>
                                     A rival finally shows up late. The hero smirks and says:
                                 </div>
@@ -471,24 +471,22 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                         <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
                             <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                                 <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
-                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>🔥 7</span>
+                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>Streak 7</span>
                             </div>
                             <div style={{ padding: '12px 14px' }}>
                                 <div style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)', borderRadius: '12px', padding: '12px', textAlign: 'center', marginBottom: '8px' }}>
-                                    <div style={{ fontSize: '1.2rem', marginBottom: '4px' }}>⚡</div>
                                     <div style={{ fontSize: '0.72rem', fontWeight: 800, marginBottom: '2px' }}>8 cards ready</div>
                                     <div style={{ fontSize: '0.6rem', color: '#94a3b8', marginBottom: '10px' }}>3 reviews · 5 new words</div>
                                     <div style={{ background: '#7c3aed', borderRadius: '8px', padding: '6px', fontSize: '0.65rem', fontWeight: 800, color: 'white' }}>Start Session →</div>
                                 </div>
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
                                     {[
-                                        { icon: '📖', label: 'Reviews', val: '3', color: '#f59e0b' },
-                                        { icon: '✨', label: 'New', val: '5', color: '#7c3aed' },
-                                        { icon: '🔥', label: 'Streak', val: '7', color: '#ef4444' },
-                                        { icon: '⭐', label: 'XP', val: '240', color: '#fbbf24' },
+                                        { label: 'Reviews', val: '3', color: '#f59e0b' },
+                                        { label: 'New', val: '5', color: '#7c3aed' },
+                                        { label: 'Streak', val: '7', color: '#ef4444' },
+                                        { label: 'XP', val: '240', color: '#fbbf24' },
                                     ].map((s, i) => (
                                         <div key={i} style={{ background: '#13142a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '8px', padding: '8px' }}>
-                                            <div style={{ fontSize: '0.7rem' }}>{s.icon}</div>
                                             <div style={{ fontSize: '0.8rem', fontWeight: 800, color: s.color }}>{s.val}</div>
                                             <div style={{ fontSize: '0.55rem', color: '#64748b' }}>{s.label}</div>
                                         </div>
@@ -798,7 +796,6 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
                     animation: 'fadeIn 0.3s ease',
                     maxWidth: '90vw',
                 }}>
-                    <span style={{ fontSize: '1.5rem' }}>🎉</span>
                     <div>
                         <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'white' }}>Premium unlocked!</div>
                         <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.75)', marginTop: '2px' }}>Unlimited words, all features. Let's go!</div>
@@ -834,7 +831,6 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
                     border: '1px solid rgba(124,58,237,0.2)',
                     borderRadius: '20px', padding: '28px 24px', marginBottom: '16px', textAlign: 'center',
                 }}>
-                    <div style={{ fontSize: '3rem', marginBottom: '8px' }}>{total > 0 ? '⚡' : '🎉'}</div>
                     {total > 0 ? (
                         <>
                             <div style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '6px' }}>{total} cards ready</div>
@@ -862,12 +858,11 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
                     {[
-                        { icon: '📖', label: 'Due Reviews', value: data?.reviewCount ?? 0, color: '#f59e0b' },
-                        { icon: '✨', label: 'New Words', value: data?.newWordCount ?? 0, color: '#7c3aed' },
-                        { icon: '🔥', label: 'Day Streak', value: streak, color: '#ef4444' },
+                        { label: 'Due Reviews', value: data?.reviewCount ?? 0, color: '#f59e0b' },
+                        { label: 'New Words', value: data?.newWordCount ?? 0, color: '#7c3aed' },
+                        { label: 'Day Streak', value: streak, color: '#ef4444' },
                     ].map(s => (
                         <div key={s.label} style={{ background: '#13142a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '18px 16px' }}>
-                            <div style={{ fontSize: '1.4rem', marginBottom: '6px' }}>{s.icon}</div>
                             <div style={{ fontSize: '1.6rem', fontWeight: 800, color: s.color }}>{s.value}</div>
                             <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px' }}>{s.label}</div>
                         </div>
@@ -881,13 +876,13 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
                     borderRadius: '16px', color: '#e2e8f0',
                     fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none',
                 }}>
-                    🎬 Scene Quiz — What would they say?
+                    Scene Quiz — What would they say?
                     {!isPremium && (
                         <span style={{
                             marginLeft: '8px', fontSize: '0.65rem', fontWeight: 800,
                             background: 'rgba(124,58,237,0.25)', color: '#a78bfa',
                             padding: '2px 8px', borderRadius: '99px', verticalAlign: 'middle',
-                        }}>🔒 Premium</span>
+                        }}>Premium</span>
                     )}
                     <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 500, marginTop: '4px' }}>
                         Pick the natural line for each anime-style scene
@@ -902,7 +897,7 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
                         fontWeight: 800, fontSize: '0.95rem', textDecoration: 'none',
                         boxShadow: '0 4px 20px rgba(124,58,237,0.35)',
                     }}>
-                        🚀 Go unlimited — from $2.50/mo
+                        Go unlimited — from $2.50/mo
                         <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.75)', fontWeight: 500, marginTop: '4px' }}>
                             Unlimited new words + scene quizzes
                         </div>
@@ -910,11 +905,11 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
                 )}
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <Link href="/history" style={LINK_STYLE}>📊 Learning history</Link>
-                    <Link href="/onboarding" style={LINK_STYLE}>⚙️ Learning settings</Link>
+                    <Link href="/history" style={LINK_STYLE}>Learning history</Link>
+                    <Link href="/onboarding" style={LINK_STYLE}>Learning settings</Link>
                     {isPremium && (
                         <Link href="/upgrade" style={LINK_STYLE}>
-                            💎 Manage plan
+                            Manage plan
                             <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', fontWeight: 500, marginTop: '2px' }}>
                                 Change plan, payment method, or cancel
                             </span>
@@ -990,7 +985,7 @@ export default function HomePage() {
 
     if (isLoading || polling) {
         return upgraded
-            ? <LoadingScreen emoji="🎉" message="Payment successful! Activating your account…" />
+            ? <LoadingScreen message="Payment successful! Activating your account…" />
             : <LoadingScreen />
     }
 
