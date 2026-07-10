@@ -151,19 +151,27 @@ export async function GET(req: NextRequest) {
     }
 
     // ── 3. Distractors: 3 wrong english answers per item ──────────
+    // Prefer same-category words (harder, more educational), fall back to global pool
     const { data: distPool } = await adminClient
         .from('content_vocabulary_details')
-        .select('content_id, english')
+        .select('content_id, english, category')
         .not('content_id', 'in', `(${Array.from(usedIds).join(',')})`)
         .limit(300)
 
-    const englishPool = (distPool ?? []).map(v => v.english)
+    const pool = distPool ?? []
     const distractors: Record<number, string[]> = {}
 
     for (const item of items) {
-        const pool = englishPool.filter(e => e !== item.english)
-        const shuffled = pool.sort(() => Math.random() - 0.5)
-        distractors[item.content_id] = shuffled.slice(0, 3)
+        const sameCategory = pool.filter(v => v.category === item.category && v.english !== item.english)
+        const others = pool.filter(v => v.category !== item.category && v.english !== item.english)
+        const shuffle = <T,>(arr: T[]) => [...arr].sort(() => Math.random() - 0.5)
+
+        const picked: string[] = []
+        for (const v of [...shuffle(sameCategory), ...shuffle(others)]) {
+            if (picked.length >= 3) break
+            if (!picked.includes(v.english)) picked.push(v.english)
+        }
+        distractors[item.content_id] = picked
     }
 
     // Shuffle session order (reviews interleaved with new words)

@@ -767,6 +767,19 @@ function Dashboard({ guestId, profile, showUpgradeSuccess }: {
                     ))}
                 </div>
 
+                <Link href="/scene" style={{
+                    display: 'block', padding: '16px 18px', marginBottom: '16px',
+                    background: 'linear-gradient(135deg, rgba(124,58,237,0.15), rgba(167,139,250,0.08))',
+                    border: '1px solid rgba(124,58,237,0.3)',
+                    borderRadius: '16px', color: '#e2e8f0',
+                    fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none',
+                }}>
+                    🎬 Scene Quiz — What would they say?
+                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 500, marginTop: '4px' }}>
+                        Pick the natural line for each anime-style scene
+                    </div>
+                </Link>
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <Link href="/history" style={LINK_STYLE}>📊 Learning history</Link>
                     <Link href="/onboarding" style={LINK_STYLE}>⚙️ Learning settings</Link>
