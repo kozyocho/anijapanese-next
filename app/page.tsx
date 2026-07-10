@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { SignInButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs'
 import { useGuest } from '@/lib/GuestProvider'
 import { StreakBadge } from '@/components/StreakBadge'
 import { useSale } from '@/lib/useSale'
@@ -929,6 +929,7 @@ const LINK_STYLE: React.CSSProperties = {
 
 export default function HomePage() {
     const { guestId, isLoading, profile } = useGuest()
+    const { isSignedIn } = useUser()
     const searchParams = useSearchParams()
     const router = useRouter()
     const upgraded = searchParams.get('upgraded') === '1'
@@ -966,10 +967,22 @@ export default function HomePage() {
     const isPremium = (profile?.is_premium ?? false) || confirmedPremium
     const onboarded = !!profile?.onboarding_completed_at
 
-    // Premium users and free users who completed onboarding get the dashboard
+    // Premium users and users who completed onboarding get the dashboard
     if ((isPremium || onboarded) && guestId) {
         return <Dashboard guestId={guestId} profile={profile} isPremium={isPremium} showUpgradeSuccess={upgraded} />
     }
 
+    // Signed-in users never see the LP — send them to finish onboarding
+    if (isSignedIn) {
+        return <RedirectToOnboarding router={router} />
+    }
+
     return <LandingPage guestId={guestId} />
+}
+
+function RedirectToOnboarding({ router }: { router: ReturnType<typeof useRouter> }) {
+    useEffect(() => {
+        router.replace('/onboarding')
+    }, [router])
+    return <LoadingScreen />
 }
