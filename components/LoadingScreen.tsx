@@ -20,12 +20,12 @@ export function LoadingScreen({ message }: Props) {
                 minHeight: '100dvh',
                 display: 'flex', flexDirection: 'column',
                 alignItems: 'center', justifyContent: 'center',
-                gap: '16px', color: '#f1f5f9',
+                gap: '16px', color: '#FFFFFF',
                 animation: 'anijp-fade-up 0.3s ease both',
             }}>
                 <div style={{
-                    fontSize: '1.3rem', fontWeight: 900, letterSpacing: '-0.02em',
-                    background: 'linear-gradient(135deg,#a78bfa,#fbbf24)',
+                    fontSize: '1.3rem', fontWeight: 700, letterSpacing: '-0.02em',
+                    background: 'linear-gradient(135deg,#0A84FF,#64D2FF)',
                     WebkitBackgroundClip: 'text', backgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                 }}>
@@ -35,14 +35,14 @@ export function LoadingScreen({ message }: Props) {
                 {/* Spinner */}
                 <div style={{
                     width: '32px', height: '32px',
-                    border: '3px solid rgba(124,58,237,0.2)',
-                    borderTopColor: '#7c3aed',
+                    border: '3px solid rgba(10,132,255,0.2)',
+                    borderTopColor: '#0A84FF',
                     borderRadius: '50%',
                     animation: 'anijp-spin 0.75s linear infinite',
                 }} />
 
                 {message && (
-                    <div style={{ color: '#64748b', fontSize: '0.88rem', fontWeight: 500 }}>
+                    <div style={{ color: 'rgba(235,235,245,0.45)', fontSize: '0.88rem', fontWeight: 500 }}>
                         {message}
                     </div>
                 )}

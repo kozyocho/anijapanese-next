@@ -26,7 +26,7 @@ function random<T>(arr: T[]) { return arr[Math.floor(Math.random() * arr.length)
 
 export function FeedbackOverlay({ isCorrect, word, reading, correctAnswer, onNext }: Props) {
     const msg = isCorrect ? random(CORRECT_MSGS) : random(WRONG_MSGS)
-    const accent = isCorrect ? '#10b981' : '#ef4444'
+    const accent = isCorrect ? '#30D158' : '#FF453A'
     const bg = isCorrect ? '#071f18' : '#1f0707'
 
     return (
@@ -49,12 +49,12 @@ export function FeedbackOverlay({ isCorrect, word, reading, correctAnswer, onNex
                 onClick={onNext}
             >
                 <div style={{ width: '100%', maxWidth: '480px' }}>
-                    <div style={{ fontSize: '1.2rem', fontWeight: 800, color: accent, marginBottom: '8px' }}>
+                    <div style={{ fontSize: '1.2rem', fontWeight: 600, color: accent, marginBottom: '8px' }}>
                         {msg}
                     </div>
-                    <div style={{ fontSize: '0.88rem', color: '#64748b', marginBottom: '16px' }}>
-                        <span style={{ color: '#f1f5f9', fontWeight: 700 }}>{word}</span>
-                        {reading && <span style={{ color: '#475569' }}> ({reading})</span>}
+                    <div style={{ fontSize: '0.88rem', color: 'rgba(235,235,245,0.45)', marginBottom: '16px' }}>
+                        <span style={{ color: '#FFFFFF', fontWeight: 700 }}>{word}</span>
+                        {reading && <span style={{ color: 'rgba(235,235,245,0.3)' }}> ({reading})</span>}
                         {' '}means{' '}
                         <span style={{ color: accent, fontWeight: 700 }}>{correctAnswer}</span>
                     </div>
@@ -75,7 +75,7 @@ export function FeedbackOverlay({ isCorrect, word, reading, correctAnswer, onNex
                     >
                         Continue
                     </button>
-                    <p style={{ textAlign: 'center', fontSize: '0.72rem', color: '#334155', marginTop: '8px', marginBottom: 0 }}>
+                    <p style={{ textAlign: 'center', fontSize: '0.72rem', color: 'rgba(235,235,245,0.3)', marginTop: '8px', marginBottom: 0 }}>
                         or press Space / Enter
                     </p>
                 </div>

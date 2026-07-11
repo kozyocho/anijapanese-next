@@ -9,9 +9,9 @@ export function StreakBadge({ streak }: Props) {
         <div
             style={{
                 display: 'flex', alignItems: 'center', gap: '6px',
-                background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.3)',
+                background: 'rgba(255,159,10,0.12)', border: '1px solid rgba(255,159,10,0.3)',
                 borderRadius: '99px', padding: '6px 12px',
-                fontSize: '0.85rem', fontWeight: 700, color: '#fbbf24',
+                fontSize: '0.85rem', fontWeight: 700, color: '#FFD60A',
             }}
         >
             {streak} day streak

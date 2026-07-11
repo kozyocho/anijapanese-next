@@ -9,10 +9,10 @@ export default function LoginPage() {
     return (
         <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
             <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-                <div style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '6px' }}>
+                <div style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '6px' }}>
                     Save your progress
                 </div>
-                <div style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+                <div style={{ color: 'rgba(235,235,245,0.6)', fontSize: '0.9rem' }}>
                     Your streak won&apos;t be lost
                 </div>
             </div>
@@ -30,7 +30,7 @@ export default function LoginPage() {
                     padding: '12px 20px',
                     background: 'none',
                     border: 'none',
-                    color: '#64748b',
+                    color: 'rgba(235,235,245,0.45)',
                     fontFamily: 'inherit',
                     fontSize: '0.9rem',
                     cursor: 'pointer',

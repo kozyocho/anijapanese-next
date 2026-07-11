@@ -1,10 +1,7 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
 import { GuestProvider } from '@/lib/GuestProvider'
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
     title: 'AniJapanese — Learn Japanese Through Anime',
@@ -15,44 +12,44 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
-    themeColor: '#0d0d1a',
+    themeColor: '#000000',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="en" className={inter.variable}>
-            <body style={{ background: '#0d0d1a', color: '#f1f5f9', minHeight: '100dvh', fontFamily: 'Inter, sans-serif' }}>
+        <html lang="en">
+            <body style={{ background: '#000000', color: '#FFFFFF', minHeight: '100dvh' }}>
                 <ClerkProvider
                     appearance={{
                         variables: {
-                            colorBackground: '#13142a',
-                            colorText: '#f1f5f9',
-                            colorTextSecondary: '#94a3b8',
-                            colorPrimary: '#7c3aed',
-                            colorInputBackground: '#1e2040',
-                            colorInputText: '#f1f5f9',
-                            colorNeutral: '#f1f5f9',
+                            colorBackground: '#1C1C1E',
+                            colorText: '#FFFFFF',
+                            colorTextSecondary: 'rgba(235,235,245,0.6)',
+                            colorPrimary: '#0A84FF',
+                            colorInputBackground: '#2C2C2E',
+                            colorInputText: '#FFFFFF',
+                            colorNeutral: '#FFFFFF',
                         },
                         elements: {
-                            card: { boxShadow: 'none', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#13142a' },
-                            headerTitle: { color: '#f1f5f9' },
-                            headerSubtitle: { color: '#94a3b8' },
+                            card: { boxShadow: 'none', border: '1px solid rgba(84,84,88,0.6)', backgroundColor: '#1C1C1E' },
+                            headerTitle: { color: '#FFFFFF' },
+                            headerSubtitle: { color: 'rgba(235,235,245,0.6)' },
                             socialButtonsBlockButton: {
-                                backgroundColor: '#1e2040',
-                                border: '1px solid rgba(255,255,255,0.12)',
-                                color: '#f1f5f9',
+                                backgroundColor: '#2C2C2E',
+                                border: '1px solid rgba(84,84,88,0.65)',
+                                color: '#FFFFFF',
                             },
-                            socialButtonsBlockButtonText: { color: '#f1f5f9' },
+                            socialButtonsBlockButtonText: { color: '#FFFFFF' },
                             // Apple logo is black by default — invert to white
                             socialButtonsProviderIcon__apple: { filter: 'invert(1)' },
-                            formFieldLabel: { color: '#94a3b8' },
-                            formFieldInput: { backgroundColor: '#1e2040', color: '#f1f5f9', borderColor: 'rgba(255,255,255,0.12)' },
-                            dividerLine: { backgroundColor: 'rgba(255,255,255,0.08)' },
-                            dividerText: { color: '#64748b' },
-                            footerActionLink: { color: '#a78bfa' },
-                            footerActionText: { color: '#64748b' },
-                            identityPreviewText: { color: '#f1f5f9' },
-                            identityPreviewEditButton: { color: '#a78bfa' },
+                            formFieldLabel: { color: 'rgba(235,235,245,0.6)' },
+                            formFieldInput: { backgroundColor: '#2C2C2E', color: '#FFFFFF', borderColor: 'rgba(84,84,88,0.65)' },
+                            dividerLine: { backgroundColor: 'rgba(84,84,88,0.6)' },
+                            dividerText: { color: 'rgba(235,235,245,0.45)' },
+                            footerActionLink: { color: '#409CFF' },
+                            footerActionText: { color: 'rgba(235,235,245,0.45)' },
+                            identityPreviewText: { color: '#FFFFFF' },
+                            identityPreviewEditButton: { color: '#409CFF' },
                         },
                     }}
                 >

@@ -43,10 +43,10 @@ function lastNDays(n: number): string[] {
 }
 
 function heatColor(questions: number): string {
-    if (questions === 0) return 'rgba(255,255,255,0.06)'
-    if (questions < 5) return 'rgba(124,58,237,0.3)'
-    if (questions < 15) return 'rgba(124,58,237,0.6)'
-    return '#7c3aed'
+    if (questions === 0) return 'rgba(84,84,88,0.5)'
+    if (questions < 5) return 'rgba(10,132,255,0.3)'
+    if (questions < 15) return 'rgba(10,132,255,0.6)'
+    return '#0A84FF'
 }
 
 const TODAY = new Date().toISOString().split('T')[0]
@@ -99,11 +99,11 @@ export default function HistoryPage() {
             <div style={{ padding: '20px 20px 0', maxWidth: '480px', margin: '0 auto' }}>
                 <button
                     onClick={() => router.push('/')}
-                    style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: '0.9rem', padding: 0, marginBottom: '16px' }}
+                    style={{ background: 'none', border: 'none', color: 'rgba(235,235,245,0.45)', cursor: 'pointer', fontSize: '0.9rem', padding: 0, marginBottom: '16px' }}
                 >
                     ← Back
                 </button>
-                <h1 style={{ fontSize: '1.5rem', fontWeight: 900, margin: '0 0 20px', color: '#f1f5f9' }}>
+                <h1 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '0 0 20px', color: '#FFFFFF' }}>
                     Learning History
                 </h1>
             </div>
@@ -125,7 +125,7 @@ export default function HistoryPage() {
                             {/* Day labels */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginRight: '4px', paddingTop: '0' }}>
                                 {['S','M','T','W','T','F','S'].map((l, i) => (
-                                    <div key={i} style={{ height: '14px', fontSize: '9px', color: '#475569', lineHeight: '14px', width: '8px' }}>
+                                    <div key={i} style={{ height: '14px', fontSize: '9px', color: 'rgba(235,235,245,0.3)', lineHeight: '14px', width: '8px' }}>
                                         {i % 2 === 1 ? l : ''}
                                     </div>
                                 ))}
@@ -140,7 +140,7 @@ export default function HistoryPage() {
                                             style={{
                                                 width: '14px', height: '14px', borderRadius: '3px',
                                                 background: date ? heatColor(activityMap[date]?.questions || 0) : 'transparent',
-                                                outline: date === TODAY ? '1.5px solid #a78bfa' : 'none',
+                                                outline: date === TODAY ? '1.5px solid #409CFF' : 'none',
                                             }}
                                         />
                                     ))}
@@ -148,11 +148,11 @@ export default function HistoryPage() {
                             ))}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '8px', justifyContent: 'flex-end' }}>
-                            <span style={{ fontSize: '9px', color: '#475569' }}>Less</span>
+                            <span style={{ fontSize: '9px', color: 'rgba(235,235,245,0.3)' }}>Less</span>
                             {[0, 3, 8, 20].map(q => (
                                 <div key={q} style={{ width: '10px', height: '10px', borderRadius: '2px', background: heatColor(q) }} />
                             ))}
-                            <span style={{ fontSize: '9px', color: '#475569' }}>More</span>
+                            <span style={{ fontSize: '9px', color: 'rgba(235,235,245,0.3)' }}>More</span>
                         </div>
                     </div>
                 </Section>
@@ -170,11 +170,11 @@ export default function HistoryPage() {
                                         width: '100%',
                                         height: q > 0 ? `${(q / maxQ) * 68}px` : '3px',
                                         minHeight: '3px',
-                                        background: isToday ? '#a78bfa' : q > 0 ? '#7c3aed' : 'rgba(255,255,255,0.06)',
+                                        background: isToday ? '#409CFF' : q > 0 ? '#0A84FF' : 'rgba(84,84,88,0.5)',
                                         borderRadius: '3px 3px 0 0',
                                         transition: 'height 0.3s ease',
                                     }} />
-                                    <div style={{ fontSize: '9px', color: isToday ? '#a78bfa' : '#475569' }}>{label}</div>
+                                    <div style={{ fontSize: '9px', color: isToday ? '#409CFF' : 'rgba(235,235,245,0.3)' }}>{label}</div>
                                 </div>
                             )
                         })}
@@ -197,19 +197,19 @@ export default function HistoryPage() {
                                 <div key={date} style={{
                                     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                                     padding: '8px 12px',
-                                    background: isToday ? 'rgba(124,58,237,0.1)' : 'rgba(255,255,255,0.03)',
-                                    border: `1px solid ${isToday ? 'rgba(124,58,237,0.3)' : 'rgba(255,255,255,0.05)'}`,
+                                    background: isToday ? 'rgba(10,132,255,0.1)' : 'rgba(255,255,255,0.03)',
+                                    border: `1px solid ${isToday ? 'rgba(10,132,255,0.3)' : 'rgba(84,84,88,0.4)'}`,
                                     borderRadius: '10px',
                                 }}>
-                                    <span style={{ fontSize: '0.82rem', color: isToday ? '#a78bfa' : '#94a3b8', fontWeight: isToday ? 700 : 400 }}>
+                                    <span style={{ fontSize: '0.82rem', color: isToday ? '#409CFF' : 'rgba(235,235,245,0.6)', fontWeight: isToday ? 700 : 400 }}>
                                         {label}
                                     </span>
                                     {day ? (
-                                        <span style={{ fontSize: '0.78rem', color: '#64748b' }}>
+                                        <span style={{ fontSize: '0.78rem', color: 'rgba(235,235,245,0.45)' }}>
                                             {day.questions}q · {day.words_learned}w · {formatTime(day.duration_seconds)}
                                         </span>
                                     ) : (
-                                        <span style={{ fontSize: '0.78rem', color: '#334155' }}>—</span>
+                                        <span style={{ fontSize: '0.78rem', color: 'rgba(235,235,245,0.3)' }}>—</span>
                                     )}
                                 </div>
                             )
@@ -223,9 +223,9 @@ export default function HistoryPage() {
 
 function StatCard({ label, value }: { label: string; value: string }) {
     return (
-        <div style={{ background: '#13142a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '18px 16px' }}>
-            <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#f1f5f9' }}>{value}</div>
-            <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px' }}>{label}</div>
+        <div style={{ background: '#1C1C1E', border: '1px solid rgba(84,84,88,0.5)', borderRadius: '16px', padding: '18px 16px' }}>
+            <div style={{ fontSize: '1.3rem', fontWeight: 600, color: '#FFFFFF' }}>{value}</div>
+            <div style={{ fontSize: '0.75rem', color: 'rgba(235,235,245,0.45)', marginTop: '2px' }}>{label}</div>
         </div>
     )
 }
@@ -233,10 +233,10 @@ function StatCard({ label, value }: { label: string; value: string }) {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
     return (
         <div style={{ marginBottom: '24px' }}>
-            <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#475569', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'rgba(235,235,245,0.3)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 {title}
             </div>
-            <div style={{ background: '#13142a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '16px' }}>
+            <div style={{ background: '#1C1C1E', border: '1px solid rgba(84,84,88,0.5)', borderRadius: '16px', padding: '16px' }}>
                 {children}
             </div>
         </div>
@@ -246,8 +246,8 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function MiniStat({ label, value }: { label: string; value: string }) {
     return (
         <div style={{ textAlign: 'center', padding: '8px 0' }}>
-            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#f1f5f9' }}>{value}</div>
-            <div style={{ fontSize: '0.7rem', color: '#64748b', marginTop: '2px' }}>{label}</div>
+            <div style={{ fontSize: '1.2rem', fontWeight: 600, color: '#FFFFFF' }}>{value}</div>
+            <div style={{ fontSize: '0.7rem', color: 'rgba(235,235,245,0.45)', marginTop: '2px' }}>{label}</div>
         </div>
     )
 }

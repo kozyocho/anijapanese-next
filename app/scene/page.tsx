@@ -137,36 +137,36 @@ export default function ScenePage() {
         return (
             <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
                 <div style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-                    <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '8px' }}>
+                    <div style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '8px' }}>
                         Scene Complete!
                     </div>
-                    <div style={{ color: '#94a3b8', marginBottom: '24px' }}>
+                    <div style={{ color: 'rgba(235,235,245,0.6)', marginBottom: '24px' }}>
                         {results.correct}/{results.total} correct · {acc}% accuracy
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px' }}>
                         <div style={{
-                            background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)',
+                            background: 'rgba(48,209,88,0.1)', border: '1px solid rgba(48,209,88,0.2)',
                             borderRadius: '14px', padding: '16px',
                         }}>
-                            <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#10b981' }}>{results.correct}</div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Correct</div>
+                            <div style={{ fontSize: '1.8rem', fontWeight: 600, color: '#30D158' }}>{results.correct}</div>
+                            <div style={{ fontSize: '0.75rem', color: 'rgba(235,235,245,0.6)' }}>Correct</div>
                         </div>
                         <div style={{
-                            background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
+                            background: 'rgba(255,69,58,0.1)', border: '1px solid rgba(255,69,58,0.2)',
                             borderRadius: '14px', padding: '16px',
                         }}>
-                            <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#ef4444' }}>{results.total - results.correct}</div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Incorrect</div>
+                            <div style={{ fontSize: '1.8rem', fontWeight: 600, color: '#FF453A' }}>{results.total - results.correct}</div>
+                            <div style={{ fontSize: '0.75rem', color: 'rgba(235,235,245,0.6)' }}>Incorrect</div>
                         </div>
                     </div>
                     <button
                         onClick={() => router.push('/')}
                         style={{
                             width: '100%', padding: '16px',
-                            background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+                            background: '#0A84FF',
                             border: 'none', borderRadius: '14px',
                             color: 'white', fontFamily: 'inherit',
-                            fontSize: '1rem', fontWeight: 800, cursor: 'pointer',
+                            fontSize: '1rem', fontWeight: 600, cursor: 'pointer',
                         }}
                     >
                         Back to Home
@@ -188,19 +188,19 @@ export default function ScenePage() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                     <button
                         onClick={() => router.push('/')}
-                        style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: '1.2rem' }}
+                        style={{ background: 'none', border: 'none', color: 'rgba(235,235,245,0.45)', cursor: 'pointer', fontSize: '1.2rem' }}
                     >
                         ✕
                     </button>
-                    <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 600 }}>
+                    <div style={{ fontSize: '0.85rem', color: 'rgba(235,235,245,0.45)', fontWeight: 600 }}>
                         {index + 1} / {items.length}
                     </div>
                     <div style={{ width: '24px' }} />
                 </div>
-                <div style={{ height: '4px', background: 'rgba(255,255,255,0.06)', borderRadius: '99px' }}>
+                <div style={{ height: '4px', background: 'rgba(84,84,88,0.5)', borderRadius: '99px' }}>
                     <div style={{
                         height: '100%', borderRadius: '99px',
-                        background: 'linear-gradient(90deg,#7c3aed,#a78bfa)',
+                        background: '#0A84FF',
                         width: `${(index / items.length) * 100}%`,
                         transition: 'width 0.3s ease',
                     }} />
@@ -211,32 +211,32 @@ export default function ScenePage() {
             <div key={currentItem.id} style={{ animation: 'fadeIn 0.25s ease both' }}>
                 <style>{`@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }`}</style>
                 <div style={{
-                    background: 'rgba(255,255,255,0.04)',
-                    border: '1px solid rgba(255,255,255,0.08)',
+                    background: 'rgba(118,118,128,0.12)',
+                    border: '1px solid rgba(84,84,88,0.6)',
                     borderRadius: '18px',
                     padding: '20px',
                     marginBottom: '16px',
                 }}>
-                    <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#a78bfa', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                    <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#409CFF', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '8px' }}>
                         Scene
                     </div>
-                    <div style={{ fontSize: '0.95rem', color: '#e2e8f0', lineHeight: 1.5 }}>
+                    <div style={{ fontSize: '0.95rem', color: '#EBEBF5', lineHeight: 1.5 }}>
                         {currentItem.scene_en}
                     </div>
                     {currentItem.question_type === 'fill_blank' && currentItem.prompt_jp && (
                         <div style={{
                             marginTop: '14px', padding: '14px',
-                            background: 'rgba(124,58,237,0.08)',
-                            border: '1px solid rgba(124,58,237,0.2)',
+                            background: 'rgba(10,132,255,0.08)',
+                            border: '1px solid rgba(10,132,255,0.2)',
                             borderRadius: '12px',
-                            fontSize: '1.3rem', fontWeight: 700, textAlign: 'center', color: '#f1f5f9',
+                            fontSize: '1.3rem', fontWeight: 700, textAlign: 'center', color: '#FFFFFF',
                         }}>
                             「{currentItem.prompt_jp}」
                         </div>
                     )}
                 </div>
 
-                <div style={{ textAlign: 'center', marginBottom: '16px', color: '#94a3b8', fontSize: '0.9rem', fontWeight: 600 }}>
+                <div style={{ textAlign: 'center', marginBottom: '16px', color: 'rgba(235,235,245,0.6)', fontSize: '0.9rem', fontWeight: 600 }}>
                     {currentItem.question_type === 'fill_blank'
                         ? 'What fills the blank?'
                         : 'What would this character say?'}
@@ -247,15 +247,15 @@ export default function ScenePage() {
                     {shuffledChoices.map((choice) => {
                         const isThisCorrect = choice === currentItem.correct_phrase
                         const isThisSelected = choice === selected
-                        let bg = 'rgba(255,255,255,0.04)'
-                        let border = '1.5px solid rgba(255,255,255,0.1)'
+                        let bg = 'rgba(118,118,128,0.12)'
+                        let border = '1.5px solid rgba(84,84,88,0.65)'
                         if (selected) {
                             if (isThisCorrect) {
-                                bg = 'rgba(16,185,129,0.12)'
-                                border = '1.5px solid rgba(16,185,129,0.5)'
+                                bg = 'rgba(48,209,88,0.12)'
+                                border = '1.5px solid rgba(48,209,88,0.5)'
                             } else if (isThisSelected) {
-                                bg = 'rgba(239,68,68,0.12)'
-                                border = '1.5px solid rgba(239,68,68,0.5)'
+                                bg = 'rgba(255,69,58,0.12)'
+                                border = '1.5px solid rgba(255,69,58,0.5)'
                             }
                         }
                         return (
@@ -265,7 +265,7 @@ export default function ScenePage() {
                                 disabled={!!selected}
                                 style={{
                                     padding: '16px', background: bg, border, borderRadius: '14px',
-                                    color: '#f1f5f9', fontFamily: 'inherit',
+                                    color: '#FFFFFF', fontFamily: 'inherit',
                                     fontSize: '1.1rem', fontWeight: 700,
                                     cursor: selected ? 'default' : 'pointer',
                                     textAlign: 'center',
@@ -283,23 +283,23 @@ export default function ScenePage() {
             {selected && (
                 <div style={{ marginTop: '20px', animation: 'fadeIn 0.25s ease both' }}>
                     <div style={{
-                        background: isCorrect ? 'rgba(16,185,129,0.08)' : 'rgba(239,68,68,0.08)',
-                        border: `1px solid ${isCorrect ? 'rgba(16,185,129,0.25)' : 'rgba(239,68,68,0.25)'}`,
+                        background: isCorrect ? 'rgba(48,209,88,0.08)' : 'rgba(255,69,58,0.08)',
+                        border: `1px solid ${isCorrect ? 'rgba(48,209,88,0.25)' : 'rgba(255,69,58,0.25)'}`,
                         borderRadius: '16px', padding: '18px', marginBottom: '12px',
                     }}>
                         <div style={{
-                            fontSize: '1rem', fontWeight: 800,
-                            color: isCorrect ? '#10b981' : '#ef4444', marginBottom: '10px',
+                            fontSize: '1rem', fontWeight: 600,
+                            color: isCorrect ? '#30D158' : '#FF453A', marginBottom: '10px',
                         }}>
                             {isCorrect ? '✓ Correct!' : '✗ Not quite'}
                         </div>
-                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f1f5f9', marginBottom: '2px' }}>
+                        <div style={{ fontSize: '1.4rem', fontWeight: 600, color: '#FFFFFF', marginBottom: '2px' }}>
                             {currentItem.correct_phrase}
                         </div>
-                        <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '6px' }}>
+                        <div style={{ fontSize: '0.85rem', color: 'rgba(235,235,245,0.6)', marginBottom: '6px' }}>
                             {currentItem.correct_reading}
                         </div>
-                        <div style={{ fontSize: '0.92rem', color: '#e2e8f0' }}>
+                        <div style={{ fontSize: '0.92rem', color: '#EBEBF5' }}>
                             {currentItem.correct_meaning}
                         </div>
                     </div>
@@ -307,24 +307,24 @@ export default function ScenePage() {
                     {/* Why the others are wrong */}
                     <div style={{
                         background: 'rgba(255,255,255,0.03)',
-                        border: '1px solid rgba(255,255,255,0.07)',
+                        border: '1px solid rgba(84,84,88,0.5)',
                         borderRadius: '16px', padding: '16px', marginBottom: '16px',
                     }}>
-                        <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748b', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
+                        <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'rgba(235,235,245,0.45)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
                             Why the others are wrong
                         </div>
                         {currentItem.distractors.map(d => (
                             <div key={d.phrase} style={{
                                 marginBottom: '10px', paddingBottom: '10px',
-                                borderBottom: '1px solid rgba(255,255,255,0.05)',
+                                borderBottom: '1px solid rgba(84,84,88,0.4)',
                             }}>
                                 <div style={{
                                     fontSize: '0.95rem', fontWeight: 700,
-                                    color: d.phrase === selected ? '#ef4444' : '#cbd5e1',
+                                    color: d.phrase === selected ? '#FF453A' : '#EBEBF5',
                                 }}>
-                                    {d.phrase} <span style={{ fontWeight: 400, color: '#64748b', fontSize: '0.8rem' }}>({d.reading})</span>
+                                    {d.phrase} <span style={{ fontWeight: 400, color: 'rgba(235,235,245,0.45)', fontSize: '0.8rem' }}>({d.reading})</span>
                                 </div>
-                                <div style={{ fontSize: '0.83rem', color: '#94a3b8', marginTop: '2px' }}>
+                                <div style={{ fontSize: '0.83rem', color: 'rgba(235,235,245,0.6)', marginTop: '2px' }}>
                                     {d.reason}
                                 </div>
                             </div>
@@ -335,10 +335,10 @@ export default function ScenePage() {
                         onClick={handleNext}
                         style={{
                             width: '100%', padding: '16px',
-                            background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+                            background: '#0A84FF',
                             border: 'none', borderRadius: '14px',
                             color: 'white', fontFamily: 'inherit',
-                            fontSize: '1rem', fontWeight: 800, cursor: 'pointer',
+                            fontSize: '1rem', fontWeight: 600, cursor: 'pointer',
                         }}
                     >
                         {index + 1 >= items.length ? 'Finish' : 'Continue'}

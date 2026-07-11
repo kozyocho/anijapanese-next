@@ -4,11 +4,11 @@ export const metadata = { title: 'Terms of Service — AniJapanese' }
 
 export default function TermsPage() {
     return (
-        <div style={{ minHeight: '100dvh', maxWidth: '680px', margin: '0 auto', padding: '40px 24px 64px', color: '#f1f5f9' }}>
-            <Link href="/" style={{ fontSize: '0.85rem', color: '#64748b', textDecoration: 'none' }}>← Back</Link>
+        <div style={{ minHeight: '100dvh', maxWidth: '680px', margin: '0 auto', padding: '40px 24px 64px', color: '#FFFFFF' }}>
+            <Link href="/" style={{ fontSize: '0.85rem', color: 'rgba(235,235,245,0.45)', textDecoration: 'none' }}>← Back</Link>
 
-            <h1 style={{ fontSize: '1.8rem', fontWeight: 900, letterSpacing: '-0.02em', margin: '32px 0 4px' }}>Terms of Service</h1>
-            <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '40px' }}>Last updated: July 3, 2026</p>
+            <h1 style={{ fontSize: '1.8rem', fontWeight: 700, letterSpacing: '-0.02em', margin: '32px 0 4px' }}>Terms of Service</h1>
+            <p style={{ color: 'rgba(235,235,245,0.45)', fontSize: '0.85rem', marginBottom: '40px' }}>Last updated: July 3, 2026</p>
 
             <Section title="1. Acceptance of Terms">
                 By accessing or using AniJapanese ("the Service"), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Service.
@@ -34,7 +34,7 @@ export default function TermsPage() {
 
             <Section title="6. Acceptable Use">
                 You agree not to:
-                <ul style={{ paddingLeft: '20px', marginTop: '8px', lineHeight: 2, color: '#94a3b8' }}>
+                <ul style={{ paddingLeft: '20px', marginTop: '8px', lineHeight: 2, color: 'rgba(235,235,245,0.6)' }}>
                     <li>Share your account with others</li>
                     <li>Attempt to reverse engineer or copy the Service</li>
                     <li>Use the Service for any unlawful purpose</li>
@@ -68,7 +68,7 @@ export default function TermsPage() {
 
             <Section title="13. Contact">
                 For questions about these Terms:<br />
-                <a href="mailto:osumomomo8110@gmail.com" style={{ color: '#a78bfa' }}>osumomomo8110@gmail.com</a>
+                <a href="mailto:osumomomo8110@gmail.com" style={{ color: '#409CFF' }}>osumomomo8110@gmail.com</a>
             </Section>
         </div>
     )
@@ -77,8 +77,8 @@ export default function TermsPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
     return (
         <div style={{ marginBottom: '32px' }}>
-            <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 10px', color: '#f1f5f9' }}>{title}</h2>
-            <p style={{ color: '#94a3b8', lineHeight: 1.8, margin: 0, fontSize: '0.92rem' }}>{children}</p>
+            <h2 style={{ fontSize: '1.05rem', fontWeight: 600, margin: '0 0 10px', color: '#FFFFFF' }}>{title}</h2>
+            <p style={{ color: 'rgba(235,235,245,0.6)', lineHeight: 1.8, margin: 0, fontSize: '0.92rem' }}>{children}</p>
         </div>
     )
 }

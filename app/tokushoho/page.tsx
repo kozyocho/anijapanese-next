@@ -6,7 +6,7 @@ const TABLE: { label: string; value: React.ReactNode }[] = [
     { label: 'Seller', value: 'Shohei Yamasaki' },
     { label: 'Address', value: 'Will be disclosed without delay upon request' },
     { label: 'Phone', value: 'Will be disclosed without delay upon request' },
-    { label: 'Email', value: <a href="mailto:osumomomo8110@gmail.com" style={{ color: '#a78bfa' }}>osumomomo8110@gmail.com</a> },
+    { label: 'Email', value: <a href="mailto:osumomomo8110@gmail.com" style={{ color: '#409CFF' }}>osumomomo8110@gmail.com</a> },
     { label: 'Representative', value: 'Shohei Yamasaki' },
     { label: 'Service', value: 'AniJapanese' },
     { label: 'Description', value: 'Web-based Japanese vocabulary learning app focused on anime terminology, using spaced repetition (SRS)' },
@@ -20,13 +20,13 @@ const TABLE: { label: string; value: React.ReactNode }[] = [
 
 export default function TokushohoPage() {
     return (
-        <div style={{ minHeight: '100dvh', maxWidth: '680px', margin: '0 auto', padding: '40px 24px 64px', color: '#f1f5f9' }}>
-            <Link href="/" style={{ fontSize: '0.85rem', color: '#64748b', textDecoration: 'none' }}>← Back</Link>
+        <div style={{ minHeight: '100dvh', maxWidth: '680px', margin: '0 auto', padding: '40px 24px 64px', color: '#FFFFFF' }}>
+            <Link href="/" style={{ fontSize: '0.85rem', color: 'rgba(235,235,245,0.45)', textDecoration: 'none' }}>← Back</Link>
 
-            <h1 style={{ fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.02em', margin: '32px 0 4px' }}>
+            <h1 style={{ fontSize: '1.6rem', fontWeight: 700, letterSpacing: '-0.02em', margin: '32px 0 4px' }}>
                 Specified Commercial Transactions Act
             </h1>
-            <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '40px' }}>
+            <p style={{ color: 'rgba(235,235,245,0.45)', fontSize: '0.85rem', marginBottom: '40px' }}>
                 Disclosure pursuant to Article 11 of Japan's Act on Specified Commercial Transactions.
             </p>
 
@@ -34,19 +34,19 @@ export default function TokushohoPage() {
                 {TABLE.map((row, i) => (
                     <div key={i} style={{
                         display: 'grid', gridTemplateColumns: '160px 1fr',
-                        borderTop: '1px solid rgba(255,255,255,0.07)',
-                        ...(i === TABLE.length - 1 ? { borderBottom: '1px solid rgba(255,255,255,0.07)' } : {}),
+                        borderTop: '1px solid rgba(84,84,88,0.5)',
+                        ...(i === TABLE.length - 1 ? { borderBottom: '1px solid rgba(84,84,88,0.5)' } : {}),
                     }}>
                         <div style={{
                             padding: '14px 16px',
-                            fontSize: '0.82rem', fontWeight: 700, color: '#64748b',
+                            fontSize: '0.82rem', fontWeight: 700, color: 'rgba(235,235,245,0.45)',
                             background: 'rgba(255,255,255,0.02)',
                         }}>
                             {row.label}
                         </div>
                         <div style={{
                             padding: '14px 16px',
-                            fontSize: '0.88rem', color: '#94a3b8', lineHeight: 1.7,
+                            fontSize: '0.88rem', color: 'rgba(235,235,245,0.6)', lineHeight: 1.7,
                         }}>
                             {row.value}
                         </div>
@@ -54,7 +54,7 @@ export default function TokushohoPage() {
                 ))}
             </div>
 
-            <p style={{ marginTop: '32px', fontSize: '0.8rem', color: '#475569', lineHeight: 1.8 }}>
+            <p style={{ marginTop: '32px', fontSize: '0.8rem', color: 'rgba(235,235,245,0.3)', lineHeight: 1.8 }}>
                 * Address and phone number will be disclosed without delay upon request from consumers.<br />
                 * Please contact us by email for any inquiries.
             </p>

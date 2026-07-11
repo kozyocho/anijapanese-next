@@ -1,35 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
 /* ── Design Tokens ─────────────────────────────────────────── */
 :root {
-    --bg: #0d0d1a;
-    --bg-card: #13142a;
-    --bg-card-2: #1a1b35;
-    --border: rgba(255, 255, 255, 0.08);
-    --border-glow: rgba(124, 58, 237, 0.4);
+    --bg: #000000;
+    --bg-card: #1C1C1E;
+    --bg-card-2: #2C2C2E;
+    --border: rgba(84,84,88,0.6);
+    --border-glow: rgba(10,132,255, 0.4);
 
-    --primary: #7c3aed;
-    --primary-light: #a78bfa;
-    --primary-glow: rgba(124, 58, 237, 0.25);
+    --primary: #0A84FF;
+    --primary-light: #409CFF;
+    --primary-glow: rgba(10,132,255, 0.25);
 
-    --accent: #f59e0b;
-    --accent-light: #fbbf24;
-    --accent-glow: rgba(245, 158, 11, 0.25);
+    --accent: #FF9F0A;
+    --accent-light: #FFD60A;
+    --accent-glow: rgba(255,159,10, 0.25);
 
-    --success: #10b981;
-    --danger: #ef4444;
+    --success: #30D158;
+    --danger: #FF453A;
 
-    --text: #f1f5f9;
-    --text-muted: #94a3b8;
-    --text-dim: #64748b;
+    --text: #FFFFFF;
+    --text-muted: rgba(235,235,245,0.6);
+    --text-dim: rgba(235,235,245,0.45);
 
     --radius: 16px;
     --radius-sm: 10px;
     --radius-lg: 24px;
     --transition: all 0.2s ease;
 
-    /* Semantic */
-    --font: 'Inter', sans-serif;
+    /* Semantic — iOS system font stack */
+    --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Hiragino Sans', sans-serif;
 }
 
 /* ── Reset ───────────────────────────────────────────────────── */
@@ -87,7 +85,6 @@ body {
 .btn-primary {
     background: var(--primary);
     color: white;
-    box-shadow: 0 4px 20px var(--primary-glow);
 }
 
 .btn-primary:hover {
@@ -96,9 +93,8 @@ body {
 }
 
 .btn-accent {
-    background: linear-gradient(135deg, var(--accent), #f97316);
+    background: var(--accent);
     color: white;
-    box-shadow: 0 4px 20px var(--accent-glow);
 }
 
 .btn-accent:hover {
@@ -171,7 +167,7 @@ body {
     left: 0;
     right: 0;
     z-index: 50;
-    background: rgba(13, 13, 26, 0.92);
+    background: rgba(28,28,30,0.9);
     backdrop-filter: blur(20px);
     border-top: 1px solid var(--border);
     padding: 8px 0 max(8px, env(safe-area-inset-bottom));

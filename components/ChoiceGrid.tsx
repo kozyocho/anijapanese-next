@@ -10,23 +10,23 @@ interface Props {
 export function ChoiceGrid({ choices, correctAnswer, selected, onSelect }: Props) {
     function getBg(choice: string) {
         if (!selected) return 'rgba(26,27,53,0.8)'
-        if (choice === correctAnswer) return 'rgba(16,185,129,0.2)'
-        if (choice === selected && choice !== correctAnswer) return 'rgba(239,68,68,0.2)'
+        if (choice === correctAnswer) return 'rgba(48,209,88,0.2)'
+        if (choice === selected && choice !== correctAnswer) return 'rgba(255,69,58,0.2)'
         return 'rgba(26,27,53,0.5)'
     }
 
     function getBorder(choice: string) {
-        if (!selected) return '1.5px solid rgba(255,255,255,0.1)'
-        if (choice === correctAnswer) return '1.5px solid #10b981'
-        if (choice === selected && choice !== correctAnswer) return '1.5px solid #ef4444'
-        return '1.5px solid rgba(255,255,255,0.05)'
+        if (!selected) return '1.5px solid rgba(84,84,88,0.65)'
+        if (choice === correctAnswer) return '1.5px solid #30D158'
+        if (choice === selected && choice !== correctAnswer) return '1.5px solid #FF453A'
+        return '1.5px solid rgba(84,84,88,0.4)'
     }
 
     function getColor(choice: string) {
-        if (!selected) return '#f1f5f9'
-        if (choice === correctAnswer) return '#10b981'
-        if (choice === selected && choice !== correctAnswer) return '#ef4444'
-        return '#475569'
+        if (!selected) return '#FFFFFF'
+        if (choice === correctAnswer) return '#30D158'
+        if (choice === selected && choice !== correctAnswer) return '#FF453A'
+        return 'rgba(235,235,245,0.3)'
     }
 
     return (
@@ -55,10 +55,10 @@ export function ChoiceGrid({ choices, correctAnswer, selected, onSelect }: Props
                     }}
                 >
                     <span style={{
-                        fontSize: '0.65rem', fontWeight: 800,
-                        color: selected ? 'transparent' : '#334155',
-                        background: selected ? 'transparent' : 'rgba(255,255,255,0.05)',
-                        border: selected ? 'none' : '1px solid rgba(255,255,255,0.08)',
+                        fontSize: '0.65rem', fontWeight: 600,
+                        color: selected ? 'transparent' : 'rgba(235,235,245,0.3)',
+                        background: selected ? 'transparent' : 'rgba(84,84,88,0.4)',
+                        border: selected ? 'none' : '1px solid rgba(84,84,88,0.6)',
                         borderRadius: '5px',
                         padding: '2px 6px',
                         flexShrink: 0,

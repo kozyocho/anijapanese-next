@@ -164,20 +164,20 @@ export default function SessionPage() {
         return (
             <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
                 <div style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-                    <div style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '8px' }}>
+                    <div style={{ fontSize: '1.8rem', fontWeight: 700, marginBottom: '8px' }}>
                         Daily limit reached
                     </div>
-                    <div style={{ color: '#94a3b8', marginBottom: '24px', lineHeight: 1.6 }}>
+                    <div style={{ color: 'rgba(235,235,245,0.6)', marginBottom: '24px', lineHeight: 1.6 }}>
                         You finished today&apos;s 5 free new words. Come back tomorrow — or go unlimited now.
                     </div>
                     <button
                         onClick={() => router.push('/upgrade')}
                         style={{
                             width: '100%', padding: '16px', marginBottom: '10px',
-                            background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+                            background: '#0A84FF',
                             border: 'none', borderRadius: '14px',
                             color: 'white', fontFamily: 'inherit',
-                            fontSize: '1rem', fontWeight: 800, cursor: 'pointer',
+                            fontSize: '1rem', fontWeight: 600, cursor: 'pointer',
                         }}
                     >
                         Unlock unlimited words →
@@ -186,8 +186,8 @@ export default function SessionPage() {
                         onClick={() => router.push('/')}
                         style={{
                             width: '100%', padding: '14px',
-                            background: 'transparent', border: '1.5px solid rgba(255,255,255,0.1)',
-                            borderRadius: '14px', color: '#64748b',
+                            background: 'transparent', border: '1.5px solid rgba(84,84,88,0.65)',
+                            borderRadius: '14px', color: 'rgba(235,235,245,0.45)',
                             fontFamily: 'inherit', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer',
                         }}
                     >
@@ -203,38 +203,38 @@ export default function SessionPage() {
         return (
             <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
                 <div style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-                    <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '8px' }}>
+                    <div style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '8px' }}>
                         Session Complete!
                     </div>
-                    <div style={{ color: '#94a3b8', marginBottom: '24px' }}>
+                    <div style={{ color: 'rgba(235,235,245,0.6)', marginBottom: '24px' }}>
                         {results.correct}/{results.total} correct · {acc}% accuracy
                     </div>
                     <div style={{
                         display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px',
                     }}>
                         <div style={{
-                            background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)',
+                            background: 'rgba(48,209,88,0.1)', border: '1px solid rgba(48,209,88,0.2)',
                             borderRadius: '14px', padding: '16px',
                         }}>
-                            <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#10b981' }}>{results.correct}</div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Correct</div>
+                            <div style={{ fontSize: '1.8rem', fontWeight: 600, color: '#30D158' }}>{results.correct}</div>
+                            <div style={{ fontSize: '0.75rem', color: 'rgba(235,235,245,0.6)' }}>Correct</div>
                         </div>
                         <div style={{
-                            background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
+                            background: 'rgba(255,69,58,0.1)', border: '1px solid rgba(255,69,58,0.2)',
                             borderRadius: '14px', padding: '16px',
                         }}>
-                            <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#ef4444' }}>{results.total - results.correct}</div>
-                            <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Incorrect</div>
+                            <div style={{ fontSize: '1.8rem', fontWeight: 600, color: '#FF453A' }}>{results.total - results.correct}</div>
+                            <div style={{ fontSize: '0.75rem', color: 'rgba(235,235,245,0.6)' }}>Incorrect</div>
                         </div>
                     </div>
                     <button
                         onClick={() => router.push('/')}
                         style={{
                             width: '100%', padding: '16px',
-                            background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+                            background: '#0A84FF',
                             border: 'none', borderRadius: '14px',
                             color: 'white', fontFamily: 'inherit',
-                            fontSize: '1rem', fontWeight: 800, cursor: 'pointer',
+                            fontSize: '1rem', fontWeight: 600, cursor: 'pointer',
                         }}
                     >
                         Back to Home
@@ -244,9 +244,9 @@ export default function SessionPage() {
                             onClick={() => router.push('/upgrade')}
                             style={{
                                 width: '100%', padding: '14px', marginTop: '10px',
-                                background: 'rgba(124,58,237,0.12)',
-                                border: '1px solid rgba(124,58,237,0.3)',
-                                borderRadius: '14px', color: '#a78bfa',
+                                background: 'rgba(10,132,255,0.12)',
+                                border: '1px solid rgba(10,132,255,0.3)',
+                                borderRadius: '14px', color: '#409CFF',
                                 fontFamily: 'inherit', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer',
                             }}
                         >
@@ -272,19 +272,19 @@ export default function SessionPage() {
                 }}>
                     <button
                         onClick={() => router.push('/')}
-                        style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: '1.2rem' }}
+                        style={{ background: 'none', border: 'none', color: 'rgba(235,235,245,0.45)', cursor: 'pointer', fontSize: '1.2rem' }}
                     >
                         ✕
                     </button>
-                    <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 600 }}>
+                    <div style={{ fontSize: '0.85rem', color: 'rgba(235,235,245,0.45)', fontWeight: 600 }}>
                         {index + 1} / {items.length}
                     </div>
                     <div style={{ width: '24px' }} />
                 </div>
-                <div style={{ height: '4px', background: 'rgba(255,255,255,0.06)', borderRadius: '99px' }}>
+                <div style={{ height: '4px', background: 'rgba(84,84,88,0.5)', borderRadius: '99px' }}>
                     <div style={{
                         height: '100%', borderRadius: '99px',
-                        background: 'linear-gradient(90deg,#7c3aed,#a78bfa)',
+                        background: '#0A84FF',
                         width: `${((index) / items.length) * 100}%`,
                         transition: 'width 0.3s ease',
                     }} />
@@ -307,10 +307,10 @@ export default function SessionPage() {
                 <button
                     onClick={() => speakJapanese(currentItem.japanese)}
                     style={{
-                        background: 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)',
+                        background: 'rgba(84,84,88,0.4)',
+                        border: '1px solid rgba(84,84,88,0.65)',
                         borderRadius: '99px',
-                        color: '#94a3b8',
+                        color: 'rgba(235,235,245,0.6)',
                         fontSize: '0.82rem',
                         fontWeight: 600,
                         cursor: 'pointer',
@@ -326,7 +326,7 @@ export default function SessionPage() {
             </div>
 
             {/* Question */}
-            <div style={{ textAlign: 'center', marginBottom: '16px', color: '#94a3b8', fontSize: '0.9rem', fontWeight: 600 }}>
+            <div style={{ textAlign: 'center', marginBottom: '16px', color: 'rgba(235,235,245,0.6)', fontSize: '0.9rem', fontWeight: 600 }}>
                 What does this mean in English?
             </div>
 
@@ -347,9 +347,9 @@ export default function SessionPage() {
                         width: '100%',
                         padding: '14px',
                         background: 'transparent',
-                        border: '1.5px solid rgba(255,255,255,0.1)',
+                        border: '1.5px solid rgba(84,84,88,0.65)',
                         borderRadius: '14px',
-                        color: '#64748b',
+                        color: 'rgba(235,235,245,0.45)',
                         fontFamily: 'inherit',
                         fontSize: '0.9rem',
                         fontWeight: 600,

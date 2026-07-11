@@ -10,7 +10,7 @@ export function SaleBanner() {
 
     return (
         <div style={{
-            background: 'linear-gradient(135deg, #7c3aed, #db2777)',
+            background: '#FF375F',
             padding: '10px 20px',
             textAlign: 'center',
         }}>
@@ -19,7 +19,7 @@ export function SaleBanner() {
                     WELCOME OFFER — 50% off your first month &nbsp;·&nbsp;
                 </span>
                 <span style={{
-                    fontFamily: 'monospace', fontSize: '0.88rem', fontWeight: 800,
+                    fontFamily: 'monospace', fontSize: '0.88rem', fontWeight: 600,
                     background: 'rgba(0,0,0,0.2)', padding: '2px 8px', borderRadius: '6px',
                 }}>
                     {hours}:{minutes}:{seconds}

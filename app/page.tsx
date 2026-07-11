@@ -22,10 +22,10 @@ const DEMO_WORDS = [
 
 const BTN: React.CSSProperties = {
     display: 'block', width: '100%', padding: '18px',
-    background: '#7c3aed', border: 'none', borderRadius: '14px',
+    background: '#0A84FF', border: 'none', borderRadius: '14px',
     color: 'white', fontFamily: 'inherit',
-    fontSize: '1.05rem', fontWeight: 800, cursor: 'pointer',
-    boxShadow: '0 4px 32px rgba(124,58,237,0.45)',
+    fontSize: '1.05rem', fontWeight: 600, cursor: 'pointer',
+    boxShadow: 'none',
 }
 
 // ── DemoQuiz ──────────────────────────────────────────────────────────────
@@ -65,10 +65,10 @@ function DemoQuiz({ onFinish, priceLabel, onBuy, buying }: {
     if (done) {
         return (
             <div style={{ textAlign: 'center', padding: '12px 0' }}>
-                <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '6px' }}>
+                <div style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '6px' }}>
                     {correct}/{DEMO_WORDS.length} correct
                 </div>
-                <div style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '24px' }}>
+                <div style={{ color: 'rgba(235,235,245,0.6)', fontSize: '0.9rem', marginBottom: '24px' }}>
                     500+ more words and scene dialogue quizzes are waiting for you.
                 </div>
                 <SignedIn>
@@ -83,7 +83,7 @@ function DemoQuiz({ onFinish, priceLabel, onBuy, buying }: {
                 </SignedOut>
                 <Link href="/onboarding" style={{
                     display: 'inline-block', marginTop: '14px',
-                    fontSize: '0.82rem', color: '#94a3b8', fontWeight: 600,
+                    fontSize: '0.82rem', color: 'rgba(235,235,245,0.6)', fontWeight: 600,
                     textDecoration: 'underline', textUnderlineOffset: '3px',
                 }}>
                     or continue with the free plan →
@@ -94,26 +94,26 @@ function DemoQuiz({ onFinish, priceLabel, onBuy, buying }: {
 
     return (
         <>
-            <div style={{ marginBottom: '20px', fontSize: '0.72rem', color: '#475569', fontWeight: 600 }}>
+            <div style={{ marginBottom: '20px', fontSize: '0.72rem', color: 'rgba(235,235,245,0.3)', fontWeight: 600 }}>
                 {index + 1} of {DEMO_WORDS.length}
             </div>
             <div style={{ textAlign: 'center', padding: '8px 0 24px' }}>
-                <div style={{ fontSize: '2.6rem', fontWeight: 900, marginBottom: '6px' }}>{word.jp}</div>
-                <div style={{ fontSize: '0.82rem', color: '#64748b' }}>{word.reading}</div>
+                <div style={{ fontSize: '2.6rem', fontWeight: 700, marginBottom: '6px' }}>{word.jp}</div>
+                <div style={{ fontSize: '0.82rem', color: 'rgba(235,235,245,0.45)' }}>{word.reading}</div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                 {shuffled.map(opt => {
                     const isCorrect = opt === word.en
                     const isSelected = opt === selected
                     const bg = selected
-                        ? isCorrect ? 'rgba(34,197,94,0.15)' : isSelected ? 'rgba(239,68,68,0.15)' : '#1a1b35'
-                        : '#1a1b35'
+                        ? isCorrect ? 'rgba(48,209,88,0.15)' : isSelected ? 'rgba(255,69,58,0.15)' : '#2C2C2E'
+                        : '#2C2C2E'
                     const border = selected
-                        ? isCorrect ? 'rgba(34,197,94,0.5)' : isSelected ? 'rgba(239,68,68,0.5)' : 'rgba(255,255,255,0.05)'
-                        : 'rgba(255,255,255,0.08)'
+                        ? isCorrect ? 'rgba(48,209,88,0.5)' : isSelected ? 'rgba(255,69,58,0.5)' : 'rgba(84,84,88,0.4)'
+                        : 'rgba(84,84,88,0.6)'
                     const color = selected
-                        ? isCorrect ? '#4ade80' : isSelected ? '#f87171' : '#475569'
-                        : '#f1f5f9'
+                        ? isCorrect ? '#30D158' : isSelected ? '#FF453A' : 'rgba(235,235,245,0.3)'
+                        : '#FFFFFF'
                     return (
                         <button key={opt} onClick={() => pick(opt)} style={{
                             padding: '14px 8px', background: bg,
@@ -210,11 +210,11 @@ function LandingPage({ guestId }: { guestId: string | null }) {
     }
 
     return (
-        <div style={{ minHeight: '100dvh', color: '#f1f5f9' }}>
+        <div style={{ minHeight: '100dvh', color: '#FFFFFF' }}>
             {/* Sale banner — one idea, full width */}
             {sale.isActive && (
                 <div style={{
-                    background: 'linear-gradient(90deg,#7c3aed,#db2777)',
+                    background: '#FF375F',
                     padding: '11px 20px', textAlign: 'center',
                     fontSize: '0.85rem', fontWeight: 700,
                 }}>
@@ -233,20 +233,20 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
                 <span style={{
-                    fontSize: '1.2rem', fontWeight: 900, letterSpacing: '-0.02em',
-                    background: 'linear-gradient(135deg,#a78bfa,#fbbf24)',
+                    fontSize: '1.2rem', fontWeight: 700, letterSpacing: '-0.02em',
+                    background: 'linear-gradient(135deg,#0A84FF,#64D2FF)',
                     WebkitBackgroundClip: 'text', backgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                 }}>AniJapanese</span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <a href="#pricing" style={{ fontSize: '0.85rem', color: '#94a3b8', textDecoration: 'none', fontWeight: 600 }}>Pricing</a>
+                    <a href="#pricing" style={{ fontSize: '0.85rem', color: 'rgba(235,235,245,0.6)', textDecoration: 'none', fontWeight: 600 }}>Pricing</a>
                     <SignedIn><UserButton afterSignOutUrl="/" /></SignedIn>
                     <SignedOut>
                         <SignInButton mode="modal">
                             <button style={{
                                 padding: '6px 14px', background: 'transparent',
                                 border: '1px solid rgba(255,255,255,0.15)',
-                                borderRadius: '99px', color: '#f1f5f9',
+                                borderRadius: '99px', color: '#FFFFFF',
                                 fontFamily: 'inherit', fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer',
                             }}>Sign in</button>
                         </SignInButton>
@@ -256,17 +256,17 @@ function LandingPage({ guestId }: { guestId: string | null }) {
 
             {/* Hero — sells in one screen */}
             <section style={{ maxWidth: '480px', margin: '0 auto', padding: '52px 20px 40px', textAlign: 'center' }}>
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#7c3aed', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '18px' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0A84FF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '18px' }}>
                     500+ anime words · 10 min/day · From $2.50/month
                 </div>
                 <h1 style={{
-                    fontSize: 'clamp(2rem, 8vw, 2.8rem)', fontWeight: 900,
+                    fontSize: 'clamp(2rem, 8vw, 2.8rem)', fontWeight: 700,
                     lineHeight: 1.1, letterSpacing: '-0.03em', margin: '0 0 18px',
                 }}>
                     Watch anime in Japanese<br />— without subtitles
                 </h1>
                 <p style={{
-                    color: '#94a3b8', fontSize: '1rem', lineHeight: 1.65,
+                    color: 'rgba(235,235,245,0.6)', fontSize: '1rem', lineHeight: 1.65,
                     margin: '0 0 36px', maxWidth: '360px', marginLeft: 'auto', marginRight: 'auto',
                 }}>
                     Master the words you actually hear in your favorite anime. Spaced repetition. 10 minutes a day.
@@ -284,15 +284,15 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                     </SignInButton>
                 </SignedOut>
 
-                <p style={{ marginTop: '10px', fontSize: '0.78rem', color: '#475569' }}>
+                <p style={{ marginTop: '10px', fontSize: '0.78rem', color: 'rgba(235,235,245,0.3)' }}>
                     $2.50/mo · Cancel anytime ·{' '}
-                    <a href="#pricing" style={{ color: '#7c3aed', textDecoration: 'none', fontWeight: 600 }}>
+                    <a href="#pricing" style={{ color: '#0A84FF', textDecoration: 'none', fontWeight: 600 }}>
                         See all plans ↓
                     </a>
                 </p>
-                <p style={{ marginTop: '6px', fontSize: '0.78rem', color: '#475569' }}>
+                <p style={{ marginTop: '6px', fontSize: '0.78rem', color: 'rgba(235,235,245,0.3)' }}>
                     Not sure yet?{' '}
-                    <a href="#demo" style={{ color: '#94a3b8', textDecoration: 'underline', textUnderlineOffset: '3px', fontWeight: 600 }}>
+                    <a href="#demo" style={{ color: 'rgba(235,235,245,0.6)', textDecoration: 'underline', textUnderlineOffset: '3px', fontWeight: 600 }}>
                         Try 3 words free — no sign-up
                     </a>
                 </p>
@@ -301,20 +301,20 @@ function LandingPage({ guestId }: { guestId: string | null }) {
             {/* Demo — show the product before explaining it */}
             <section id="demo" style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px 48px' }}>
                 <div style={{
-                    background: '#13142a', border: '1px solid rgba(255,255,255,0.07)',
+                    background: '#1C1C1E', border: '1px solid rgba(84,84,88,0.5)',
                     borderRadius: '20px', padding: '24px',
                 }}>
                     {!showDemo ? (
                         <div style={{ textAlign: 'center', padding: '16px 0' }}>
-                            <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '20px' }}>
+                            <div style={{ fontSize: '0.75rem', color: 'rgba(235,235,245,0.45)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '20px' }}>
                                 See how it works — try 3 words
                             </div>
-                            <div style={{ fontSize: '2.8rem', fontWeight: 900, marginBottom: '4px' }}>仲間</div>
-                            <div style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '24px' }}>nakama · comrade</div>
+                            <div style={{ fontSize: '2.8rem', fontWeight: 700, marginBottom: '4px' }}>仲間</div>
+                            <div style={{ fontSize: '0.85rem', color: 'rgba(235,235,245,0.45)', marginBottom: '24px' }}>nakama · comrade</div>
                             <button onClick={() => setShowDemo(true)} style={{
                                 padding: '12px 28px',
-                                background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.3)',
-                                borderRadius: '12px', color: '#a78bfa',
+                                background: 'rgba(10,132,255,0.12)', border: '1px solid rgba(10,132,255,0.3)',
+                                borderRadius: '12px', color: '#409CFF',
                                 fontFamily: 'inherit', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer',
                             }}>
                                 Start demo →
@@ -333,7 +333,7 @@ function LandingPage({ guestId }: { guestId: string | null }) {
 
             {/* App screenshots — show before explain */}
             <section style={{ maxWidth: '480px', margin: '0 auto', padding: '0 0 48px' }}>
-                <h2 style={{ fontSize: '1.2rem', fontWeight: 900, textAlign: 'center', margin: '0 0 20px', letterSpacing: '-0.02em', padding: '0 20px' }}>
+                <h2 style={{ fontSize: '1.2rem', fontWeight: 700, textAlign: 'center', margin: '0 0 20px', letterSpacing: '-0.02em', padding: '0 20px' }}>
                     How it works
                 </h2>
 
@@ -342,22 +342,22 @@ function LandingPage({ guestId }: { guestId: string | null }) {
 
                     {/* Screen 1: Word card */}
                     <div style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
-                        <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>① A word appears</div>
-                        <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
+                        <div style={{ fontSize: '0.72rem', color: 'rgba(235,235,245,0.45)', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>① A word appears</div>
+                        <div style={{ width: '220px', background: '#000000', border: '1px solid rgba(84,84,88,0.65)', borderRadius: '20px', overflow: 'hidden' }}>
                             {/* Mini header */}
-                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
-                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>Streak 3</span>
+                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(84,84,88,0.4)' }}>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 700, background: 'linear-gradient(135deg,#0A84FF,#64D2FF)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
+                                <span style={{ fontSize: '0.65rem', color: '#FF453A', fontWeight: 700 }}>Streak 3</span>
                             </div>
                             {/* Word card */}
                             <div style={{ padding: '24px 14px 20px', textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.6rem', color: '#7c3aed', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Battle</div>
-                                <div style={{ fontSize: '2.4rem', fontWeight: 900, marginBottom: '4px' }}>仲間</div>
-                                <div style={{ fontSize: '0.7rem', color: '#64748b', marginBottom: '20px' }}>nakama</div>
+                                <div style={{ fontSize: '0.6rem', color: '#0A84FF', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Battle</div>
+                                <div style={{ fontSize: '2.4rem', fontWeight: 700, marginBottom: '4px' }}>仲間</div>
+                                <div style={{ fontSize: '0.7rem', color: 'rgba(235,235,245,0.45)', marginBottom: '20px' }}>nakama</div>
                                 {/* Blurred choices (pre-reveal) */}
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
                                     {['', '', '', ''].map((_, i) => (
-                                        <div key={i} style={{ height: '32px', background: '#1a1b35', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)', filter: 'blur(3px)' }} />
+                                        <div key={i} style={{ height: '32px', background: '#2C2C2E', borderRadius: '8px', border: '1px solid rgba(84,84,88,0.5)', filter: 'blur(3px)' }} />
                                     ))}
                                 </div>
                             </div>
@@ -366,23 +366,23 @@ function LandingPage({ guestId }: { guestId: string | null }) {
 
                     {/* Screen 2: Quiz choices */}
                     <div style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
-                        <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>② Pick the meaning</div>
-                        <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
-                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
-                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>Streak 3</span>
+                        <div style={{ fontSize: '0.72rem', color: 'rgba(235,235,245,0.45)', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>② Pick the meaning</div>
+                        <div style={{ width: '220px', background: '#000000', border: '1px solid rgba(84,84,88,0.65)', borderRadius: '20px', overflow: 'hidden' }}>
+                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(84,84,88,0.4)' }}>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 700, background: 'linear-gradient(135deg,#0A84FF,#64D2FF)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
+                                <span style={{ fontSize: '0.65rem', color: '#FF453A', fontWeight: 700 }}>Streak 3</span>
                             </div>
                             <div style={{ padding: '24px 14px 20px', textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.6rem', color: '#7c3aed', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Battle</div>
-                                <div style={{ fontSize: '2.4rem', fontWeight: 900, marginBottom: '4px' }}>仲間</div>
-                                <div style={{ fontSize: '0.7rem', color: '#64748b', marginBottom: '20px' }}>nakama</div>
+                                <div style={{ fontSize: '0.6rem', color: '#0A84FF', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Battle</div>
+                                <div style={{ fontSize: '2.4rem', fontWeight: 700, marginBottom: '4px' }}>仲間</div>
+                                <div style={{ fontSize: '0.7rem', color: 'rgba(235,235,245,0.45)', marginBottom: '20px' }}>nakama</div>
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
                                     {['rival', 'enemy', 'comrade', 'mentor'].map((opt, i) => (
                                         <div key={i} style={{
                                             padding: '8px 4px', fontSize: '0.68rem', fontWeight: 600,
-                                            background: '#1a1b35', borderRadius: '8px',
-                                            border: '1.5px solid rgba(255,255,255,0.08)',
-                                            color: '#f1f5f9', textAlign: 'center',
+                                            background: '#2C2C2E', borderRadius: '8px',
+                                            border: '1.5px solid rgba(84,84,88,0.6)',
+                                            color: '#FFFFFF', textAlign: 'center',
                                         }}>{opt}</div>
                                     ))}
                                 </div>
@@ -392,16 +392,16 @@ function LandingPage({ guestId }: { guestId: string | null }) {
 
                     {/* Screen 3: Correct feedback */}
                     <div style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
-                        <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>③ Instant feedback</div>
-                        <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
-                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
-                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>Streak 3</span>
+                        <div style={{ fontSize: '0.72rem', color: 'rgba(235,235,245,0.45)', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>③ Instant feedback</div>
+                        <div style={{ width: '220px', background: '#000000', border: '1px solid rgba(84,84,88,0.65)', borderRadius: '20px', overflow: 'hidden' }}>
+                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(84,84,88,0.4)' }}>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 700, background: 'linear-gradient(135deg,#0A84FF,#64D2FF)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
+                                <span style={{ fontSize: '0.65rem', color: '#FF453A', fontWeight: 700 }}>Streak 3</span>
                             </div>
                             <div style={{ padding: '24px 14px 12px', textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.6rem', color: '#7c3aed', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Battle</div>
-                                <div style={{ fontSize: '2.4rem', fontWeight: 900, marginBottom: '4px' }}>仲間</div>
-                                <div style={{ fontSize: '0.7rem', color: '#64748b', marginBottom: '16px' }}>nakama</div>
+                                <div style={{ fontSize: '0.6rem', color: '#0A84FF', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>Battle</div>
+                                <div style={{ fontSize: '2.4rem', fontWeight: 700, marginBottom: '4px' }}>仲間</div>
+                                <div style={{ fontSize: '0.7rem', color: 'rgba(235,235,245,0.45)', marginBottom: '16px' }}>nakama</div>
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '10px' }}>
                                     {[
                                         { label: 'rival', correct: false, selected: false },
@@ -411,33 +411,33 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                                     ].map((opt, i) => (
                                         <div key={i} style={{
                                             padding: '8px 4px', fontSize: '0.68rem', fontWeight: 600,
-                                            background: opt.correct ? 'rgba(34,197,94,0.15)' : '#1a1b35',
+                                            background: opt.correct ? 'rgba(48,209,88,0.15)' : '#2C2C2E',
                                             borderRadius: '8px',
-                                            border: `1.5px solid ${opt.correct ? 'rgba(34,197,94,0.5)' : 'rgba(255,255,255,0.06)'}`,
-                                            color: opt.correct ? '#4ade80' : '#475569', textAlign: 'center',
+                                            border: `1.5px solid ${opt.correct ? 'rgba(48,209,88,0.5)' : 'rgba(84,84,88,0.5)'}`,
+                                            color: opt.correct ? '#30D158' : 'rgba(235,235,245,0.3)', textAlign: 'center',
                                         }}>{opt.label}</div>
                                     ))}
                                 </div>
                             </div>
                             {/* Feedback banner */}
-                            <div style={{ background: '#0a2e22', padding: '10px 14px', borderTop: '1px solid rgba(34,197,94,0.2)' }}>
-                                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#4ade80', marginBottom: '2px' }}>✓ Correct! +10 XP</div>
-                                <div style={{ fontSize: '0.62rem', color: '#94a3b8' }}>comrade / ally / nakama</div>
+                            <div style={{ background: 'rgba(48,209,88,0.1)', padding: '10px 14px', borderTop: '1px solid rgba(48,209,88,0.2)' }}>
+                                <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#30D158', marginBottom: '2px' }}>✓ Correct! +10 XP</div>
+                                <div style={{ fontSize: '0.62rem', color: 'rgba(235,235,245,0.6)' }}>comrade / ally / nakama</div>
                             </div>
                         </div>
                     </div>
 
                     {/* Screen 4: Scene quiz */}
                     <div style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
-                        <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>④ Master real dialogue</div>
-                        <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
-                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
-                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>Streak 7</span>
+                        <div style={{ fontSize: '0.72rem', color: 'rgba(235,235,245,0.45)', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>④ Master real dialogue</div>
+                        <div style={{ width: '220px', background: '#000000', border: '1px solid rgba(84,84,88,0.65)', borderRadius: '20px', overflow: 'hidden' }}>
+                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(84,84,88,0.4)' }}>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 700, background: 'linear-gradient(135deg,#0A84FF,#64D2FF)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
+                                <span style={{ fontSize: '0.65rem', color: '#FF453A', fontWeight: 700 }}>Streak 7</span>
                             </div>
                             <div style={{ padding: '14px' }}>
-                                <div style={{ fontSize: '0.55rem', color: '#a78bfa', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Scene</div>
-                                <div style={{ fontSize: '0.62rem', color: '#94a3b8', lineHeight: 1.5, marginBottom: '10px' }}>
+                                <div style={{ fontSize: '0.55rem', color: '#409CFF', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Scene</div>
+                                <div style={{ fontSize: '0.62rem', color: 'rgba(235,235,245,0.6)', lineHeight: 1.5, marginBottom: '10px' }}>
                                     A rival finally shows up late. The hero smirks and says:
                                 </div>
                                 <div style={{ display: 'grid', gap: '5px' }}>
@@ -449,16 +449,16 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                                     ].map((opt, i) => (
                                         <div key={i} style={{
                                             padding: '7px 4px', fontSize: '0.68rem', fontWeight: 700,
-                                            background: opt.correct ? 'rgba(34,197,94,0.15)' : '#1a1b35',
+                                            background: opt.correct ? 'rgba(48,209,88,0.15)' : '#2C2C2E',
                                             borderRadius: '8px',
-                                            border: `1.5px solid ${opt.correct ? 'rgba(34,197,94,0.5)' : 'rgba(255,255,255,0.06)'}`,
-                                            color: opt.correct ? '#4ade80' : '#94a3b8', textAlign: 'center',
+                                            border: `1.5px solid ${opt.correct ? 'rgba(48,209,88,0.5)' : 'rgba(84,84,88,0.5)'}`,
+                                            color: opt.correct ? '#30D158' : 'rgba(235,235,245,0.6)', textAlign: 'center',
                                         }}>{opt.jp}</div>
                                     ))}
                                 </div>
                             </div>
-                            <div style={{ background: '#0a2e22', padding: '8px 14px', borderTop: '1px solid rgba(34,197,94,0.2)' }}>
-                                <div style={{ fontSize: '0.6rem', color: '#94a3b8', lineHeight: 1.5 }}>
+                            <div style={{ background: 'rgba(48,209,88,0.1)', padding: '8px 14px', borderTop: '1px solid rgba(48,209,88,0.2)' }}>
+                                <div style={{ fontSize: '0.6rem', color: 'rgba(235,235,245,0.6)', lineHeight: 1.5 }}>
                                     Every wrong choice explained — register, grammar, nuance
                                 </div>
                             </div>
@@ -467,28 +467,28 @@ function LandingPage({ guestId }: { guestId: string | null }) {
 
                     {/* Screen 5: Dashboard */}
                     <div style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
-                        <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>⑤ Track your streak</div>
-                        <div style={{ width: '220px', background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
-                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                <span style={{ fontSize: '0.65rem', fontWeight: 900, background: 'linear-gradient(135deg,#a78bfa,#fbbf24)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
-                                <span style={{ fontSize: '0.65rem', color: '#ef4444', fontWeight: 700 }}>Streak 7</span>
+                        <div style={{ fontSize: '0.72rem', color: 'rgba(235,235,245,0.45)', fontWeight: 700, marginBottom: '8px', textAlign: 'center' }}>⑤ Track your streak</div>
+                        <div style={{ width: '220px', background: '#000000', border: '1px solid rgba(84,84,88,0.65)', borderRadius: '20px', overflow: 'hidden' }}>
+                            <div style={{ padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(84,84,88,0.4)' }}>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 700, background: 'linear-gradient(135deg,#0A84FF,#64D2FF)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AniJapanese</span>
+                                <span style={{ fontSize: '0.65rem', color: '#FF453A', fontWeight: 700 }}>Streak 7</span>
                             </div>
                             <div style={{ padding: '12px 14px' }}>
-                                <div style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)', borderRadius: '12px', padding: '12px', textAlign: 'center', marginBottom: '8px' }}>
-                                    <div style={{ fontSize: '0.72rem', fontWeight: 800, marginBottom: '2px' }}>8 cards ready</div>
-                                    <div style={{ fontSize: '0.6rem', color: '#94a3b8', marginBottom: '10px' }}>3 reviews · 5 new words</div>
-                                    <div style={{ background: '#7c3aed', borderRadius: '8px', padding: '6px', fontSize: '0.65rem', fontWeight: 800, color: 'white' }}>Start Session →</div>
+                                <div style={{ background: 'rgba(10,132,255,0.1)', border: '1px solid rgba(10,132,255,0.2)', borderRadius: '12px', padding: '12px', textAlign: 'center', marginBottom: '8px' }}>
+                                    <div style={{ fontSize: '0.72rem', fontWeight: 600, marginBottom: '2px' }}>8 cards ready</div>
+                                    <div style={{ fontSize: '0.6rem', color: 'rgba(235,235,245,0.6)', marginBottom: '10px' }}>3 reviews · 5 new words</div>
+                                    <div style={{ background: '#0A84FF', borderRadius: '8px', padding: '6px', fontSize: '0.65rem', fontWeight: 600, color: 'white' }}>Start Session →</div>
                                 </div>
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
                                     {[
-                                        { label: 'Reviews', val: '3', color: '#f59e0b' },
-                                        { label: 'New', val: '5', color: '#7c3aed' },
-                                        { label: 'Streak', val: '7', color: '#ef4444' },
-                                        { label: 'XP', val: '240', color: '#fbbf24' },
+                                        { label: 'Reviews', val: '3', color: '#FF9F0A' },
+                                        { label: 'New', val: '5', color: '#0A84FF' },
+                                        { label: 'Streak', val: '7', color: '#FF453A' },
+                                        { label: 'XP', val: '240', color: '#FFD60A' },
                                     ].map((s, i) => (
-                                        <div key={i} style={{ background: '#13142a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '8px', padding: '8px' }}>
-                                            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: s.color }}>{s.val}</div>
-                                            <div style={{ fontSize: '0.55rem', color: '#64748b' }}>{s.label}</div>
+                                        <div key={i} style={{ background: '#1C1C1E', border: '1px solid rgba(84,84,88,0.5)', borderRadius: '8px', padding: '8px' }}>
+                                            <div style={{ fontSize: '0.8rem', fontWeight: 600, color: s.color }}>{s.val}</div>
+                                            <div style={{ fontSize: '0.55rem', color: 'rgba(235,235,245,0.45)' }}>{s.label}</div>
                                         </div>
                                     ))}
                                 </div>
@@ -498,7 +498,7 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                 </div>
 
                 {/* Scroll hint */}
-                <p style={{ textAlign: 'center', fontSize: '0.72rem', color: '#334155', margin: '0' }}>← swipe to see more →</p>
+                <p style={{ textAlign: 'center', fontSize: '0.72rem', color: 'rgba(235,235,245,0.3)', margin: '0' }}>← swipe to see more →</p>
             </section>
 
             {/* Numbers — no adjectives */}
@@ -509,9 +509,9 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                         { n: '10 min', label: 'per day' },
                         { n: '$2.50', label: 'per month (annual)' },
                     ].map((s, i) => (
-                        <div key={i} style={{ background: '#13142a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', padding: '18px 12px' }}>
-                            <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#7c3aed', marginBottom: '4px' }}>{s.n}</div>
-                            <div style={{ fontSize: '0.7rem', color: '#64748b' }}>{s.label}</div>
+                        <div key={i} style={{ background: '#1C1C1E', border: '1px solid rgba(84,84,88,0.5)', borderRadius: '14px', padding: '18px 12px' }}>
+                            <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#0A84FF', marginBottom: '4px' }}>{s.n}</div>
+                            <div style={{ fontSize: '0.7rem', color: 'rgba(235,235,245,0.45)' }}>{s.label}</div>
                         </div>
                     ))}
                 </div>
@@ -519,29 +519,29 @@ function LandingPage({ guestId }: { guestId: string | null }) {
 
             {/* Pricing */}
             <section id="pricing" style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px 64px' }}>
-                <h2 style={{ fontSize: '1.4rem', fontWeight: 900, textAlign: 'center', margin: '0 0 8px', letterSpacing: '-0.02em' }}>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 700, textAlign: 'center', margin: '0 0 8px', letterSpacing: '-0.02em' }}>
                     Simple pricing
                 </h2>
-                <p style={{ textAlign: 'center', color: '#64748b', fontSize: '0.85rem', margin: '0 0 24px' }}>
+                <p style={{ textAlign: 'center', color: 'rgba(235,235,245,0.45)', fontSize: '0.85rem', margin: '0 0 24px' }}>
                     Free to try · Upgrade anytime
                 </p>
 
                 {/* Free tier */}
                 <div style={{
-                    background: '#0d0d1a', border: '1px solid rgba(255,255,255,0.07)',
+                    background: '#000000', border: '1px solid rgba(84,84,88,0.5)',
                     borderRadius: '16px', padding: '18px 20px', marginBottom: '12px',
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px',
                 }}>
                     <div>
                         <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '2px' }}>Free</div>
-                        <div style={{ fontSize: '0.78rem', color: '#475569' }}>5 new words/day · No credit card</div>
+                        <div style={{ fontSize: '0.78rem', color: 'rgba(235,235,245,0.3)' }}>5 new words/day · No credit card</div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#64748b' }}>$0</div>
+                        <div style={{ fontSize: '1.4rem', fontWeight: 700, color: 'rgba(235,235,245,0.45)' }}>$0</div>
                         <Link href="/onboarding" style={{
-                            padding: '9px 16px', background: 'rgba(255,255,255,0.06)',
-                            border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px',
-                            color: '#e2e8f0', fontSize: '0.82rem', fontWeight: 700,
+                            padding: '9px 16px', background: 'rgba(84,84,88,0.5)',
+                            border: '1px solid rgba(84,84,88,0.65)', borderRadius: '10px',
+                            color: '#EBEBF5', fontSize: '0.82rem', fontWeight: 700,
                             textDecoration: 'none', whiteSpace: 'nowrap',
                         }}>
                             Start free
@@ -558,49 +558,49 @@ function LandingPage({ guestId }: { guestId: string | null }) {
 
                     return (
                         <div key={plan.id} style={{
-                            background: isAnnual ? 'linear-gradient(135deg,rgba(124,58,237,0.15),rgba(109,40,217,0.08))' : '#13142a',
-                            border: isAnnual ? '1.5px solid rgba(124,58,237,0.5)' : '1px solid rgba(255,255,255,0.07)',
+                            background: isAnnual ? 'rgba(10,132,255,0.12)' : '#1C1C1E',
+                            border: isAnnual ? '1.5px solid rgba(10,132,255,0.5)' : '1px solid rgba(84,84,88,0.5)',
                             borderRadius: '18px', padding: '22px 20px', marginBottom: '12px',
                         }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
                                 <div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
-                                        <span style={{ fontWeight: 800, fontSize: '1rem' }}>{plan.label}</span>
+                                        <span style={{ fontWeight: 600, fontSize: '1rem' }}>{plan.label}</span>
                                         {plan.badge && (
                                             <span style={{
-                                                fontSize: '0.65rem', fontWeight: 800,
-                                                background: '#7c3aed', color: 'white',
+                                                fontSize: '0.65rem', fontWeight: 600,
+                                                background: '#0A84FF', color: 'white',
                                                 padding: '2px 8px', borderRadius: '99px',
                                                 textTransform: 'uppercase', letterSpacing: '0.04em',
                                             }}>{plan.badge}</span>
                                         )}
                                         {isLifetime && sale.isActive && (
                                             <span style={{
-                                                fontSize: '0.65rem', fontWeight: 800,
-                                                background: '#db2777', color: 'white',
+                                                fontSize: '0.65rem', fontWeight: 600,
+                                                background: '#FF375F', color: 'white',
                                                 padding: '2px 8px', borderRadius: '99px',
                                             }}>Sale</span>
                                         )}
                                     </div>
                                     {'monthlyEquiv' in plan && (
-                                        <div style={{ fontSize: '0.75rem', color: '#7c3aed', fontWeight: 600 }}>{plan.monthlyEquiv}</div>
+                                        <div style={{ fontSize: '0.75rem', color: '#0A84FF', fontWeight: 600 }}>{plan.monthlyEquiv}</div>
                                     )}
                                 </div>
                                 <div style={{ textAlign: 'right' }}>
                                     {isLifetime && sale.isActive && (
-                                        <div style={{ fontSize: '0.78rem', color: '#64748b', textDecoration: 'line-through' }}>{plan.price}</div>
+                                        <div style={{ fontSize: '0.78rem', color: 'rgba(235,235,245,0.45)', textDecoration: 'line-through' }}>{plan.price}</div>
                                     )}
                                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
-                                        <span style={{ fontSize: '1.6rem', fontWeight: 900 }}>{displayPrice}</span>
-                                        <span style={{ fontSize: '0.75rem', color: '#64748b' }}>{plan.per}</span>
+                                        <span style={{ fontSize: '1.6rem', fontWeight: 700 }}>{displayPrice}</span>
+                                        <span style={{ fontSize: '0.75rem', color: 'rgba(235,235,245,0.45)' }}>{plan.per}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '7px', marginBottom: '16px' }}>
                                 {plan.features.map((f, i) => (
-                                    <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '0.83rem', color: '#94a3b8' }}>
-                                        <span style={{ color: '#7c3aed', fontWeight: 800, flexShrink: 0 }}>✓</span>
+                                    <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '0.83rem', color: 'rgba(235,235,245,0.6)' }}>
+                                        <span style={{ color: '#0A84FF', fontWeight: 600, flexShrink: 0 }}>✓</span>
                                         {f}
                                     </div>
                                 ))}
@@ -612,10 +612,10 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                                     disabled={buying !== null}
                                     style={{
                                         ...BTN,
-                                        background: isAnnual ? '#7c3aed' : 'rgba(124,58,237,0.15)',
-                                        boxShadow: isAnnual ? '0 4px 20px rgba(124,58,237,0.35)' : 'none',
-                                        color: isAnnual ? 'white' : '#a78bfa',
-                                        border: isAnnual ? 'none' : '1px solid rgba(124,58,237,0.3)',
+                                        background: isAnnual ? '#0A84FF' : 'rgba(10,132,255,0.15)',
+                                        boxShadow: isAnnual ? 'none' : 'none',
+                                        color: isAnnual ? 'white' : '#409CFF',
+                                        border: isAnnual ? 'none' : '1px solid rgba(10,132,255,0.3)',
                                         opacity: buying !== null && !isBuying ? 0.6 : 1,
                                         fontSize: '0.9rem', padding: '14px',
                                     }}
@@ -627,10 +627,10 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                                 <SignInButton mode="modal">
                                     <button style={{
                                         ...BTN,
-                                        background: isAnnual ? '#7c3aed' : 'rgba(124,58,237,0.15)',
-                                        boxShadow: isAnnual ? '0 4px 20px rgba(124,58,237,0.35)' : 'none',
-                                        color: isAnnual ? 'white' : '#a78bfa',
-                                        border: isAnnual ? 'none' : '1px solid rgba(124,58,237,0.3)',
+                                        background: isAnnual ? '#0A84FF' : 'rgba(10,132,255,0.15)',
+                                        boxShadow: isAnnual ? 'none' : 'none',
+                                        color: isAnnual ? 'white' : '#409CFF',
+                                        border: isAnnual ? 'none' : '1px solid rgba(10,132,255,0.3)',
                                         fontSize: '0.9rem', padding: '14px',
                                     }}>
                                         Get {plan.label}
@@ -646,7 +646,7 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                     {!showPromo ? (
                         <button onClick={() => setShowPromo(true)} style={{
                             background: 'transparent', border: 'none',
-                            color: '#475569', fontSize: '0.82rem', fontWeight: 600,
+                            color: 'rgba(235,235,245,0.3)', fontSize: '0.82rem', fontWeight: 600,
                             cursor: 'pointer', fontFamily: 'inherit', width: '100%', textAlign: 'center',
                         }}>
                             Have a promo code?
@@ -660,8 +660,8 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                                 placeholder="Enter promo code"
                                 style={{
                                     flex: 1, padding: '10px 14px',
-                                    background: '#1a1b35', border: '1px solid rgba(255,255,255,0.12)',
-                                    borderRadius: '10px', color: '#f1f5f9',
+                                    background: '#2C2C2E', border: '1px solid rgba(84,84,88,0.65)',
+                                    borderRadius: '10px', color: '#FFFFFF',
                                     fontFamily: 'inherit', fontSize: '0.88rem',
                                     outline: 'none', textTransform: 'uppercase',
                                 }}
@@ -670,7 +670,7 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                                 onClick={redeemPromo}
                                 disabled={promoStatus === 'loading' || !promoCode.trim()}
                                 style={{
-                                    padding: '10px 18px', background: '#7c3aed',
+                                    padding: '10px 18px', background: '#0A84FF',
                                     border: 'none', borderRadius: '10px',
                                     color: 'white', fontFamily: 'inherit',
                                     fontSize: '0.88rem', fontWeight: 700,
@@ -683,14 +683,14 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                         </div>
                     )}
                     {promoStatus === 'error' && (
-                        <p style={{ marginTop: '8px', fontSize: '0.78rem', color: '#f87171', textAlign: 'center' }}>{promoError}</p>
+                        <p style={{ marginTop: '8px', fontSize: '0.78rem', color: '#FF453A', textAlign: 'center' }}>{promoError}</p>
                     )}
                 </div>
             </section>
 
             {/* FAQ */}
             <section style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px 56px' }}>
-                <h2 style={{ fontSize: '1.4rem', fontWeight: 900, textAlign: 'center', margin: '0 0 20px', letterSpacing: '-0.02em' }}>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 700, textAlign: 'center', margin: '0 0 20px', letterSpacing: '-0.02em' }}>
                     Common questions
                 </h2>
                 {[
@@ -716,16 +716,16 @@ function LandingPage({ guestId }: { guestId: string | null }) {
                     },
                 ].map(item => (
                     <details key={item.q} style={{
-                        background: '#13142a', border: '1px solid rgba(255,255,255,0.07)',
+                        background: '#1C1C1E', border: '1px solid rgba(84,84,88,0.5)',
                         borderRadius: '14px', padding: '16px 18px', marginBottom: '10px',
                     }}>
                         <summary style={{
-                            fontSize: '0.92rem', fontWeight: 700, color: '#f1f5f9',
+                            fontSize: '0.92rem', fontWeight: 700, color: '#FFFFFF',
                             cursor: 'pointer', listStyle: 'none',
                         }}>
                             {item.q}
                         </summary>
-                        <p style={{ margin: '10px 0 0', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.65 }}>
+                        <p style={{ margin: '10px 0 0', fontSize: '0.85rem', color: 'rgba(235,235,245,0.6)', lineHeight: 1.65 }}>
                             {item.a}
                         </p>
                     </details>
@@ -734,15 +734,15 @@ function LandingPage({ guestId }: { guestId: string | null }) {
 
             {/* Footer — something worth sharing */}
             <footer style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px 40px', textAlign: 'center' }}>
-                <div style={{ fontSize: '0.82rem', color: '#334155', lineHeight: 1.7, marginBottom: '20px' }}>
+                <div style={{ fontSize: '0.82rem', color: 'rgba(235,235,245,0.3)', lineHeight: 1.7, marginBottom: '20px' }}>
                     Built by an anime fan who got tired of pausing to read subtitles.<br />
-                    <span style={{ color: '#475569' }}>No textbooks. No grammar charts. Just words you'll actually hear.</span>
+                    <span style={{ color: 'rgba(235,235,245,0.3)' }}>No textbooks. No grammar charts. Just words you'll actually hear.</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
-                    <Link href="/privacy" style={{ fontSize: '0.75rem', color: '#475569', textDecoration: 'none' }}>Privacy Policy</Link>
-                    <Link href="/terms" style={{ fontSize: '0.75rem', color: '#475569', textDecoration: 'none' }}>Terms of Service</Link>
-                    <Link href="/tokushoho" style={{ fontSize: '0.75rem', color: '#475569', textDecoration: 'none' }}>Specified Commercial Transactions</Link>
-                    <a href="mailto:osumomomo8110@gmail.com" style={{ fontSize: '0.75rem', color: '#475569', textDecoration: 'none' }}>Contact</a>
+                    <Link href="/privacy" style={{ fontSize: '0.75rem', color: 'rgba(235,235,245,0.3)', textDecoration: 'none' }}>Privacy Policy</Link>
+                    <Link href="/terms" style={{ fontSize: '0.75rem', color: 'rgba(235,235,245,0.3)', textDecoration: 'none' }}>Terms of Service</Link>
+                    <Link href="/tokushoho" style={{ fontSize: '0.75rem', color: 'rgba(235,235,245,0.3)', textDecoration: 'none' }}>Specified Commercial Transactions</Link>
+                    <a href="mailto:osumomomo8110@gmail.com" style={{ fontSize: '0.75rem', color: 'rgba(235,235,245,0.3)', textDecoration: 'none' }}>Contact</a>
                 </div>
             </footer>
         </div>
@@ -789,7 +789,7 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
             {toastVisible && (
                 <div style={{
                     position: 'fixed', top: '20px', left: '50%', transform: 'translateX(-50%)',
-                    zIndex: 1000, background: 'linear-gradient(135deg,#7c3aed,#059669)',
+                    zIndex: 1000, background: '#0A84FF',
                     borderRadius: '16px', padding: '16px 24px',
                     display: 'flex', alignItems: 'center', gap: '12px',
                     boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
@@ -797,7 +797,7 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
                     maxWidth: '90vw',
                 }}>
                     <div>
-                        <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'white' }}>Premium unlocked!</div>
+                        <div style={{ fontWeight: 600, fontSize: '0.95rem', color: 'white' }}>Premium unlocked!</div>
                         <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.75)', marginTop: '2px' }}>Unlimited words, all features. Let's go!</div>
                     </div>
                     <button onClick={() => setToastVisible(false)} style={{
@@ -812,12 +812,12 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
             }}>
                 <div>
                     <div style={{
-                        fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-0.02em',
-                        background: 'linear-gradient(135deg,#a78bfa,#fbbf24)',
+                        fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.02em',
+                        background: 'linear-gradient(135deg,#0A84FF,#64D2FF)',
                         WebkitBackgroundClip: 'text', backgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                     }}>AniJapanese</div>
-                    <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '2px' }}>Understand anime in Japanese</div>
+                    <div style={{ fontSize: '0.78rem', color: 'rgba(235,235,245,0.45)', marginTop: '2px' }}>Understand anime in Japanese</div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <StreakBadge streak={streak} />
@@ -827,64 +827,64 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
 
             <div style={{ maxWidth: '480px', margin: '0 auto', padding: '0 20px' }}>
                 <div style={{
-                    background: 'linear-gradient(135deg,rgba(124,58,237,0.12),rgba(245,158,11,0.08))',
-                    border: '1px solid rgba(124,58,237,0.2)',
+                    background: '#1C1C1E',
+                    border: '1px solid rgba(10,132,255,0.2)',
                     borderRadius: '20px', padding: '28px 24px', marginBottom: '16px', textAlign: 'center',
                 }}>
                     {total > 0 ? (
                         <>
-                            <div style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '6px' }}>{total} cards ready</div>
-                            <div style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '20px' }}>
+                            <div style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '6px' }}>{total} cards ready</div>
+                            <div style={{ color: 'rgba(235,235,245,0.6)', fontSize: '0.9rem', marginBottom: '20px' }}>
                                 {data?.reviewCount ?? 0} reviews · {data?.newWordCount ?? 0} new words
-                                {!isPremium && <span style={{ color: '#64748b' }}> · Free: 5 new/day</span>}
+                                {!isPremium && <span style={{ color: 'rgba(235,235,245,0.45)' }}> · Free: 5 new/day</span>}
                             </div>
                             <Link href="/session" style={{
                                 display: 'block', padding: '16px',
-                                background: '#7c3aed', borderRadius: '14px',
-                                color: 'white', fontWeight: 800, fontSize: '1.05rem',
+                                background: '#0A84FF', borderRadius: '14px',
+                                color: 'white', fontWeight: 600, fontSize: '1.05rem',
                                 textDecoration: 'none', textAlign: 'center',
-                                boxShadow: '0 4px 20px rgba(124,58,237,0.35)',
+                                boxShadow: 'none',
                             }}>
                                 Start Session →
                             </Link>
                         </>
                     ) : (
                         <>
-                            <div style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '6px' }}>All caught up!</div>
-                            <div style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Come back tomorrow for more reviews</div>
+                            <div style={{ fontSize: '1.4rem', fontWeight: 600, marginBottom: '6px' }}>All caught up!</div>
+                            <div style={{ color: 'rgba(235,235,245,0.6)', fontSize: '0.9rem' }}>Come back tomorrow for more reviews</div>
                         </>
                     )}
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
                     {[
-                        { label: 'Due Reviews', value: data?.reviewCount ?? 0, color: '#f59e0b' },
-                        { label: 'New Words', value: data?.newWordCount ?? 0, color: '#7c3aed' },
-                        { label: 'Day Streak', value: streak, color: '#ef4444' },
+                        { label: 'Due Reviews', value: data?.reviewCount ?? 0, color: '#FF9F0A' },
+                        { label: 'New Words', value: data?.newWordCount ?? 0, color: '#0A84FF' },
+                        { label: 'Day Streak', value: streak, color: '#FF453A' },
                     ].map(s => (
-                        <div key={s.label} style={{ background: '#13142a', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '18px 16px' }}>
-                            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: s.color }}>{s.value}</div>
-                            <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px' }}>{s.label}</div>
+                        <div key={s.label} style={{ background: '#1C1C1E', border: '1px solid rgba(84,84,88,0.5)', borderRadius: '16px', padding: '18px 16px' }}>
+                            <div style={{ fontSize: '1.6rem', fontWeight: 600, color: s.color }}>{s.value}</div>
+                            <div style={{ fontSize: '0.75rem', color: 'rgba(235,235,245,0.45)', marginTop: '2px' }}>{s.label}</div>
                         </div>
                     ))}
                 </div>
 
                 <Link href={isPremium ? '/scene' : '/upgrade'} style={{
                     display: 'block', padding: '16px 18px', marginBottom: '16px',
-                    background: 'linear-gradient(135deg, rgba(124,58,237,0.15), rgba(167,139,250,0.08))',
-                    border: '1px solid rgba(124,58,237,0.3)',
-                    borderRadius: '16px', color: '#e2e8f0',
+                    background: '#1C1C1E',
+                    border: '1px solid rgba(10,132,255,0.3)',
+                    borderRadius: '16px', color: '#EBEBF5',
                     fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none',
                 }}>
                     Scene Quiz — What would they say?
                     {!isPremium && (
                         <span style={{
-                            marginLeft: '8px', fontSize: '0.65rem', fontWeight: 800,
-                            background: 'rgba(124,58,237,0.25)', color: '#a78bfa',
+                            marginLeft: '8px', fontSize: '0.65rem', fontWeight: 600,
+                            background: 'rgba(10,132,255,0.25)', color: '#409CFF',
                             padding: '2px 8px', borderRadius: '99px', verticalAlign: 'middle',
                         }}>Premium</span>
                     )}
-                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 500, marginTop: '4px' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'rgba(235,235,245,0.6)', fontWeight: 500, marginTop: '4px' }}>
                         Pick the natural line for each anime-style scene
                     </div>
                 </Link>
@@ -892,10 +892,10 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
                 {!isPremium && (
                     <Link href="/upgrade" style={{
                         display: 'block', padding: '16px 18px', marginBottom: '16px',
-                        background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
+                        background: '#0A84FF',
                         borderRadius: '16px', color: 'white',
-                        fontWeight: 800, fontSize: '0.95rem', textDecoration: 'none',
-                        boxShadow: '0 4px 20px rgba(124,58,237,0.35)',
+                        fontWeight: 600, fontSize: '0.95rem', textDecoration: 'none',
+                        boxShadow: 'none',
                     }}>
                         Go unlimited — from $2.50/mo
                         <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.75)', fontWeight: 500, marginTop: '4px' }}>
@@ -905,14 +905,23 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
                 )}
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <Link href="/history" style={LINK_STYLE}>Learning history</Link>
-                    <Link href="/onboarding" style={LINK_STYLE}>Learning settings</Link>
+                    <Link href="/history" style={LINK_STYLE}>
+                        Learning history
+                        <span style={CHEVRON_STYLE}>›</span>
+                    </Link>
+                    <Link href="/onboarding" style={LINK_STYLE}>
+                        Learning settings
+                        <span style={CHEVRON_STYLE}>›</span>
+                    </Link>
                     {isPremium && (
                         <Link href="/upgrade" style={LINK_STYLE}>
-                            Manage plan
-                            <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', fontWeight: 500, marginTop: '2px' }}>
-                                Change plan, payment method, or cancel
+                            <span>
+                                Manage plan
+                                <span style={{ display: 'block', fontSize: '0.75rem', color: 'rgba(235,235,245,0.45)', fontWeight: 500, marginTop: '2px' }}>
+                                    Change plan, payment method, or cancel
+                                </span>
                             </span>
+                            <span style={CHEVRON_STYLE}>›</span>
                         </Link>
                     )}
                 </div>
@@ -922,10 +931,16 @@ function Dashboard({ guestId, profile, isPremium, showUpgradeSuccess }: {
 }
 
 const LINK_STYLE: React.CSSProperties = {
-    display: 'block', padding: '14px 18px',
-    background: '#13142a', border: '1px solid rgba(255,255,255,0.06)',
-    borderRadius: '14px', color: '#94a3b8',
+    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+    padding: '14px 18px',
+    background: '#1C1C1E', border: '1px solid rgba(84,84,88,0.5)',
+    borderRadius: '14px', color: 'rgba(235,235,245,0.6)',
     fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none',
+}
+
+const CHEVRON_STYLE: React.CSSProperties = {
+    color: 'rgba(235,235,245,0.3)', fontSize: '1.2rem', fontWeight: 400,
+    lineHeight: 1, flexShrink: 0, marginLeft: '12px',
 }
 
 // ── Root ──────────────────────────────────────────────────────────────────
